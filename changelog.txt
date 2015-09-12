@@ -1,0 +1,257 @@
+lazy mofo - php data grid for mysql - send bugs and feedback to lazymofo@wdschools.com
+
+version 2015-09-11
+http://lazymofo.wdschools.com/code/2015-09-11/lazy_mofo.zip
+------------------
+  Added BigInt support for MySQL Identity columns. Removed intval casting.
+  Fixed minor parse bug in get_qs(). Thanks Aaron
+  Removed sql comment during parsing of commands in get_input_control() since MySQL doesn't seem to like this style of comment anymore. Tweaks to html_radio(), html_select(), html_checkbox() 
+
+version 2014-07-08
+http://lazymofo.wdschools.com/code/2014-07-08/lazy_mofo.zip
+------------------
+  Removed classes and spans associated with picnic.css.
+
+version 2014-07-07
+http://lazymofo.wdschools.com/code/2014-07-07/lazy_mofo.zip
+------------------
+  Fixed exclude_field which wasn't working since 2011. Yea for security!  
+  Fixed notice on $button. Thanks Aaron g.
+  Removed picnic.css, various style/class changes. Back to plain old css since picnic.css is hard to integrate with existing sites.
+	
+version 2014-05-06
+http://lazymofo.wdschools.com/code/2014-05-06/lazy_mofo.zip
+------------------
+  Another redirect() bug. Sometimes HTTP_HOST has port number already so dulicate port numbers were appearing. Thanks someone at ordeninformatica.
+  Export to CSV column issues. Thanks Yannick M.	
+  Reverted to old version of picnic.css from 2015-02-26 - input width causing issues
+
+version 2014-04-30
+http://lazymofo.wdschools.com/code/2014-04-30/lazy_mofo.zip
+------------------
+  Fixed redirect() bug affecting https on IIS. Thanks Matt H.
+  Added latest version of picnic.css
+
+version 2015-02-26
+http://lazymofo.wdschools.com/code/2015-02-26/lazy_mofo.zip
+------------------
+  Fixed bug in date_in to identify invalid dates. I thought this was already fixed in 2014-03-11. 
+  Suppressed a couple notices.
+
+version 2015-02-22
+http://lazymofo.wdschools.com/code/2015-02-22/lazy_mofo.zip
+------------------
+  Removed &amp; in urls. No more escaping and can use header redirects if desired.	
+  Altered redirect() to use header().
+  Added search cancel link added. 
+
+version 2015-02-14
+http://lazymofo.wdschools.com/code/2015-02-14/lazy_mofo.zip
+------------------
+  Removed child grid 
+  Removed automatic search query generation - search must be done manually now
+  Added validation system
+  Add proper counting with sql_calc_found_rows rathen than a separate query
+  Added Picnic CSS compatibility
+  Fixed grid_repeat_header_at
+  Restored how clean_out removes illegal characters
+  Fixed mb_substr in clean_out(). Thanks Dragoslav! 
+
+version 2014-09-08
+http://lazymofo.wdschools.com/code/2014-09-08/lazy_mofo.zip
+------------------
+  Fixed bug related to grid_repeat_header_at. Thanks Matt H.
+
+version 2014-08-26
+http://lazymofo.wdschools.com/code/2014-08-26/lazy_mofo.zip
+------------------
+  Reports of PDO errors on some versions of PHP, altered query() so fetchAll is not called unless data is available. Thanks Matt H.
+
+version 2014-08-03
+http://lazymofo.wdschools.com/code/2014-08-03/lazy_mofo.zip
+------------------
+  Fixed pdo named parameters to allow for non a-z0-9_ column names.
+  Fixed mysql 'set names'. It was not allowing user to set the value.
+  Fixed sql_update_grid to allow single image or document upload.
+
+version 2014-04-24
+http://lazymofo.wdschools.com/code/2014-04-24/lazy_mofo.zip
+------------------
+  Removed extra div on grid. Thanks Krzysiek.  
+
+version 2014-03-11
+http://lazymofo.wdschools.com/code/2014-03-11/lazy_mofo.zip
+------------------
+  Added native types readonly_date and readonly_datetime.
+  Fixed date_in, blanks dates should not be evaluated. Bug introduced in 2014-01-13 date_in fix. Thanks Rob H.	
+  Fixed - multi delete was sendinga a false error message when no grid_input_control defined.
+  Fixed - multi delete save changes button was not appearing when no grid_input_control defined.   
+  Change css class names and style sheet. Again...
+  Fixed restricted_numeric_input default regular exp to allow for minus/negative symbol -
+
+version 2014-01-13
+http://lazymofo.wdschools.com/code/2014-01-13/lazy_mofo.zip
+------------------
+  Fixed - date_in was should be testing for false, not <= 0 dates. Thanks to Joe B. for spotting the bug.
+  Added form_text_record_saved and form_text_record_added to customize success messages on the form.
+  Added hidden actions on form and search since older IE don't always send value of submit buttons.
+
+version 2014-01-06
+http://lazymofo.wdschools.com/code/2014-01-06/lazy_mofo.zip
+------------------
+  Fixed - Export feature may display extra identity column. Thanks to Geoffroi for bug fix. 
+
+version 2013-12-14
+http://lazymofo.wdschools.com/code/2013-12-14/lazy_mofo.zip
+------------------
+  Fixed - edit and delete links now displaying when grid_sql is not defined. Bug introduced in version 2013-10-31
+http://lazymofo.wdschools.com/code/2013-10-31/lazy_mofo.zip.
+  Added form_display_identity boolean to allow identity to be display when editing a record.
+
+version 2013-10-31
+http://lazymofo.wdschools.com/code/2013-10-31/lazy_mofo.zip
+------------------
+  Added child grid system to edit child data while editing a record.
+  Added ability to upload images and docs directly to the grid.
+  Added query_string_list to hold variables names to preserve in the query string while paging.
+  Added multi delete from grids feature.
+  Added more placeholders for custom text on save changes and search buttons 
+  Changed css classes and ids
+  Changed form_user_function to form_additional_html, now just a variable to hold a string to add html to the bottom of a form.
+  Changed insert_user_function to on_insert_user_function
+  Changed update_user_function to on_update_user_function
+  Changed delete_user_function to on_delete_user_function
+  Changed update_grid_user_function to on_update_grid_user_function
+  Added after_insert_user_function
+  Added after_update_user_function
+  Added after_delete_user_function
+  Added after_update_grid_user_function
+  Changed after_insert_action to be controlled by boolean return_to_edit_after_insert
+  Changed after_update_action to be controlled by boolean return_to_edit_after_update
+
+version 2013-07-09
+http://lazymofo.wdschools.com/code/2013-07-09/lazy_mofo.zip
+------------------
+  preg_replace on $sql_count missing case insensitive flag
+
+version 2013-07-05
+http://lazymofo.wdschools.com/code/2013-07-05/lazy_mofo.zip
+------------------
+  Changed insert() so user is redirected to the default view (no pagination or search) after adding a record
+
+version 2013-06-30
+http://lazymofo.wdschools.com/code/2013-06-30/lazy_mofo.zip
+------------------
+  Added lm class name to forms for easier styling.
+  Added @ and other fixes to avoid notice messages when accessing array elements and appending strings.
+  Fixed date_in() so that d/m/Y dates should work. found out strtotime does not look at locale info.
+  New variables to edit individual form buttons; form_add_button, form_update_button, form_back_button, form_delete_button
+  Added delete button to form. Move grid delete javascript out to delete_form().
+  Added grid_default_order_by to specify the default sort order, otherwise sort by identity_id is used. Adding a sort fixes weird natural sort behavior.
+  Form Back/Cancel button now highlights last viewed record on the grid view.
+  Renamed grid_delete_confirm to delete_confirm since delete button has been added to the form view.
+  Added success message for when records are deleted.
+  Fixed csv export() bug related to erasing existing buffers.
+  
+version 2013-05-08
+http://lazymofo.wdschools.com/code/2013-05-08/lazy_mofo.zip
+-------------------
+  Fixed upload_rename_if_exists()
+  Added form_default_value to allow defaults when adding a record, also populates from column default.
+  Changed all string functions to multibyte to hopefully work properly in other languages.
+  Added magic_quotes warning
+  Added "set names charset" to make sure communications are in proper characterset
+  Changed redirect(), triple equals used for auto-redirect.
+
+version 2013-04-07
+http://lazymofo.wdschools.com/code/2013-04-07/lazy_mofo.zip
+-------------------
+  Bug fix, sql_param not passed in grid() record count. grrrr, thought this was already fixed...
+
+version 2013-03-07
+http://lazymofo.wdschools.com/code/2013-03-07/lazy_mofo.zip
+-------------------
+  form_user_function was implemented wrong, should be populated from user function.
+  image_resize() was not resizing.
+  query_insert() missing optional called_from parameter.
+
+version 2013-02-27
+http://lazymofo.wdschools.com/code/2013-02-27/lazy_mofo.zip
+-------------------
+  Added uri_path variable to be more flexible. Weird URI seems to be required in WordPress admins.
+  Added upload_file_multiple(). It's not used in lazy_mofo but handy to have around.
+  Changed export() to work with large datasets and not run out of memory. Also displays errors when ob_start was not started.
+  Added after_insert_action and after_update_action to alter default action after updates and inserts. An entry like 'edit' will redirect the user back to the edit/form screen after updates or inserts.
+  Added $form_user_function to allow html injection before </form> in form.
+  Changed search back to POST. I think there was some kind of issue with WordPress admin that prompted this.
+
+version 2013-01-16
+http://lazymofo.wdschools.com/code/2013-01-16/lazy_mofo.zip
+-------------------
+  Bug fixed in insert(), failed to get error string from user function.
+
+version 2013-01-08
+http://lazymofo.wdschools.com/code/2013-01-08/lazy_mofo.zip
+-------------------
+  Bug fixes introduced from version 2012-12-16
+http://lazymofo.wdschools.com/code/2012-12-16/lazy_mofo.zip.
+
+version 2012-12-31
+http://lazymofo.wdschools.com/code/2012-12-31/lazy_mofo.zip
+-------------------
+  Fixed bug, change grid search to use get. No need to post on search and check csrf.
+  Moved .grid and .form css class names from form to table.
+
+version 2012-12-19
+http://lazymofo.wdschools.com/code/2012-12-19/lazy_mofo.zip
+-------------------
+  Fixed bug. grid_sql_param was not being passed in.
+
+version 2012-12-16
+http://lazymofo.wdschools.com/code/2012-12-16/lazy_mofo.zip
+-------------------
+  Added optional grid_sql_count variable to help count results for pagination. useful when using grid() for complex queries/reporting.
+
+version 2012-12-11
+http://lazymofo.wdschools.com/code/2012-12-11/lazy_mofo.zip
+-------------------
+  Removed cr & lf from sql strings in grid() which caused row count magic to break.
+
+version 2012-12-10
+http://lazymofo.wdschools.com/code/2012-12-10/lazy_mofo.zip
+-------------------
+  Oops, refixed calls to udf to render input/output controls
+
+version 2012-11-13
+http://lazymofo.wdschools.com/code/2012-11-13/lazy_mofo.zip
+-------------------
+  Swapped $_SERVER['SCRIPT_NAME'] to uri path to allow this script to be used on pretty urls.
+  Fixed bug in sql_update_grid(), this function should not have been calling a global variable.
+  Added form_title public variable to allow custom form title/header when editing or adding a record.
+  Added export_csv_file_name public variable to allow download to be named, if empty the table name is used.
+  Fixed calls to udf to render input/output controls. first parameter removed. changed to: call_user_func($column_name, $value, $command, $called_from).
+  Fixed pagination select dropdown, off by one error.
+
+version 2012-06-30
+http://lazymofo.wdschools.com/code/2012-06-30/lazy_mofo.zip
+-------------------
+  Added csv export feature.
+  Changed query() method to return PDO::FETCH_ASSOC instead of PDO::FETCH_BOTH to save memory. many methods altered.
+
+version 2012-01-06
+http://lazymofo.wdschools.com/code/2012-01-06/lazy_mofo.zip
+-------------------
+  Bug fix - grid() search changed to only filter out aggregates functions in where clause.
+
+version 2012-01-05
+http://lazymofo.wdschools.com/code/2012-01-05/lazy_mofo.zip
+-------------------
+	grid() pagination changed to work with large datasets. limit & offset in sql statements now.
+	grid() search changed to accommodate pagination update. lot's of hacks required. this is where ORM would be better.
+	all links and posts now carry search and pagination variables to maintain position when editing records.
+	sql_update_grid() now uses transactions for better performance
+
+version 2011-11-01
+http://lazymofo.wdschools.com/code/2011-11-01/lazy_mofo.zip
+-------------------
+	Initial release
