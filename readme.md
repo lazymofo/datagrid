@@ -12,7 +12,7 @@ What is Lazy Mofo (LM) PHP Datagrid?
 LM is a single PHP5 class for performing CRUD (create, read, update and delete) operations on a MySQL database table.
 What can LM do?
 
--   Define grids and forms from SQL statements for table name
+-   Define grids and forms from SQL statements or table name
 -   Grid features include pagination, sorting, and inline editing. Searching can be added.
 -   Grid uses SQL_CALC_FOUND_ROWS, limit + offset for efficiency and low memory usage on large datasets
 -   Populate select, radio, and checkbox inputs with data from SQL statements
