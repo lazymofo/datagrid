@@ -1,5 +1,11 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to lazymofo@wdschools.com
 
+version 2015-09-21
+http://lazymofo.wdschools.com/code/2015-09-21/lazy_mofo.zip
+------------------
+  Added deprecated split() in last release. Meant to use explode(). Thanks again Aaron g!
+
+
 version 2015-09-11
 http://lazymofo.wdschools.com/code/2015-09-11/lazy_mofo.zip
 ------------------

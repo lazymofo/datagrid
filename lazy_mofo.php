@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions lazymofo@wdschools.com
-// version 2015-09-11
+// version 2015-09-21
 
 class lazy_mofo{
 
@@ -1784,7 +1784,7 @@ class lazy_mofo{
             $query_string_list .= ',' . $this->query_string_list;
 
         $get = '';
-        $arr = split(',', trim($query_string_list, ','));
+        $arr = explode(',', trim($query_string_list, ','));
         foreach($arr as $var)
             if(mb_strlen(@$_REQUEST[$var]) > 0)
                 $get .= "&$var=" . urlencode($_REQUEST[$var]);
