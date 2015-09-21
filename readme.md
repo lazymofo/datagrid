@@ -2,7 +2,7 @@
 Lazy Mofo Data Grid
 ===================
 
-current version: 2015-09-11 
+current version: 2015-09-21 
 project home and documentation: [http://lazymofo.wdschools.com/](http://lazymofo.wdschools.com/)
 
 
