@@ -3,7 +3,7 @@ Lazy Mofo Data Grid
 ===================
 
 current version: 2015-09-21 
-project home and documentation: [http://lazymofo.wdschools.com/](http://lazymofo.wdschools.com/)
+project home, demo and documentation: [http://lazymofo.wdschools.com/](http://lazymofo.wdschools.com/)
 
 
 What is Lazy Mofo (LM) PHP Datagrid?
