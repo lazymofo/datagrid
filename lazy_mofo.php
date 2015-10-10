@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions lazymofo@wdschools.com
-// version 2015-09-21
+// version 2015-10-09
 
 class lazy_mofo{
 
@@ -310,7 +310,11 @@ class lazy_mofo{
 
         // go back on validation error
         if($error != ''){
-            $this->index($error);
+            if($_POST['_called_from'] == 'form')
+                $this->edit($error);
+            else
+                $this->index($error);
+
             return;
         }
         
@@ -741,7 +745,7 @@ class lazy_mofo{
         $html .= $this->form_additional_html;
         $html .= "</form>\n";
         $html .= "</div><!-- close #lm -->\n";
-        $html .= $this->delete_js($identity_id);
+        $html .= $this->delete_js($identity_id, 'form');
         
         return $html;    
 
@@ -993,14 +997,14 @@ class lazy_mofo{
         $html .= $pagination_button_bar;
         $html .= "</form>\n";
         $html .= "</div><!-- close #id -->\n";
-		$html .= $this->delete_js();
+		$html .= $this->delete_js(0, 'grid');
 
         return $html;
 
     }
 
     
-    function delete_js($identity_id = 0){
+    function delete_js($identity_id = 0, $_called_from = ''){
 
         // purpose: extra form & js for deleing records and going back
         // returns: html
@@ -1022,6 +1026,7 @@ class lazy_mofo{
         <input type='hidden' name='action' value='delete' >
         <input type='hidden' name='$this->identity_name' value='$identity_id' >
         <input type='hidden' name='_csrf' value='$_SESSION[_csrf]' >
+        <input type='hidden' name='_called_from' value='$_called_from' >
         </form>
 
         <script type='text/javascript'>

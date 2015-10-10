@@ -1,10 +1,15 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to lazymofo@wdschools.com
 
+version 2015-10-09
+http://lazymofo.wdschools.com/code/2015-10-09/lazy_mofo.zip
+------------------
+  fixed delete/on_delete_user_function - error messages returned from on_delete_user_function should redirect user back to grid or form, depending on where the delete button action was called.
+
+
 version 2015-09-21
 http://lazymofo.wdschools.com/code/2015-09-21/lazy_mofo.zip
 ------------------
   Added deprecated split() in last release. Meant to use explode(). Thanks again Aaron g!
-
 
 version 2015-09-11
 http://lazymofo.wdschools.com/code/2015-09-11/lazy_mofo.zip
