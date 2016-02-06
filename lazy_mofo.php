@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions lazymofo@wdschools.com
-// version 2015-10-09
+// version 2016-02-06
 
 class lazy_mofo{
 
@@ -48,15 +48,17 @@ class lazy_mofo{
     public $validate_tip_in_placeholder = true; // allow input placeholder to display validation tip
     public $validate_text_general = "Missing or Invalid Input"; // generic message displayed at the top when validation error occurs, optional
 
-    public $on_insert_user_function = '';     // user function called before data is inserted, updated, or deleteed. return a string error message for server-side validation. Can be used to formating _POST data.
+    public $on_insert_user_function = '';       // user function called before data is inserted, updated, or deleteed. return a string error message for server-side validation. Can be used to formating _POST data.
     public $on_update_user_function = '';
     public $on_delete_user_function = '';
     public $on_update_grid_user_function = '';
 
-    public $after_insert_user_function = '';  // user function names to be called after data is inserted, updated, or deleteed.
+    public $after_insert_user_function = '';    // user function names to be called after data is inserted, updated, or deleteed.
     public $after_update_user_function = '';
     public $after_delete_user_function = '';
     public $after_update_grid_user_function = '';
+
+    public $cast_user_function = array();       // user function for casting data, example : $lm->cast_function['field_name'] = 'my_casting_function'
 
     public $return_to_edit_after_insert = true; // redirect to edit screen after adding or updating a record. if false, user is sent back to grid view.
     public $return_to_edit_after_update = true; 
@@ -79,7 +81,7 @@ class lazy_mofo{
     public $charset_mysql = 'utf8';                   // charset for mysql communications
     public $charset = 'UTF-8';                        // charset for output
 
-    public $date_in = 'Y-m-d';                        // input format into database, no need to change
+    public $date_in = 'Y-m-d';                        // input format into database, no need to change this
     public $datetime_in = 'Y-m-d H:i:s';              
 
     // US date format
@@ -100,7 +102,7 @@ class lazy_mofo{
 
     public $query_string_list = '';            // comma delimited list of variable names carried around to maintain state of search, sort, and pagination
 
-    public $delete_confirm = 'Are you sure you want to delete this record?';            // javascript popup confirmation
+    public $delete_confirm      = 'Are you sure you want to delete this record?';       // javascript popup confirmation
     public $update_grid_confirm = 'Are you sure you want to delete [count] record(s)?'; // javascript popup confirmation when deleting on the grid
 
     public $form_add_button    = "<input type='submit' value='Add' class='lm_button'>";
@@ -120,14 +122,14 @@ class lazy_mofo{
 
     public $grid_search_box = "<form action='[script_name]' class='lm_search_box'><input type='text' name='_search' value='[_search]' size='20' class='lm_search_input'><a href='[script_name]' style='margin: 0 10px 0 -20px; display: inline-block;' title='Clear Search'>x</a><input type='submit' value='Search' class='lm_button lm_search_button'><input type='hidden' name='action' value='search'></form>"; 
 
-    public $grid_text_record_added = "Record Added";
-    public $grid_text_changes_saved = "Changes Saved";
-    public $grid_text_record_deleted = "Record Deleted";
-    public $grid_text_save_changes = "Save Changes";
-    public $grid_text_delete = "Delete";
+    public $grid_text_record_added     = "Record Added";
+    public $grid_text_changes_saved    = "Changes Saved";
+    public $grid_text_record_deleted   = "Record Deleted";
+    public $grid_text_save_changes     = "Save Changes";
+    public $grid_text_delete           = "Delete";
     public $grid_text_no_records_found = "No Records Found";
 
-    public $pagination_text_use_paging    = '[use paging]';
+    public $pagination_text_use_paging = '[use paging]';
     public $pagination_text_show_all   = '[show all]';
     public $pagination_text_records    = 'Records';
     public $pagination_text_go         = 'Go';
@@ -492,7 +494,7 @@ class lazy_mofo{
         // purpose: generate multiple update sql statements from editable fields in grid()
         // returns: false on error, true on success
 
-        $columns = $this->get_columns($context);
+        $columns = $this->get_columns('grid');
         $skip_update_on_column_name = '';
 
         $table = $this->table;
@@ -552,7 +554,7 @@ class lazy_mofo{
 
                 $safe_np = $this->safe_np($column_name);
                 $sql_set .= "`$column_name` = :$safe_np, ";
-                $sql_param[":$safe_np"] = $this->cast_value(@$_POST["$column_name-$identity_id"], $column_name, $context);
+                $sql_param[":$safe_np"] = $this->cast_value(@$_POST["$column_name-$identity_id"], $column_name, 'grid');
 
             }
 
@@ -1363,7 +1365,9 @@ class lazy_mofo{
         // get command only, no sql, no '--'
         $cmd = trim(mb_substr($command, mb_strrpos($command, '--') + 2));
 
-        if($cmd == 'date')
+        if(isset($this->cast_user_function[$column_name]))
+            $val = call_user_func($this->cast_user_function[$column_name], $val);
+        elseif($cmd == 'date')
             $val = $this->date_in($val);
         elseif($cmd == 'datetime')
             $val = $this->date_in($val, true);
@@ -2250,10 +2254,11 @@ class lazy_mofo{
             echo("<center><a href='$url'>Continue</a></center>");    
             return;
         }
-    
+
+        $port = '';    
         $host = preg_replace('/:[0-9]+$/', '', $_SERVER['HTTP_HOST']); // host without port number
         $protocol = 'http://';
-        if($_SERVER['HTTPS'] != '' && $_SERVER['HTTPS'] != 'off')
+        if(@$_SERVER['HTTPS'] != '' && @$_SERVER['HTTPS'] != 'off')
             $protocol = 'https://';
         if(!($_SERVER['SERVER_PORT'] == '80' || $_SERVER['SERVER_PORT'] == '443'))
             $port = ':' . $_SERVER['SERVER_PORT'];

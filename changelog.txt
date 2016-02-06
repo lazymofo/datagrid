@@ -1,10 +1,15 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to lazymofo@wdschools.com
 
+version 2016-02-06
+http://lazymofo.wdschools.com/code/2015-02-06/lazy_mofo.zip
+------------------
+  Fixed a few issues causing notices. Thanks Michael B.
+  Added feature cast_user_function to cast columns based on user defined functions. 
+
 version 2015-10-09
 http://lazymofo.wdschools.com/code/2015-10-09/lazy_mofo.zip
 ------------------
-  fixed delete/on_delete_user_function - error messages returned from on_delete_user_function should redirect user back to grid or form, depending on where the delete button action was called.
-
+  Fixed delete/on_delete_user_function - error messages returned from on_delete_user_function should redirect user back to grid or form, depending on where the delete button action was called.
 
 version 2015-09-21
 http://lazymofo.wdschools.com/code/2015-09-21/lazy_mofo.zip

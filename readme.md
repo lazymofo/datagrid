@@ -2,7 +2,7 @@
 Lazy Mofo Data Grid
 ===================
 
-current version: 2015-10-09 
+current version: 2015-02-06 
 project home, demo and documentation: [http://lazymofo.wdschools.com/](http://lazymofo.wdschools.com/)
 
 
@@ -23,7 +23,7 @@ What can LM do?
 
 What's New
 ==========
-
+-   Added cast_user_function to define function to cast a specified column.
 -   Added MySQL BigInt support for identity columns.
 -   Removed child grid features. Sorry, I found the UI for the child records awkward. Back to simplicity.
 -   Removed automatic searching. Search queries must now be defined manually.
