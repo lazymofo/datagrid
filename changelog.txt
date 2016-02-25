@@ -1,11 +1,10 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to lazymofo@wdschools.com
 
-version 2016-02-06
-http://lazymofo.wdschools.com/code/2015-02-06/lazy_mofo.zip
+version 2016-02-24
+http://lazymofo.wdschools.com/code/2015-02-24/lazy_mofo.zip
 ------------------
-  Fixed a few issues causing notices. Thanks Michael B.
-  Added feature cast_user_function to cast columns based on user defined functions. 
-
+  Added default timezone in case none is set in the application. strtotime requires a timezone be set in the application.
+  
 version 2015-10-09
 http://lazymofo.wdschools.com/code/2015-10-09/lazy_mofo.zip
 ------------------

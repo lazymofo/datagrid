@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions lazymofo@wdschools.com
-// version 2016-02-06
+// version 2016-02-24
 
 class lazy_mofo{
 
@@ -80,6 +80,8 @@ class lazy_mofo{
 
     public $charset_mysql = 'utf8';                   // charset for mysql communications
     public $charset = 'UTF-8';                        // charset for output
+
+    public $timezone = 'UTC';                         // if no timezone is set in the application, then this timezone is set for strtotime. http://php.net/manual/en/timezones.others.php
 
     public $date_in = 'Y-m-d';                        // input format into database, no need to change this
     public $datetime_in = 'Y-m-d H:i:s';              
@@ -160,7 +162,11 @@ class lazy_mofo{
 
         $this->dbh = $dbh; 
 
-        // avoid notices. csrf nonce token
+        $timezone = @date_default_timezone_get();
+        if($timezone == '' || $timezone == 'UTC')
+            date_default_timezone_set($this->timezone);
+
+        // avoid notices for this noonce token
         if(!isset($_SESSION['_csrf']))
             $_SESSION['_csrf'] = '';
 
