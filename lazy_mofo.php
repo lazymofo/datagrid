@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions lazymofo@wdschools.com
-// version 2016-02-24
+// version 2016-03-20
 
 class lazy_mofo{
 
@@ -932,7 +932,7 @@ class lazy_mofo{
 
         // quit if there's no data
         if($count <= 0){
-            $html .= "<div class='lm_error'><b>$this->grid_text_no_records_found</b></div></form>\n";
+            $html .= "<div class='lm_error'><b>$this->grid_text_no_records_found</b></div></form></div><!-- close #lm -->\n";
             return $html;    
         }    
 
@@ -1004,7 +1004,7 @@ class lazy_mofo{
         // buttons & pagination, close form
         $html .= $pagination_button_bar;
         $html .= "</form>\n";
-        $html .= "</div><!-- close #id -->\n";
+        $html .= "</div><!-- close #lm -->\n";
 		$html .= $this->delete_js(0, 'grid');
 
         return $html;

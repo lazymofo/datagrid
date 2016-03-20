@@ -1,5 +1,10 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to lazymofo@wdschools.com
 
+version 2016-03-20
+http://lazymofo.wdschools.com/code/2015-03-20/lazy_mofo.zip
+------------------
+  Missing </div> when no results are found. Ugly code :( needs refactoring... Thanks Artur.
+
 version 2016-02-24
 http://lazymofo.wdschools.com/code/2015-02-24/lazy_mofo.zip
 ------------------
