@@ -1,5 +1,13 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to lazymofo@wdschools.com
 
+version 2016-03-29
+http://lazymofo.wdschools.com/code/2015-03-29/lazy_mofo.zip
+------------------
+  Fixed query_string_list so variables are carry on inserts and in the search functionality
+	Fixed pagination_text_records, it was not applied
+  Added new redirect() code for when uri_path is defined - this is only used for wordpress admin plugins
+  Fixed a notice
+
 version 2016-03-20
 http://lazymofo.wdschools.com/code/2015-03-20/lazy_mofo.zip
 ------------------
@@ -9,7 +17,7 @@ version 2016-02-24
 http://lazymofo.wdschools.com/code/2015-02-24/lazy_mofo.zip
 ------------------
   Added default timezone in case none is set in the application. strtotime requires a timezone be set in the application.
-  
+
 version 2015-10-09
 http://lazymofo.wdschools.com/code/2015-10-09/lazy_mofo.zip
 ------------------
@@ -25,7 +33,7 @@ http://lazymofo.wdschools.com/code/2015-09-11/lazy_mofo.zip
 ------------------
   Added BigInt support for MySQL Identity columns. Removed intval casting.
   Fixed minor parse bug in get_qs(). Thanks Aaron
-  Removed sql comment during parsing of commands in get_input_control() since MySQL doesn't seem to like this style of comment anymore. Tweaks to html_radio(), html_select(), html_checkbox() 
+  Removed sql comment during parsing of commands in get_input_control() since MySQL doesn't seem to like this style of comment anymore. Tweaks to html_radio(), html_select(), html_checkbox()
 
 version 2014-07-08
 http://lazymofo.wdschools.com/code/2014-07-08/lazy_mofo.zip
@@ -35,15 +43,15 @@ http://lazymofo.wdschools.com/code/2014-07-08/lazy_mofo.zip
 version 2014-07-07
 http://lazymofo.wdschools.com/code/2014-07-07/lazy_mofo.zip
 ------------------
-  Fixed exclude_field which wasn't working since 2011. Yea for security!  
+  Fixed exclude_field which wasn't working since 2011. Yea for security!
   Fixed notice on $button. Thanks Aaron g.
   Removed picnic.css, various style/class changes. Back to plain old css since picnic.css is hard to integrate with existing sites.
-	
+
 version 2014-05-06
 http://lazymofo.wdschools.com/code/2014-05-06/lazy_mofo.zip
 ------------------
   Another redirect() bug. Sometimes HTTP_HOST has port number already so dulicate port numbers were appearing. Thanks someone at ordeninformatica.
-  Export to CSV column issues. Thanks Yannick M.	
+  Export to CSV column issues. Thanks Yannick M.
   Reverted to old version of picnic.css from 2015-02-26 - input width causing issues
 
 version 2014-04-30
@@ -55,27 +63,27 @@ http://lazymofo.wdschools.com/code/2014-04-30/lazy_mofo.zip
 version 2015-02-26
 http://lazymofo.wdschools.com/code/2015-02-26/lazy_mofo.zip
 ------------------
-  Fixed bug in date_in to identify invalid dates. I thought this was already fixed in 2014-03-11. 
+  Fixed bug in date_in to identify invalid dates. I thought this was already fixed in 2014-03-11.
   Suppressed a couple notices.
 
 version 2015-02-22
 http://lazymofo.wdschools.com/code/2015-02-22/lazy_mofo.zip
 ------------------
-  Removed &amp; in urls. No more escaping and can use header redirects if desired.	
+  Removed &amp; in urls. No more escaping and can use header redirects if desired.
   Altered redirect() to use header().
-  Added search cancel link added. 
+  Added search cancel link added.
 
 version 2015-02-14
 http://lazymofo.wdschools.com/code/2015-02-14/lazy_mofo.zip
 ------------------
-  Removed child grid 
+  Removed child grid
   Removed automatic search query generation - search must be done manually now
   Added validation system
   Add proper counting with sql_calc_found_rows rathen than a separate query
   Added Picnic CSS compatibility
   Fixed grid_repeat_header_at
   Restored how clean_out removes illegal characters
-  Fixed mb_substr in clean_out(). Thanks Dragoslav! 
+  Fixed mb_substr in clean_out(). Thanks Dragoslav!
 
 version 2014-09-08
 http://lazymofo.wdschools.com/code/2014-09-08/lazy_mofo.zip
@@ -97,15 +105,15 @@ http://lazymofo.wdschools.com/code/2014-08-03/lazy_mofo.zip
 version 2014-04-24
 http://lazymofo.wdschools.com/code/2014-04-24/lazy_mofo.zip
 ------------------
-  Removed extra div on grid. Thanks Krzysiek.  
+  Removed extra div on grid. Thanks Krzysiek.
 
 version 2014-03-11
 http://lazymofo.wdschools.com/code/2014-03-11/lazy_mofo.zip
 ------------------
   Added native types readonly_date and readonly_datetime.
-  Fixed date_in, blanks dates should not be evaluated. Bug introduced in 2014-01-13 date_in fix. Thanks Rob H.	
+  Fixed date_in, blanks dates should not be evaluated. Bug introduced in 2014-01-13 date_in fix. Thanks Rob H.
   Fixed - multi delete was sendinga a false error message when no grid_input_control defined.
-  Fixed - multi delete save changes button was not appearing when no grid_input_control defined.   
+  Fixed - multi delete save changes button was not appearing when no grid_input_control defined.
   Change css class names and style sheet. Again...
   Fixed restricted_numeric_input default regular exp to allow for minus/negative symbol -
 
@@ -119,7 +127,7 @@ http://lazymofo.wdschools.com/code/2014-01-13/lazy_mofo.zip
 version 2014-01-06
 http://lazymofo.wdschools.com/code/2014-01-06/lazy_mofo.zip
 ------------------
-  Fixed - Export feature may display extra identity column. Thanks to Geoffroi for bug fix. 
+  Fixed - Export feature may display extra identity column. Thanks to Geoffroi for bug fix.
 
 version 2013-12-14
 http://lazymofo.wdschools.com/code/2013-12-14/lazy_mofo.zip
@@ -135,7 +143,7 @@ http://lazymofo.wdschools.com/code/2013-10-31/lazy_mofo.zip
   Added ability to upload images and docs directly to the grid.
   Added query_string_list to hold variables names to preserve in the query string while paging.
   Added multi delete from grids feature.
-  Added more placeholders for custom text on save changes and search buttons 
+  Added more placeholders for custom text on save changes and search buttons
   Changed css classes and ids
   Changed form_user_function to form_additional_html, now just a variable to hold a string to add html to the bottom of a form.
   Changed insert_user_function to on_insert_user_function
@@ -172,7 +180,7 @@ http://lazymofo.wdschools.com/code/2013-06-30/lazy_mofo.zip
   Renamed grid_delete_confirm to delete_confirm since delete button has been added to the form view.
   Added success message for when records are deleted.
   Fixed csv export() bug related to erasing existing buffers.
-  
+
 version 2013-05-08
 http://lazymofo.wdschools.com/code/2013-05-08/lazy_mofo.zip
 -------------------

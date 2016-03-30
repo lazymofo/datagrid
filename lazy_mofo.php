@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions lazymofo@wdschools.com
-// version 2016-03-20
+// version 2016-03-29
 
 class lazy_mofo{
 
@@ -13,7 +13,9 @@ class lazy_mofo{
 
     public $rename = array();               // associative array of column names and friendly names. example: array('prod_id' => 'Product ID') 
 
-    public $uri_path = '';                  // to specify URI. Needed for some applications such as in admin WordPress Plugins.
+    public $uri_path = '';                  // experimental - to specify URI used for WordPress admin plugins
+
+    public $query_string_list = '';         // comma delimited list of variable names to carry around in the URL
 
     public $exclude_field = array();        // don't allow users to update or insert into these fields, even if data is posted. place the field name in the key of the array. example: $lm->exclude_field['is_admin'] = '';
 
@@ -102,8 +104,6 @@ class lazy_mofo{
 
     public $upload_allow_list = '.mp3 .jpg .jpeg .png .gif .doc .docx .xls .xlsx .txt .pdf'; // space delimted file name extentions. include period
 
-    public $query_string_list = '';            // comma delimited list of variable names carried around to maintain state of search, sort, and pagination
-
     public $delete_confirm      = 'Are you sure you want to delete this record?';       // javascript popup confirmation
     public $update_grid_confirm = 'Are you sure you want to delete [count] record(s)?'; // javascript popup confirmation when deleting on the grid
 
@@ -122,7 +122,7 @@ class lazy_mofo{
     public $grid_delete_link = "<a href='#' onclick='return _delete(\"[identity_id]\");'>[delete]</a>";
     public $grid_export_link = "<a href='[script_name]_export=1&amp;[qs]' title='Download CSV'>Export</a>";
 
-    public $grid_search_box = "<form action='[script_name]' class='lm_search_box'><input type='text' name='_search' value='[_search]' size='20' class='lm_search_input'><a href='[script_name]' style='margin: 0 10px 0 -20px; display: inline-block;' title='Clear Search'>x</a><input type='submit' value='Search' class='lm_button lm_search_button'><input type='hidden' name='action' value='search'></form>"; 
+    public $grid_search_box = "<form action='[script_name]' class='lm_search_box'><input type='text' name='_search' value='[_search]' size='20' class='lm_search_input'><a href='[script_name]' style='margin: 0 10px 0 -20px; display: inline-block;' title='Clear Search'>x</a><input type='submit' value='Search' class='lm_button lm_search_button'><input type='hidden' name='action' value='search'>[query_string_list]</form>"; 
 
     public $grid_text_record_added     = "Record Added";
     public $grid_text_changes_saved    = "Changes Saved";
@@ -133,7 +133,7 @@ class lazy_mofo{
 
     public $pagination_text_use_paging = '[use paging]';
     public $pagination_text_show_all   = '[show all]';
-    public $pagination_text_records    = 'Records';
+    public $pagination_text_records    = 'Record(s)';
     public $pagination_text_go         = 'Go';
     public $pagination_text_page       = 'Page';
     public $pagination_text_of         = 'of';
@@ -232,7 +232,7 @@ class lazy_mofo{
             $action = 'action=edit&';
 
         // redirect user
-        $url = $this->get_uri_path() . "{$action}_success=1&$this->identity_name=$id";
+        $url = $this->get_uri_path() . "{$action}_success=1&$this->identity_name=$id&" . $this->get_qs(''); // do carry items defined in query_string_list, '' removes the default
         $this->redirect($url, $id);
 
     }
@@ -888,10 +888,20 @@ class lazy_mofo{
         // search bar
         $search_box = '';
 		if($this->grid_show_search_box){
+    
+            // carry values defined in query_string_list
+            $query_string_list_inputs = '';
+            if(mb_strlen($this->query_string_list) > 0){
+                $arr = explode(',', trim($this->query_string_list, ', '));
+                foreach($arr as $val)
+                    $query_string_list_inputs .= "<input type='hidden' name='$val' value='" . $this->clean_out(@$_REQUEST[$val]) . "'>";
+            }
+            
             $search_box = $this->grid_search_box;
-			$search_box = str_replace('[script_name]', $uri_path, $search_box);
+			$search_box = str_replace('[script_name]', $uri_path . $this->get_qs('') , $search_box); // for 'x' cancel do add get_qs('') to carry query_string_list
 			$search_box = str_replace('[_search]', $_search, $search_box);
 			$search_box = str_replace('[_csrf]', $_SESSION['_csrf'], $search_box);
+			$search_box = str_replace('[query_string_list]', $query_string_list_inputs, $search_box);
         }
 
 		$add_record_search_bar = "<table cellpadding='2' cellspacing='1' border='0' width='100%' class='lm_add_search'><tr><td style='text-align: left'>$grid_add_link &nbsp; $grid_export_link</td><td style='text-align: right'>$search_box</td></tr></table>\n";
@@ -1781,7 +1791,7 @@ class lazy_mofo{
         else
             $pagination  .= " <a href='{$uri_path}_offset=" . ($_offset + $limit) . "&$get'>$this->pagination_text_next</a> ";
 
-        $pagination .= " &nbsp; " . number_format($count) . " Total Records <a href='{$uri_path}_pagination_off=1&$get' rel='nofollow'>$this->pagination_text_show_all</a> ";
+        $pagination .= " &nbsp; " . number_format($count) . " $this->pagination_text_records <a href='{$uri_path}_pagination_off=1&$get' rel='nofollow'>$this->pagination_text_show_all</a> ";
 
         $id++;
         return $pagination;
@@ -1820,6 +1830,7 @@ class lazy_mofo{
         $thumb_width = $this->thumb_width;
         $thumb_height = $this->thumb_height;
         $thumb_crop = $this->thumb_crop;
+        $notice = '';
 
         if($context == 'grid')
             $input_control = $this->grid_input_control;
@@ -2258,6 +2269,12 @@ class lazy_mofo{
 
         if($automatic === false){
             echo("<center><a href='$url'>Continue</a></center>");    
+            return;
+        }
+        
+        // this feature is only used used with WordPress plugins - use a simple js redirect for WP
+        if(mb_strlen($this->uri_path) > 0){
+            echo "<script>window.location.href='$url';</script>";
             return;
         }
 

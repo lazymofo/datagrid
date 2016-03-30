@@ -63,7 +63,6 @@ catch(PDOException $e) {
 	die('pdo connection error: ' . $e->getMessage());
 }
 
-
 // create LM object, pass in PDO connection
 $lm = new lazy_mofo($dbh); 
 
