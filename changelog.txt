@@ -1,5 +1,11 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to lazymofo@wdschools.com
 
+version 2016-04-13
+http://lazymofo.wdschools.com/code/2015-04-13/lazy_mofo.zip
+------------------
+  Fixed bug in CSV Export related to counting buffer level returned from ob_get_status(). 
+
+
 version 2016-03-29
 http://lazymofo.wdschools.com/code/2015-03-29/lazy_mofo.zip
 ------------------

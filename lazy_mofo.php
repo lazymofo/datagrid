@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions lazymofo@wdschools.com
-// version 2016-03-29
+// version 2016-04-13
 
 class lazy_mofo{
 
@@ -2361,8 +2361,10 @@ class lazy_mofo{
             $file_name = 'download.csv';
 
         // output buffering required
-        $arr = ob_get_status();
-        $level = intval($arr['level']);
+        $level = 0;
+        $arr = ob_get_status(true);
+        if($arr)
+            $level = count($arr);
 
         if($level <= 0){
             $error = "ob_start() or ob_start('ob_gzhandler') must be called at the beginning of the script to use CSV Export.";
