@@ -144,6 +144,7 @@ class lazy_mofo{
     public $text_delete_document = 'delete document';
 
     public $export_csv_file_name = '';
+    public $export_escape_char = '"';
 
     public $delim = '|'; // when using mutiple checkboxes or multipleselect, delimiter for values
 
@@ -2391,16 +2392,21 @@ class lazy_mofo{
              array_pop($columns);
            
         // header row    
-        foreach($columns as $key => $val)
-            echo $this->export_escape($val);
+	$first_col = true;
+        foreach($columns as $key => $val) {
+            echo $this->export_escape($val, $first_col);
+            $first_col = false;
+	}
 
         echo "\n";
 
         // loop thru data
         foreach($result as $row){
-
-            foreach($columns as $val)
-                echo $this->export_escape($row[$val]);
+            $first_col = true;
+            foreach($columns as $val) {
+                echo $this->export_escape($row[$val], $first_col);
+                $first_col = false;
+            }
 
             echo "\n";
             
@@ -2417,7 +2423,11 @@ class lazy_mofo{
         // purpose: escape for export()
         // returns: csv quoted and escaped string
         
-        return '"' . str_replace('"', '\"', $str) . '",'; 
+	$escape_str = $this->export_escape_char . str_replace($this->export_escape_char, '\\'.$this->export_escape_char, $str) . $this->export_escape_char;
+        if ($_first_col)
+		return $escape_str; 
+	else
+		return ','.$escape_str;
 
     }
 
