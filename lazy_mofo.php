@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions lazymofo@wdschools.com
-// version 2016-04-13
+// version 2016-04-14
 
 class lazy_mofo{
 
@@ -144,6 +144,9 @@ class lazy_mofo{
     public $text_delete_document = 'delete document';
 
     public $export_csv_file_name = '';
+    public $export_separator = ',';           // separator for csv export
+    public $export_delim = '"';               // delimiter for csv export 
+    public $export_delim_escape = '"';        // if delim is used in content add this string before for escaping
 
     public $delim = '|'; // when using mutiple checkboxes or multipleselect, delimiter for values
 
@@ -2391,16 +2394,18 @@ class lazy_mofo{
              array_pop($columns);
            
         // header row    
+        $column_index = 0;
         foreach($columns as $key => $val)
-            echo $this->export_escape($val);
+            echo $this->export_escape($val, $column_index++);
 
         echo "\n";
 
         // loop thru data
         foreach($result as $row){
 
+            $column_index = 0;
             foreach($columns as $val)
-                echo $this->export_escape($row[$val]);
+                echo $this->export_escape($row[$val], $column_index++);
 
             echo "\n";
             
@@ -2412,12 +2417,17 @@ class lazy_mofo{
     }
 
     
-    function export_escape($str){
+    function export_escape($str, $column_index){
 
         // purpose: escape for export()
-        // returns: csv quoted and escaped string
-        
-        return '"' . str_replace('"', '\"', $str) . '",'; 
+        // returns: separated and escaped string
+
+        $str = str_replace($this->export_delim, $this->export_delim_escape . $this->export_delim, $str);
+
+        if($column_index == 0)
+            return $this->export_delim . $str . $this->export_delim; 
+        else
+            return $this->export_separator . $this->export_delim . $str . $this->export_delim; 
 
     }
 

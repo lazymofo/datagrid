@@ -1,9 +1,15 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to lazymofo@wdschools.com
 
+version 2016-04-14
+http://lazymofo.wdschools.com/code/2015-04-14/lazy_mofo.zip
+------------------
+  Fixed bug in CSV export related escaping quotes. Added feature requested by ais-one to allow for different delimiters.
+
+
 version 2016-04-13
 http://lazymofo.wdschools.com/code/2015-04-13/lazy_mofo.zip
 ------------------
-  Fixed bug in CSV Export related to counting buffer level returned from ob_get_status(). 
+  Fixed bug in CSV export related to counting buffer level returned from ob_get_status(). 
 
 
 version 2016-03-29
