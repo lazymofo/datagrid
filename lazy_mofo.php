@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions lazymofo@wdschools.com
-// version 2016-04-14
+// version 2016-05-14
 
 class lazy_mofo{
 
@@ -2072,7 +2072,7 @@ class lazy_mofo{
             return;            
 
         // image is already smaller than maximum size
-        if($orig_width < $max_width && $orig_height < $max_height)
+        if($orig_width <= $max_width && $orig_height <= $max_height)
             return;            
 
         $width = $orig_width;

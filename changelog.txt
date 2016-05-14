@@ -1,5 +1,12 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to lazymofo@wdschools.com
 
+version 2016-04-15
+http://lazymofo.wdschools.com/code/2015-04-14/lazy_mofo.zip
+------------------
+  Fixed bug in image_resize() where resize was still processing if the image was the the requested size.
+  Fixed notice in html_document_input. Thx for pull from Adam.
+
+
 version 2016-04-14
 http://lazymofo.wdschools.com/code/2015-04-14/lazy_mofo.zip
 ------------------
