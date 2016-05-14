@@ -1142,6 +1142,7 @@ class lazy_mofo{
 
         // purpose: if document exists, display link and delete checkbox. also display file input
         // returns: html
+	$html = '';
 
         $class = $this->get_class_name($field_name);
 
