@@ -1672,7 +1672,6 @@ class lazy_mofo{
 
         // simplify query for faster execution
         $sql = rtrim($sql, "\r\n\t; ");                         // remove last semicolon
-        $sql = preg_replace('/order\s+by\s+.+$/i', '', $sql);   // remove order
         $sql = preg_replace('/limit\s+[0-9,\s]+$/i', '', $sql); // remove limit
         $sql .= ' limit 0 ';                                    // add limit
 
