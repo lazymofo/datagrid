@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Lazy Mofo Datagrid for PHP + MySQL CRUD</title>
+	<meta name="keywords" content="PHPGrid Free, PHP DataGrid, Automatic CRUD, PHP CRUD" />
+	<meta name="description" content="Lazy Mofo is a SQL meta driven form and grid generator for PHP and MySQL." />
+	<style>
+		*   { font-family: sans-serif; }
+        body { margin: 40px; }
+		pre { font-family: monospace, courier; color: blue; margin-left: 10px; padding: 10px; border: 1px solid #999; border-radius: 2px; border-right: 0; background-color: #ff; width: 100%; }
+		li  { margin: 6px; }
+    </style>
+</head>
+<body>
+
+<img src='http://lazymofo.wdschools.com/images/logo_color.png' alt='logo' align='left' style='margin: 10px; clear: both;' />
+
+<a href='http://lazymofo.wdschools.com/code/current/demo.php' target='_blank' rel='nofollow'><b>Live Demo</b></a> | 
+<a href='http://lazymofo.wdschools.com/code/current/_show_source.php?demo=1' target='_blank'>Demo Source</a> | 
+<a href='http://lazymofo.wdschools.com/code/current/_show_source.php' target='_blank'>Class Source</a> | 
+<a href='https://github.com/lazymofo/datagrid/archive/master.zip'>Download</a> | 
+<a href='https://github.com/lazymofo/datagrid' target='_blank'>GitHub</a> | 
+<a href='mailto&#58;&#108;&#97;zymo%66o%&#52;0w&#37;64s&#37;63h&#111;ol%73&#46;c&#111;%&#54;D'>Email Me</a>
+
+<br>current version: 2015-05-14
+<br>project home and demos: <a href='http://lazymofo.wdschools.com/'>http://lazymofo.wdschools.com/</a>
+
+
+<h1 style='clear:left;'>What is Lazy Mofo (LM) PHP Datagrid?</h1>
+<p>LM is a single PHP5 class for performing CRUD (create, read, update and delete) operations on a MySQL database table.<br>What can LM do?</p>
+<ul>
+    <li>Define grids and forms by SQL statements or table name</li>
+    <li>Populate select, radio, and checkbox inputs with data from SQL statements</li>
+    <li>Upload documents, resize or crop images</li>
+	<li>Grid features include pagination, sorting, and inline editing. Searching can be added.</li>
+    <li>Grid uses SQL_CALC_FOUND_ROWS, limit + offset for efficiency and low memory usage on large datasets</li>
+    <li>LM can be used for reporting since grids can be generated from SQL statements</li>
+    <li>Built-in validation, error reported next to input</li>
+	<li>Lightweight; a single class</li>
+</ul>
+
+<h1>Contents</h1>
+<ul>
+	<li><a href='#whats_new'>What's New</a></li>
+	<li><a href='#requirements'>Requirements</a></li>
+	<li><a href='#example_1'>Example 1 - Basic Usage</a></li>
+	<li><a href='#example_2'>Example 2 - Advanced Usage</a></li>
+	<li><a href='#hiding_or_altering_links_and_buttons'>Hiding or Altering Links and Buttons</a></li>
+	<li><a href='#redirect_to_edit_screen_after_update_and_insert'>Redirect to Grid Screen After Update and Insert</a></li>
+	<li><a href='#input_and_output_controls'>Input and Output Controls - define how a field is rendered</a></li>
+	<ul>
+		<li><a href='#defining_custom_input_and_output_controls'>Defining Custom Input and Output Controls</li>
+		<li><a href='#Controls Which are Automatically Populated'>Controls Which are Automatically Populated</li>
+		<li><a href='#native_input_controls'>Native Input Controls</a></li>
+		<li><a href='#native_output_controls'>Native Output Control</a></li>
+	</ul>
+	<li><a href='#adding_search'>Adding Search</a></li>
+	<li><a href='#customizing_the_search_form'>Customizing the Search Form</a></li>
+	<li><a href='#defining_separate_add_and_edit_forms'>Defining Separate Add and Edit Forms</a></li>
+	<li><a href='#validation'>Validation</a></li>
+	<li><a href='#on_insert_update_delete_events'>On Insert/Update/Delete Events</a></li>
+	<li><a href='#cross_site_request_forgery_protection_token'>Cross Site Request Forgery Protection Token</a></li>
+	<li><a href='#date_formats'>Date Formats</a></li>
+	<li><a href='#adding_jquery_ui_datepicker'>Adding JQuery UI Datepicker</a></li>
+	<li><a href='#export_to_csv'>Export to CSV</a></li>
+	<li><a href='#more_features_and_settings'>More Features and Settings</a></li>
+</ul>
+
+
+
+<h1 style='clear:left;'><a name='whats_new'>What's New</a></h1>
+<ul>
+	<li>Added feature to <a href='#cast_user_function'>cast columns based on user defined functions</a>.</li>
+	<li>Added MySQL BigInt support for identity columns.</li>
+	<li>Added MySQL BigInt support for identity columns.</li>
+	<li>Added validation using regular expressions. Error messages are displayed next to the input.</li>
+	<li>Removed child grid features. Sorry, I found the UI for the child records awkward. Back to simplicity.</li>
+	<li>Removed automatic searching. Search queries must now be defined manually.</li>
+	<li>Removed Picnic CSS</li>
+</ul>
+
+
+<h1><a name='requirements'>Requirements</a></h1>
+<ul>
+<li>PHP 5 and MySQL 5</li>
+<li>Magic Quotes should be turned off</li>
+<li>PDO MySQL module installed for PHP</li>
+<li>Database table must have a primary key identity</li>
+<li>Multibyte Support / mbstring must be enabled</li>
+</ul>
+
+
+<h1><a name='example_1'>Example 1 - Basic Usage</a></h1>
+<pre>
+include('lazy_mofo.php');
+
+// required for csv export
+ob_start();
+
+// connect to database with pdo
+$dbh = new PDO("mysql:host=localhost;dbname=test;", 'user', 'password');
+
+// create LM object, pass in PDO connection
+$lm = new lazy_mofo($dbh); 
+
+// table name for updates, inserts and deletes
+$lm-&gt;table = 'market';
+
+// identity / primary key column name
+$lm-&gt;identity_name = 'market_id';
+
+// use the lm controller 
+$lm-&gt;run();
+
+</pre>
+
+
+<h1><a name='example_2'>Example 2 - Advanced Usage</a></h1>
+
+<pre>
+include('lazy_mofo.php');
+
+
+// required for csv export
+ob_start();
+
+
+// connect with pdo 
+$dbh = new PDO("mysql:host=localhost;dbname=testdb;", "username", "password");
+
+
+// create LM object, pass in PDO connection
+$lm = new lazy_mofo($dbh); 
+
+
+// table name for updates, inserts and deletes
+$lm-&gt;table = 'market';
+
+
+// identity / primary key for table
+$lm-&gt;identity_name = 'market_id';
+
+
+// optional, make friendly names for fields
+$lm-&gt;rename['country_id'] = 'Country';
+
+
+// optional, define input controls on the form
+$lm-&gt;form_input_control['photo'] = '--image';
+$lm-&gt;form_input_control['is_active'] = "select 1, 'Yes' union select 0, 'No' union select 2, 'Maybe'; --radio";
+$lm-&gt;form_input_control['country_id'] = 'select country_id, country_name from country; --select';
+
+
+// optional, define editable input controls on the grid
+$lm-&gt;grid_input_control['is_active'] = '--checkbox';
+
+
+// optional, define output control on the grid 
+$lm-&gt;grid_output_control['contact_email'] = '--email'; // make email clickable
+$lm-&gt;grid_output_control['photo'] = '--image'; // image clickable  
+
+
+// new in version &gt;= 2015-02-27 all searches have to be done manually
+$lm-&gt;grid_show_search_box = true;
+
+
+// optional, query for grid(). LAST COLUMN MUST BE THE IDENTITY for [edit] and [delete] links to appear
+$lm-&gt;grid_sql = "
+select 
+  m.market_id
+, m.market_name
+, m.photo
+, m.contact_email
+, c.country_name
+, m.is_active
+, m.create_date
+, m.market_id 
+from  market m 
+left  
+join  country c 
+on    m.country_id = c.country_id 
+where coalesce(m.market_name, '') like :_search 
+or    coalesce(m.contact_email, '') like :_search 
+or    coalesce(c.country_name, '') like :_search 
+order by m.market_id desc
+";
+$lm-&gt;grid_sql_param[':_search'] = '%' . trim(@$_REQUEST['_search']) . '%';
+
+
+// optional, define what is displayed on edit form. identity id must be passed in also.  
+$lm-&gt;form_sql = "
+select 
+  market_id
+, market_name
+, country_id
+, photo
+, contact_email
+, is_active
+, create_date
+, notes 
+from  market 
+where market_id = :market_id
+";
+
+$lm-&gt;form_sql_param[":$lm-&gt;identity_name"] = @$_REQUEST[$lm-&gt;identity_name]; 
+
+
+// optional, validation. input:  regular expression (with slashes), error message, tip/placeholder
+// first element can also be a user function or 'email'
+$lm-&gt;on_insert_validate['market_name'] = array('/.+/', 'Missing Market Name', 'this is required'); 
+$lm-&gt;on_insert_validate['contact_email'] = array('email', 'Invalid Email', 'this is optional', true); 
+
+
+// copy validation rules to update - same rules
+$lm-&gt;on_update_validate = $lm-&gt;on_insert_validate;  
+
+
+// use the lm controller
+$lm-&gt;run();
+</pre>
+
+<h1><a name='hiding_or_altering_links_and_buttons'>Hiding or Altering Links and Buttons</a></h1>
+Most links, buttons, and messages can be hidden or altered. View the class source code to see all the member variables. 
+
+<pre>
+Example:
+
+// change back button to read "Cancel"
+$lm-&gt;form_back_button = "&lt;input type='button' value='Cancel' class='lm_button dull' onclick='_back();'&gt;";
+
+// alter link text
+$lm-&gt;grid_add_link = str_replace('Add a Record', 'Add New', $lm-&gt;grid_add_link);
+$lm-&gt;grid_edit_link = str_replace('[edit]', 'Edit', $lm-&gt;grid_edit_link);
+
+// hide delete and export links
+$lm-&gt;grid_delete_link = "";
+$lm-&gt;grid_export_link = "";
+
+// change success message
+$lm-&gt;form_text_record_added = "New Record Added";
+$lm-&gt;grid_text_record_added = "New Record Added";
+
+</pre>
+
+
+
+<h1><a name='redirect_to_edit_screen_after_update_and_insert'>Redirect to Grid Screen After Update and Insert</a></h1>
+<p>By default the user is redirected back to the edit form after making updates or inserting a record. Redirect users to the opening grid screen by setting the following variables to false:</p>
+
+<pre>
+
+    $lm-&gt;return_to_edit_after_insert = false;
+    $lm-&gt;return_to_edit_after_update = false;
+
+</pre>
+
+
+<h1><a name='input_and_output_controls'>Input and Output Controls - define how a field is rendered</a></h1>
+<p>Input and Output Controls are associative arrays used to define how to render input or output for a field.</p>
+<p>Inputs render form inputs such as text, select, or checkbox. </p>
+<p>Outputs render: text, links, and images. Output controls only apply to the grid view and are defined in grid_output_control.</p>
+
+<pre>
+Define Inputs on edit form()
+$lm-&gt;form_input_control["field_name"] = "[sql] --command";
+
+Define Inputs on grid()
+$lm-&gt;grid_input_control["field_name"] = "[sql] --command";
+
+Define Output on grid()
+$lm-&gt;grid_output_control["field_name"] = "[sql] --command";
+</pre>
+
+
+<pre>
+
+Examples: 
+
+    $lm-&gt;form_input_control['client_pic'] = '--image';
+
+    $lm-&gt;form_input_control['pdf'] = '--document';
+
+    $lm-&gt;form_input_control['weird_data']  = '--my_user_function';
+
+    $lm-&gt;form_input_control['will_you_attend'] = "select 1 as key, 'Yes' as val union select 0, 'No' union select 3, 'Maybe'; --radio";
+
+    $lm-&gt;form_input_control['country_id'] = 'select country_id as val, country_name as opt from country; --select';
+
+    $lm-&gt;form_input_control['is_active'] = "--checkbox"; // without a sql prefix this control will default to yes/no
+
+</pre>
+
+<h2><a name='defining_custom_input_and_output_controls'>Defining Custom Input and Output Controls</h2>
+<p>User defined functions can be defined to render an input or output control. </p>
+
+<pre>
+Example: 
+
+$lm->form_input_control['weird_data'] = '--my_user_function';
+
+function my_user_function($column_name, $value, $command, $called_from){
+
+    // $column_name: field name
+    // $value: field value  
+    // $command: full command as defined in the arrays: form_input_control, grid_input_control, or grid_output_control
+    // $called_from: which function called this user function; form, or grid
+
+    global $lm;
+    $val = $lm-&gt;clean_out($value);
+    return "&lt;input type='text' name='$column_name' value='$val' size='100'&gt;";
+
+}
+</pre>
+
+
+<h2><a name='Controls Which are Automatically Populated'>Controls Which are Automatically Populated</h2>
+<p>By default LM will populate form_input_control and grid_output_control with --date, --datetime, --number and --textarea according to meta data. To disable this behavior set auto_populate_controls = false.</p>
+
+
+<h2><a name='native_input_controls'>Native Input Controls</a></h2>
+<p>For use with form_input_control and grid_input_control arrays.</p>
+
+<ul>
+	<li>--my_input_control<p>define your own function and return any HTML. example: function my_input_control($column_name, $value, $command, $called_from)</li>
+	<li>--text<p>text input (default)</li>
+	<li>--password<p>password input</li>
+	<li>--number<p>text input for number, when cast numbers are filtered through restricted_numeric_input pattern.</li>
+	<li>--date<p>text input, date is formatted according to public $date_format variable</li>
+	<li>--datetime<p>text input, date is formatted according to public $date_format variable</li>
+	<li>--textarea<p>textarea input</li>
+	<li>--readonly<p>plain text (not an input, just displays data)</li>
+	<li>--readonly_date<p>plain text formatted with date settings (not an input, just displays data)</li>
+	<li>--readonly_datetime<p>plain text formatted with datetime settings (not an input, just displays data)</li>
+	<li>--image<p>file input for uploading, if image exists then image is displayed with 'delete' checkbox.</li>
+	<li>--document<p>file input for uploading, if document exists then display link with 'delete' checkbox.</li>
+	<li>[sql] --select<p>select dropdown, sql statement is optional.</li>
+	<li>[sql] --selectmultiple<p>select dropdown with multiple options. values are stored in a delimited list. sql statement is optional.</li>
+	<li>[sql] --checkbox<p>input checkboxes. values are stored in a delimited list. sql statement is optional. </li>
+	<li>[sql] --radio<p>radio buttons. sql statement is optional.</li>
+</ul>
+
+<h2><a name='native_output_controls'>Native Output Controls</a></h2>
+<p>For use with form_output_control and grid_output_control arrays.</p>
+
+<ul>
+	<li>--my_output_control<p>define your own function and return any HTML. example: function my_output_control($column_name, $value, $command, $called_from)</li>
+	<li>--text<p>outputs plain text (default)</li>
+	<li>--date<p>outputs date according to date_out setting</li>
+	<li>--datetime<p>outputs datetime according to datetime_out setting</li>
+	<li>--email<p>outputs a clickable email link</li>
+	<li>--image<p>outputs a clickable link to the image, or display image if grid_show_images = true</li>
+	<li>--document<p>outputs a clickable link to the document</li>
+	<li>--html<p>outputs html without tags or formatting</li>
+</ul>
+
+<h1><a name='adding_search'>Adding Search</a></h1>
+<p>Version &gt;= current requires searching to be done manually.</p>
+<pre>
+Example:
+
+$lm->grid_show_search_box = true;
+
+$lm->grid_sql = "select m.market_id, m.market_name, m.photo, m.contact_email, c.country_name, m.is_active, m.create_date, market_id from market m left join country c on m.country_id = c.country_id where coalesce(m.market_name, '') like :_search or coalesce(m.contact_email, '') like :_search or coalesce(c.country_name, '') like :_search order by m.market_id desc";
+$lm->grid_sql_param = array(':_search' => '%' . trim(@$_REQUEST['_search']) . '%');
+</pre>
+
+
+<h1><a name='customizing_the_search_form'>Customizing the Search Form</a></h1>
+Placeholders [script_name] and [_search] (not show here) are populated by the class.
+<pre>
+Example:
+
+$lm-&gt;grid_show_search_box = true; // show html defined in grid_search_box
+
+$_new_search1 = $lm->clean_out(@$_REQUEST['_new_search1']);
+$_new_search2 = $lm->clean_out(@$_REQUEST['_new_search2']);
+
+// define our own search form with two inputs instead of the default one
+$lm-&gt;grid_search_box = "
+&lt;form class='lm_search_box'&gt;
+	&lt;input type='text' name='_new_search1' value='$_new_search1' size='20' class='lm_search_input'&gt;
+	&lt;input type='text' name='_new_search2' value='$_new_search2' size='20' class='lm_search_input'&gt;
+	&lt;input type='submit' value='Search' class='lm_search_button'&gt;
+	&lt;input type='hidden' name='action' value='search'&gt;
+&lt;/form&gt;
+"; 
+
+$lm->query_string_list = "_new_search1,_new_search2"; // add variable names to querystring so search is perserved when paging, sorting, and editing.
+</pre>
+
+
+<h1><a name='defining_separate_add_and_edit_forms'>Defining Separate Add and Edit Forms</a></h1>
+<p>Different forms may be defined for adding records versus editing records.</p>
+
+<pre>
+Example:
+
+if(!isset(@$_REQUEST[$lm->identity_name])){
+	// form for adding records
+	$lm->form_sql = 'select * from market where market_id = :market_id';
+}
+else{
+	// form for editing records
+	$lm->form_sql = 'select market_id, market_name, country_id, photo, is_active, create_date, notes from market where market_id = :market_id';
+}
+
+$lm->form_sql_param = array(':' . $lm->identity_name => @$_REQUEST[$lm->identity_name]); 
+
+</pre>
+
+
+<h1><a name='validation'>Validation</a></h1>
+<p>Server-side validation displays an error message next to the form input. <br>A general error message is displayed at the top and can be defined with the $lm-&gt;validate_text_general string setting. </p>
+<p>Separate arrays are used for inserts and updates. If the validate needs are the same for both inserts and updates then just copy the existing array to duplicate the rules.</p>
+<p>Alternatively, validation can be handled in On Insert/Update/Delete events <a href='#on_insert_update_delete_events'>(see below)</a>.</p>
+<pre>
+$lm-gt;on_insert_validate['field_name'] = array(string $regexp_or_user_function, string $error_message[, string $tip_placeholder , boolean optional_input]);
+
+$lm-gt;on_update_validate['field_name'] = array(string $regexp_or_user_function, string $error_message[, string $tip_placeholder , boolean optional_input]);
+</pre>
+
+<ul>
+<li>First element is a regular expression /slashes required/, 'email', or user defined function name.</li>
+<li>Second element is the error message.</li>
+<li>Third element is the optional tip, or placeholder for text inputs.</li>
+<li>Fouth element is a boolean flag defining if any input is optional. Default false.</li>
+
+</ul>
+
+<pre>
+Example: 
+
+$lm->on_insert_validate['market_name'] = array('/.+/', 'Missing Market Name', 'This is Required'); 
+$lm->on_insert_validate['contact_email'] = array('email', 'Missing or invalid Email', 'Optional Email', true); // built in validator for email, set to optional input
+$lm->on_insert_validate['country_id'] = array('my_validate', 'Missing or invalid country', 'Required');        // user defined function
+
+// copy array - same setting for updates
+$lm->on_update_validate = $lm->on_insert_validate;
+
+function my_validate(){
+
+	if($_POST['country_id') == '')
+		return false;
+	else
+		return true;
+
+}
+</pre>
+
+
+<h1><a name='on_insert_update_delete_events'>On Insert/Update/Delete Events</a></h1>
+<p>On Insert/Update/Delete functions are useful for validation and data manipulation.</p>
+<p>These functions can be also be used for validation. Strings returned by the user defined functions are displayed at the top as error messages and the insert/update/delete action is halted.</p>
+
+<ul>
+<li>on_insert_user_function</li>
+<li>on_update_user_function</li>
+<li>on_delete_user_function</li>
+<li>on_update_grid_user_function</li>
+</ul>
+
+<pre>
+Example: 
+
+$lm->on_update_user_function = 'my_hash';
+
+function my_hash(){
+
+	if(isset($_POST['password_reset']))
+		$_POST['password'] = password_hash($_POST['password_reset']);
+	
+	if(mb_strlen($_POST['password_reset']) &gt; 100)
+		return "Password too long";
+
+}
+</pre>
+
+
+<a name='after_insert_update_delete_events'></a>
+<h1>After Insert/Update/Delete Events</h1>
+
+<p>User define functions can be defined in the properties listed below.</p>
+<p>after_ events are useful for running trigger-like actions. The after_insert_user_function event uniquely receives the identity id of the newly added record.</p>
+
+<ul>
+<li>after_insert_user_function</li>
+<li>after_update_user_function</li>
+<li>after_delete_user_function</li>
+<li>after_update_grid_user_function</li>
+</ul>
+
+<pre>
+Example: 
+
+$lm->after_insert_user_function = 'my_after_insert';
+
+function my_after_insert($id){
+	
+	// after_insert_user_function is the only action to get the identity id
+	// now that the record is added we can do anything we need to
+
+	global $lm;
+
+	$sql_param = array(':market_id' =&gt; $id);
+	$sql = "insert into related_table(field1, market_id) values (now(), :market_id)";
+	$lm->query($sql, $sql_param);
+
+}
+</pre>
+
+
+
+<a name='cast_user_function'></a>
+<h1>Cast Data Based on Colunm Name</h1>
+
+<p>The cast_user_function array is used for storing column names and their corresponding cast function.</p>
+
+<pre>
+Example: 
+
+// when using the checkbox input maybe we'd want unchecked to be 0 instead of null 
+$lm->cat_user_function['is_active'] = 'my_cast';
+
+function my_cast($val){
+	
+	return intval($val);
+	
+}
+</pre>
+
+
+<h1><a name='cross_site_request_forgery_protection_token'>Cross Site Request Forgery Protection Token</a></h1>
+<p>This script does not validate csrf itself but has a placeholder csrf variable from loaded from $_SESSION['_csrf']. To protect from csrf, place your nonce token in $_SESSION['_csrf'] and validate the csrf on POST commands.</p>
+
+<pre>
+Example: 
+
+// in your login script give the user a random string token
+$_SESSION['_csrf'] = base64_encode(openssl_random_pseudo_bytes(15));
+
+// somewhere else, before the page is processed, run some code like this 
+if($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['_csrf'] != $_POST['_csrf'])
+	die('Invalid csrf token');
+</pre>
+
+
+<h1><a name='date_formats'>Date Formats</a></h1>
+<p>Lazy Mofo will automatically identify date and datetime fields. All output of dates and datetimes are output in the format defined by member variables date_out and datetime_out.</p>
+<pre>
+Example: 
+
+// default US format
+$lm-&gt;date_out = 'm/d/Y';
+$lm-&gt;datetime_out = 'm/d/Y h:i A';
+
+// or set non-US date format
+$lm-&gt;date_out = 'd/m/Y';
+$lm-&gt;datetime_out = 'd/m/Y h:i A';
+
+// or use a ISO-ish date format for html5 date inputs
+$lm-&gt;date_out = 'Y-m-d';
+$lm-&gt;datetime_out = 'Y-m-d H:i';
+
+</pre>
+
+
+<h1><a name='adding_jquery_ui_datepicker'>Adding JQuery UI Datepicker</a></h1>
+<pre>
+Example: 
+
+&lt;link rel='stylesheet' href='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css'&gt;
+&lt;script src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'&gt;&lt;/script&gt;
+&lt;script src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js'&gt;&lt;/script&gt;
+&lt;script&gt;
+$(function() {
+	
+	// note how field class names are prefixed with 'lm_'
+	$('input.lm_create_date').datepicker(); 
+	
+	// non US date example dd/mm/yy and week starting on monday(1) instead of sunday(0)
+	// make sure lazy mofo class members for date_out and datetime_out correspond with your local date format
+	//$('input.lm_create_date').datepicker({ dateFormat: 'dd/mm/yy', firstDay: 1 });
+
+
+});
+&lt;/script&gt;
+
+</pre>
+
+
+<h1><a name='export_to_csv'>Export to CSV</a></h1>
+<p>Output buffering (ob_start) must be used at the beginning of the script for the export to CSV feature to function properly.</p>
+
+
+<h1><a name='more_features_and_settings'>More Features and Settings</a></h1>
+<p>View class source code to see all the available settings and features.</p>
+
+
+<br /><br /><br />
+<b>Project Sponsored By:</b>
+<div>
+    <div align='center'>
+        <a href='http://www.animationschoolsindex.com/' class='footer'>Computer Animation Schools</a> | 
+        <a href='http://www.gdschools.com/' class='footer'>Graphic Design Degrees</a> | 
+        <a href='http://www.wdschools.com/' class='footer'>Web Design School</a> | 
+        <a href='http://www.legaldegrees.net/' class='footer'>Criminal Justice and Paralegal Schools</a>
+    </div>
+    <div align='center'>
+        <a href='http://www.accountantschools.com/' class='footer'>Accounting Schools</a> |
+        <a href='http://www.massagetherapistschools.com/' class='footer'>Massage Therapy Schools</a> |
+        <a href='http://www.pharmtechschools.com/' class='footer'>Pharmacy Tech Schools</a> |
+        <a href='http://www.themechanicschools.com/' class='footer'>Auto Mechanic Schools</a>
+    </div>
+    <div align='center'>
+        <a href='http://www.dhschools.com/' class='footer'>Dental Hygienist Schools</a> |
+        <a href='http://www.medicaltrainingindex.com/' class='footer'>Medical Tech Training</a> |
+        <a href='http://www.phlebotomyschools.net/' class='footer'>Phlebotomy Schools</a> |
+        <a href='http://www.technicianschoolsu.com/' class='footer'>Technician Schools</a>
+    </div>
+</div>
+
+</body>
+</html>
