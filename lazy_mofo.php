@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions lazymofo@wdschools.com
-// version 2016-05-14
+// version 2016-07-08
 
 class lazy_mofo{
 
@@ -1673,7 +1673,6 @@ class lazy_mofo{
         // simplify query for faster execution
         $sql = rtrim($sql, "\r\n\t; ");                         // remove last semicolon
         $sql = preg_replace('/order\s+by\s+.+$/i', '', $sql);   // remove order
-        $sql = preg_replace('/limit\s+[0-9,\s]+$/i', '', $sql); // remove limit
         $sql .= ' limit 0 ';                                    // add limit
 
         $sth = $this->dbh->prepare($sql);
