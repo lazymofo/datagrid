@@ -1685,8 +1685,12 @@ class lazy_mofo{
 
         $i = 0;
         $columns = array();
-        while($column = $sth->getColumnMeta($i++))
+        while($column = $sth->getColumnMeta($i++)){
+            if($context == 'form' && array_key_exists($column['name'], $this->exclude_field))
+                continue;
+
             array_push($columns, $column['name']);
+        }
 
         // quit now if there's nothing else to do
         if(!$this->auto_populate_controls)
