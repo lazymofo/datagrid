@@ -65,6 +65,8 @@ class lazy_mofo{
     public $return_to_edit_after_insert = true; // redirect to edit screen after adding or updating a record. if false, user is sent back to grid view.
     public $return_to_edit_after_update = true; 
 
+    public $redirect_using_js = false; // redirect to a page using java-script instead of header modification by means of PHP. 
+
     // upload paths                             // relative path names only! paths are created at runtime as needed
     public $upload_path = 'uploads';            // required when using --image or --document input types
     public $thumb_path = 'thumbs';              // optional, leave blank if you don't need thumbnails
@@ -2280,10 +2282,13 @@ class lazy_mofo{
         }
         
         // this feature is only used used with WordPress plugins - use a simple js redirect for WP
-        if(mb_strlen($this->uri_path) > 0){
+        // or if $this->redirect_using_js is true
+        if(mb_strlen($this->uri_path) > 0 ||
+            $this->redirect_using_js ){
             echo "<script>window.location.href='$url';</script>";
             return;
         }
+       
 
         $port = '';    
         $host = preg_replace('/:[0-9]+$/', '', $_SERVER['HTTP_HOST']); // host without port number
