@@ -1,8 +1,14 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to lazymofo@wdschools.com
 
+version 2016-07-26
+------------------
+  Added option to switch to a js redirect. Thanks Artur-A
+
+
 version 2016-07-08
 ------------------
   Removed an unnecessary tweak to sql in get_columns().
+
 
 version 2016-04-15
 http://lazymofo.wdschools.com/code/2015-04-14/lazy_mofo.zip

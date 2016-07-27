@@ -1,4 +1,4 @@
-LoadModule mod_rewrite.so
+# LoadModule mod_rewrite.so
 
 RewriteEngine on
 
