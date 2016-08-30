@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions lazymofo@wdschools.com
-// version 2016-07-26
+// version 2016-08-29
 
 class lazy_mofo{
 
@@ -1349,6 +1349,7 @@ class lazy_mofo{
         $prev_sql = $sql;
 
         $value  = "$this->delim$value$this->delim";
+        $html = '';
         foreach($result as $row){
 
             $val = current($row);

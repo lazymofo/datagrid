@@ -1,5 +1,9 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to lazymofo@wdschools.com
 
+version 2016-08-29
+------------------
+  Doh! Fixed notice in html_checkbox()
+
 version 2016-07-26
 ------------------
   Added option to switch to a js redirect. Thanks Artur-A
