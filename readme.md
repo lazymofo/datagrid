@@ -33,7 +33,7 @@ What's New
 Requirements
 ============
 
--   PHP 5 and MySQL 5
+-   PHP 5+ and MySQL 5
 -   Magic Quotes should be turned off
 -   PDO MySQL module installed for PHP
 -   Database table must have a primary key identity
