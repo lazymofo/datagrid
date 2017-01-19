@@ -2,7 +2,7 @@
 
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
-// send feedback or questions lazymofo@wdschools.com
+// send feedback or questions iansoko at gmail
 // version 2016-08-29
 
 class lazy_mofo{
