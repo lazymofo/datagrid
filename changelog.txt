@@ -1,4 +1,8 @@
-lazy mofo - php data grid for mysql - send bugs and feedback to lazymofo@wdschools.com
+lazy mofo - php data grid for mysql - send bugs and feedback to iansoko at gmail
+
+version 2017-02-25
+------------------
+  Fixed, another attempt to fix the code the strips the order by clause
 
 version 2016-08-29
 ------------------
