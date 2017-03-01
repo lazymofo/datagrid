@@ -1191,6 +1191,7 @@ class lazy_mofo{
         // purpose: if exists, display document link
         // returns: html
 
+        $html = '';
         if(mb_strlen($file_name) > 0)
             $html = "<a href='$this->upload_path/$file_name' target='_blank'>" . $this->clean_out($file_name, $this->grid_ellipse_at) . "</a>";
 
