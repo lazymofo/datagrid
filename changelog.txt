@@ -1,5 +1,10 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to iansoko at gmail
 
+
+version 2017-02-28
+------------------
+  Fixed undefined variable in html_document_output(). thx premax!
+
 version 2017-02-25
 ------------------
   Fixed, another attempt to fix the code the strips the order by clause
