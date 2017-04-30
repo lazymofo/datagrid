@@ -856,6 +856,8 @@ class lazy_mofo{
         // add limit and offset for pagination
         if($_pagination_off == 0 && $_export == 0)
             $sql .= " limit $_offset, $grid_limit"; 
+		
+	$sql = str_replace('[ORDER_BY]','ORDER BY',$sql); // Handle ORDER BY in other parts of grid_sql statement
 
         // run query
         $result = $this->query($sql, $sql_param, 'grid() run query');
@@ -1687,6 +1689,7 @@ class lazy_mofo{
         $sql = rtrim($sql, "\r\n\t; ");                         // remove last semicolon
         $sql = preg_replace('/order\s+by\s+.+$/i', '', $sql);   // remove order
         $sql .= ' limit 0 ';                                    // add limit
+	$sql = str_replace('[ORDER_BY]','ORDER BY',$sql); // Handle ORDER BY in other parts of grid_sql statement
 
         $sth = $this->dbh->prepare($sql);
         if(!$sth->execute($sql_param)){
