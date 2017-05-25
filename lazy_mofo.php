@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions iansoko at gmail
-// version 2017-02-25
+// version 2017-05-23
 
 class lazy_mofo{
 
@@ -1683,9 +1683,15 @@ class lazy_mofo{
         if($sql == '')
             $sql = "select * from `$table`";
 
-        // simplify query for faster execution
-        $sql = rtrim($sql, "\r\n\t; ");                         // remove last semicolon
-        $sql = preg_replace('/order\s+by\s+.+$/i', '', $sql);   // remove order
+        // remove last semicolon        
+        $sql = rtrim($sql, "\r\n\t; ");
+
+        // try to remove last 'order by'. we need to allow functions in order by and order by in subqueries
+        preg_match_all('/order\s+by\s/im', $sql, $matches, PREG_OFFSET_CAPTURE);
+        if(count($matches) > 0){
+            $match = end($matches[0]);
+            $sql = mb_substr($sql, 0, $match[1]);
+        }
         $sql .= ' limit 0 ';                                    // add limit
 
         $sth = $this->dbh->prepare($sql);

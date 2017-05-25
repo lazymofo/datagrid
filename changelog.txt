@@ -1,5 +1,8 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to iansoko at gmail
 
+version 2017-05-23
+------------------
+  Same fix as 2017-02-25, but this fix needed to be applied in get_columns() too.
 
 version 2017-02-28
 ------------------
