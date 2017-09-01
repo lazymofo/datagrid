@@ -22,12 +22,8 @@ What can LM do?
 
 What's New
 ==========
--   Added cast_user_function to define function to cast a specified column.
--   Added MySQL BigInt support for identity columns.
--   Removed child grid features. Sorry, I found the UI for the child records awkward. Back to simplicity.
--   Removed automatic searching. Search queries must now be defined manually.
--   Added validation using regular expressions. Error messages are displayed next to the input.
--   Removed Picnic CSS
+-   Switched default mysql charset from utf8 to utf8mb4
+-   Replaced preg_match_all with one that works properly with multibyte
 
 Requirements
 ============

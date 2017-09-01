@@ -5,7 +5,7 @@
 create table if not exists country
 ( country_id int unsigned not null auto_increment primary key
 , country_name varchar(255)
-) character set utf8 collate utf8_general_ci;
+) character set utf8mb4 collate utf8mb4_unicode_ci;
 
 insert into country(country_name) values ('Canada'), ('United States'), ('Mexico');
 
@@ -18,7 +18,7 @@ create table if not exists market
 , is_active tinyint(1)
 , create_date date
 , notes text
-) character set utf8 collate utf8_general_ci;
+) character set utf8mb4 collate utf8mb4_unicode_ci;
 
 insert into market(market_name, contact_email, country_id, is_active, create_date, notes) values 
 ('Great North', 'jane@superco.com', 1, 1, curdate(), 'nothing new'),

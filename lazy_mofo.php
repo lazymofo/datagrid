@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions iansoko at gmail
-// version 2017-05-23
+// version 2017-08-31
 
 class lazy_mofo{
 
@@ -82,7 +82,7 @@ class lazy_mofo{
     public $image_quality = 80;                       // image quality when resizing and cropping, 1-100
     public $image_style = "style='height: 100px;'";   // apply style to all images displayed. limiting size is nice to keep things orderly.
 
-    public $charset_mysql = 'utf8';                   // charset for mysql communications
+    public $charset_mysql = 'utf8mb4';                // charset for mysql communications. was utf8 before version 2017-08-31 
     public $charset = 'UTF-8';                        // charset for output
 
     public $timezone = 'UTC';                         // if no timezone is set in the application, then this timezone is set for strtotime. http://php.net/manual/en/timezones.others.php
@@ -841,7 +841,7 @@ class lazy_mofo{
             $sql = rtrim($sql, '; '); // remove last semicolon
             
             // try to remove last 'order by'. we need to allow functions in order by and order by in subqueries
-            preg_match_all('/order\s+by\s/im', $sql, $matches, PREG_OFFSET_CAPTURE);
+            $this->mb_preg_match_all('/order\s+by\s/im', $sql, $matches, PREG_OFFSET_CAPTURE);
             if(count($matches) > 0){
                 $match = end($matches[0]);
                 $sql = mb_substr($sql, 0, $match[1]);
@@ -1687,7 +1687,7 @@ class lazy_mofo{
         $sql = rtrim($sql, "\r\n\t; ");
 
         // try to remove last 'order by'. we need to allow functions in order by and order by in subqueries
-        preg_match_all('/order\s+by\s/im', $sql, $matches, PREG_OFFSET_CAPTURE);
+        $this->mb_preg_match_all('/order\s+by\s/im', $sql, $matches, PREG_OFFSET_CAPTURE);
         if(count($matches) > 0){
             $match = end($matches[0]);
             $sql = mb_substr($sql, 0, $match[1]);
@@ -2281,7 +2281,26 @@ class lazy_mofo{
         return preg_replace('/[^a-zA-Z0-9_]/', '', $named_parameter);
             
     }
-    
+
+
+    function mb_preg_match_all($ps_pattern, $ps_subject, &$pa_matches, $pn_flags = PREG_PATTERN_ORDER, $pn_offset = 0, $ps_encoding = NULL){
+
+        // purpose: preg_match_all wrapper that returns the correct int for PREG_OFFSET_CAPTURE
+
+        if(is_null($ps_encoding))
+            $ps_encoding = mb_internal_encoding();
+
+        $pn_offset = strlen(mb_substr($ps_subject, 0, $pn_offset, $ps_encoding));
+        $ret = preg_match_all($ps_pattern, $ps_subject, $pa_matches, $pn_flags, $pn_offset);
+
+        if($ret && ($pn_flags & PREG_OFFSET_CAPTURE))
+            foreach($pa_matches as &$ha_match)
+                foreach($ha_match as &$ha_match)
+                    $ha_match[1] = mb_strlen(substr($ps_subject, 0, $ha_match[1]), $ps_encoding);
+        return $ret;
+
+    }
+
 
     function redirect($url, $automatic = true){
 

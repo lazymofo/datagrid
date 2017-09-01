@@ -1,5 +1,10 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to iansoko at gmail
 
+version 2017-08-31
+------------------
+  Replaced preg_match_all with one that works properly with multibyte. Thx Raffael!
+  Switched default mysql charset from utf8 to utf8mb4. demo database also switched to utf8mb4.
+
 version 2017-05-23
 ------------------
   Same fix as 2017-02-25, but this fix needed to be applied in get_columns() too.
