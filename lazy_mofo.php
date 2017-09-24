@@ -2523,4 +2523,17 @@ class lazy_mofo{
 
     }
 
+    function localization($lang, $file = null) {
+        // purpose: language and country localization by include file
+        // return: no
+
+        if (is_null($file)) {
+            $file = '$' . 'lm_' . $lang . '.inc.php';
+        }
+        
+        if (file_exists($file)) {
+            include($file);
+        }
+    } //localization
+    
 }
