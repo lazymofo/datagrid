@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions iansoko at gmail
-// version 2017-08-31
+// version 2017-09-29
 
 class lazy_mofo{
 
@@ -65,11 +65,12 @@ class lazy_mofo{
     public $return_to_edit_after_insert = true; // redirect to edit screen after adding or updating a record. if false, user is sent back to grid view.
     public $return_to_edit_after_update = true; 
 
-    public $redirect_using_js = false; // redirect to a page using java-script instead of header modification by means of PHP. 
+    public $redirect_using_js = false;          // redirect to a page using java-script instead of header modification by means of PHP. 
 
-    // upload paths                             // relative path names only! paths are created at runtime as needed
-    public $upload_path = 'uploads';            // required when using --image or --document input types
-    public $thumb_path = 'thumbs';              // optional, leave blank if you don't need thumbnails
+    public $charset_mysql = 'utf8mb4';          // charset for mysql communications. was utf8 before version 2017-08-31 
+    public $charset = 'UTF-8';                  // charset for output
+
+    public $timezone = 'UTC';                   // if no timezone is set in the application, then this timezone is set for strtotime. http://php.net/manual/en/timezones.others.php
 
     // image settings    
     public $upload_width = 400;                 // 0 height or width means no resizing or cropping
@@ -82,50 +83,47 @@ class lazy_mofo{
     public $image_quality = 80;                       // image quality when resizing and cropping, 1-100
     public $image_style = "style='height: 100px;'";   // apply style to all images displayed. limiting size is nice to keep things orderly.
 
-    public $charset_mysql = 'utf8mb4';                // charset for mysql communications. was utf8 before version 2017-08-31 
-    public $charset = 'UTF-8';                        // charset for output
-
-    public $timezone = 'UTC';                         // if no timezone is set in the application, then this timezone is set for strtotime. http://php.net/manual/en/timezones.others.php
-
-    public $date_in = 'Y-m-d';                        // input format into database, no need to change this
-    public $datetime_in = 'Y-m-d H:i:s';              
-
-    // US date format
-    public $date_out = 'm/d/Y';                       // output date
-    public $datetime_out = 'm/d/Y h:i A';             // output datetime
-
-    // non-US date format
-    //public $date_out = 'd/m/Y';
-    //public $datetime_out = 'd/m/Y h:i A';
-
-    // ISO-ish date format, or when using html5 date input
-    //public $date_out = 'Y-m-d';
-    //public $datetime_out = 'Y-m-d H:i';
-
     public $restricted_numeric_input = '/[^0-9\.\-]/';// optional, regular expression of what numbers are allowed to be sent to the database. helpful to remove dollar signs and spaces. many non-US countries use comma instead of decimal points and spaces instead of commas.
 
     public $upload_allow_list = '.mp3 .jpg .jpeg .png .gif .doc .docx .xls .xlsx .txt .pdf'; // space delimted file name extentions. include period
 
-    public $delete_confirm      = 'Are you sure you want to delete this record?';       // javascript popup confirmation
-    public $update_grid_confirm = 'Are you sure you want to delete [count] record(s)?'; // javascript popup confirmation when deleting on the grid
+    public $export_csv_file_name = '';
+    public $export_separator = ',';                  // separator for csv export
+    public $export_delim = '"';                      // delimiter for csv export 
+    public $export_delim_escape = '"';               // if delim is used in content add this string before for escaping
 
+    public $delim = '|';                             // when using mutiple checkboxes or multipleselect, delimiter for values
+
+    public $select_first_option_blank = true;        // make first option blank on dropdown --select and --selectmultiple inputs
+
+    // start i18n defaults // 
+
+    // javascript dialogs
+    public $delete_confirm      = 'Are you sure you want to delete this record?';
+    public $update_grid_confirm = 'Are you sure you want to delete [count] record(s)?';
+
+    // form buttons
     public $form_add_button    = "<input type='submit' value='Add' class='lm_button'>";
     public $form_update_button = "<input type='submit' value='Update' class='lm_button'>"; 
-    public $form_back_button   = "<input type='button' value='&lt; Back' class='lm_button dull' onclick='_back();'>"; // use type=button for delete and cancel so form presses the right button with enter key
+    public $form_back_button   = "<input type='button' value='&lt; Back' class='lm_button dull' onclick='_back();'>";
     public $form_delete_button = "<input type='button' value='Delete' class='lm_button error' onclick='_delete();'>"; 
 
-    public $form_text_title_add    = 'Add Record';   // titles in the <th> of top of the edit form 
+    // titles in the <th> of top of the edit form 
+    public $form_text_title_add    = 'Add Record';   
     public $form_text_title_edit   = 'Edit Record';
-    public $form_text_record_saved = 'Record Saved'; // customize success messages
+    public $form_text_record_saved = 'Record Saved';
     public $form_text_record_added = 'Record Added';
 
-    public $grid_add_link    = "<a href='[script_name]action=edit&amp;[qs]' class='lm_grid_add_link'>Add a Record</a>";  // link at displayed at the top to add a new record. [script_name] placeholder  will be populated by grid()
-    public $grid_edit_link   = "<a href='[script_name]action=edit&amp;[identity_name]=[identity_id]&amp;[qs]'>[edit]</a>"; // note special [identity_name] and [identity_id] placeholders that will be populated by grid()
+    // links on grid
+    public $grid_add_link    = "<a href='[script_name]action=edit&amp;[qs]' class='lm_grid_add_link'>Add a Record</a>";
+    public $grid_edit_link   = "<a href='[script_name]action=edit&amp;[identity_name]=[identity_id]&amp;[qs]'>[edit]</a>";
     public $grid_delete_link = "<a href='#' onclick='return _delete(\"[identity_id]\");'>[delete]</a>";
     public $grid_export_link = "<a href='[script_name]_export=1&amp;[qs]' title='Download CSV'>Export</a>";
 
-    public $grid_search_box = "<form action='[script_name]' class='lm_search_box'><input type='text' name='_search' value='[_search]' size='20' class='lm_search_input'><a href='[script_name]' style='margin: 0 10px 0 -20px; display: inline-block;' title='Clear Search'>x</a><input type='submit' value='Search' class='lm_button lm_search_button'><input type='hidden' name='action' value='search'>[query_string_list]</form>"; 
+    // search box
+    public $grid_search_box = "<form action='[script_name]' class='lm_search_box'><input type='text' name='_search' value='[_search]' size='20' class='lm_search_input'><a href='[script_name]' style='margin: 0 10px 0 -20px; display: inline-block;' title='Clear Search'>x</a><input type='submit' class='lm_button lm_search_button' value='Search'><input type='hidden' name='action' value='search'>[query_string_list]</form>"; 
 
+    // grid messages
     public $grid_text_record_added     = "Record Added";
     public $grid_text_changes_saved    = "Changes Saved";
     public $grid_text_record_deleted   = "Record Deleted";
@@ -133,8 +131,9 @@ class lazy_mofo{
     public $grid_text_delete           = "Delete";
     public $grid_text_no_records_found = "No Records Found";
 
-    public $pagination_text_use_paging = '[use paging]';
-    public $pagination_text_show_all   = '[show all]';
+    // pagination text
+    public $pagination_text_use_paging = 'use paging';
+    public $pagination_text_show_all   = 'show all';
     public $pagination_text_records    = 'Record(s)';
     public $pagination_text_go         = 'Go';
     public $pagination_text_page       = 'Page';
@@ -142,22 +141,26 @@ class lazy_mofo{
     public $pagination_text_next       = 'Next&gt;';
     public $pagination_text_back       = '&lt;Back';
 
+    // delete upload link text
     public $text_delete_image = 'delete image';
     public $text_delete_document = 'delete document';
 
-    public $export_csv_file_name = '';
-    public $export_separator = ',';           // separator for csv export
-    public $export_delim = '"';               // delimiter for csv export 
-    public $export_delim_escape = '"';        // if delim is used in content add this string before for escaping
+    // relative paths for --image or --document uploads
+    // paths are created at runtime as needed
+    public $upload_path = 'uploads';            // required when using  input types
+    public $thumb_path = 'thumbs';              // optional, leave blank if you don't need thumbnails
 
-    public $delim = '|'; // when using mutiple checkboxes or multipleselect, delimiter for values
+    // output date formats
+    public $date_out = 'm/d/Y';                 // output date, change to d/m/Y for non-us
+    public $datetime_out = 'm/d/Y h:i A';       // output datetime, change to d/m/Y h:i A for non-us
 
-    public $select_first_option_blank = true; // make first option blank on dropdown --select and --selectmultiple inputs
+    // end i18n defaults // 
 
-    private $set_names = false; 
+    public $date_in = 'Y-m-d';                  // do not change - input format into database
+    public $datetime_in = 'Y-m-d H:i:s';        // do not change
+    private $set_names = false;                 // do not change - internal flag
 
-
-    function __construct($dbh){
+    function __construct($dbh, $i18n = 'en-us'){
 
         if(!$dbh)
             die('Pass in a PDO object connected to the mysql database.');
@@ -175,6 +178,12 @@ class lazy_mofo{
         if(!isset($_SESSION['_csrf']))
             $_SESSION['_csrf'] = '';
 
+        // load requested internationalization file, en-us is defined above, in this class
+        if(strlen($i18n) > 0 && $i18n != 'en-us'){
+            if(!file_exists("i18n/{$i18n}.php"))
+                die("Error: Requested i18n file ({$i18n}.php) does not exists.");
+            include("i18n/{$i18n}.php");    
+        }
     }
 
     

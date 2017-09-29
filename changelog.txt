@@ -1,5 +1,9 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to iansoko at gmail
 
+version 2017-09-29
+------------------
+  Added tweaks to support i18n/internationalization. Thx Raffael and Fabio.
+
 version 2017-08-31
 ------------------
   Replaced preg_match_all with one that works properly with multibyte. Thx Raffael!

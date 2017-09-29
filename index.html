@@ -23,20 +23,20 @@
 <a href='https://github.com/lazymofo/datagrid' target='_blank'>GitHub</a> | 
 <a href='m&#97;i&#108;t&#111;&#58;ian&#115;&#111;ko&#64;%&#54;7m&#97;i&#108;&#46;co%6D'>Email Me</a>
 
-<br>current version: 2017-08-31
+<br>current version: 2017-09-29
 <br>project home and demos: <a href='http://lazymofo.wdschools.com/'>http://lazymofo.wdschools.com/</a>
 
 
-<h1 style='clear:left;'>What is Lazy Mofo (LM) PHP Datagrid?</h1>
-<p>LM is a single PHP5 class for performing CRUD (create, read, update and delete) operations on a MySQL database table.<br>What can LM do?</p>
+<h1 style='clear:left;'>Lazy Mofo (LM) PHP Datagrid</h1>
+<p>LM is a single PHP5 class for performing CRUD (create, read, update and delete) operations on a MySQL database table.</p>
 <ul>
     <li>Define grids and forms by SQL statements or table name</li>
     <li>Populate select, radio, and checkbox inputs with data from SQL statements</li>
     <li>Upload documents, resize or crop images</li>
 	<li>Grid features include pagination, sorting, and inline editing. Searching can be added.</li>
     <li>Grid uses SQL_CALC_FOUND_ROWS, limit + offset for efficiency and low memory usage on large datasets</li>
-    <li>LM can be used for reporting since grids can be generated from SQL statements</li>
     <li>Built-in validation, error reported next to input</li>
+	<li>i18n/internationalization enabled. See i18n/template.php if want to submit your county + language file.</li>
 	<li>Lightweight; a single class</li>
 </ul>
 
@@ -71,6 +71,7 @@
 
 <h1 style='clear:left;'><a name='whats_new'>What's New</a></h1>
 <ul>
+    <li>Added i18n/internationalization. See i18n/template.php if want to submit your county + language file.</li>
     <li>Switched default mysql charset from utf8 to utf8mb4</li>
     <li>Replaced preg_match_all with one that works properly with multibyte</li>
 </ul>
@@ -96,8 +97,8 @@ ob_start();
 // connect to database with pdo
 $dbh = new PDO("mysql:host=localhost;dbname=test;", 'user', 'password');
 
-// create LM object, pass in PDO connection
-$lm = new lazy_mofo($dbh); 
+// create LM object, pass in PDO connection, see i18n folder for language + country options 
+$lm = new lazy_mofo($dbh, 'en-us'); 
 
 // table name for updates, inserts and deletes
 $lm-&gt;table = 'market';
@@ -125,8 +126,8 @@ ob_start();
 $dbh = new PDO("mysql:host=localhost;dbname=testdb;", "username", "password");
 
 
-// create LM object, pass in PDO connection
-$lm = new lazy_mofo($dbh); 
+// create LM object, pass in PDO connection, see i18n folder for language + country options 
+$lm = new lazy_mofo($dbh, 'en-us'); 
 
 
 // table name for updates, inserts and deletes
@@ -216,8 +217,8 @@ $lm-&gt;run();
 </pre>
 
 <h1><a name='hiding_or_altering_links_and_buttons'>Hiding or Altering Links and Buttons</a></h1>
-Most links, buttons, and messages can be hidden or altered. View the class source code to see all the member variables. 
-
+Most links, buttons, and messages can be hidden or altered. View the class source code to see all the member variables.<br>
+i18n/internationalization are in the process of being added. Check the i18n folder for your language + country. Set the i18n by passing the language + country code into the constructor.
 <pre>
 Example:
 

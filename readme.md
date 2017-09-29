@@ -5,7 +5,7 @@ Lazy Mofo Data Grid
 project home, demo and documentation: [http://lazymofo.wdschools.com/](http://lazymofo.wdschools.com/)
 MIT License
 
-What is Lazy Mofo (LM) PHP Datagrid?
+Lazy Mofo (LM) PHP Datagrid
 ====================================
 
 LM is a single PHP5 class for performing CRUD (create, read, update and delete) operations on a MySQL database table.
@@ -16,12 +16,13 @@ What can LM do?
 -   Upload documents, resize or crop images
 -   Grid features include pagination, sorting, and inline editing. Searching can be added.
 -   Grid uses SQL_CALC_FOUND_ROWS, limit + offset for efficiency and low memory usage on large datasets
--   LM can be used for reporting since grids can be generated from SQL statements
 -   Built-in validation, error reported next to input
+-   i18n/internationalization enabled. See i18n/template.php if want to submit your county + language file.
 -   Lightweight; a single class
 
 What's New
 ==========
+-   Added i18n/internationalization. See i18n/template.php if want to submit your county + language file.
 -   Switched default mysql charset from utf8 to utf8mb4
 -   Replaced preg_match_all with one that works properly with multibyte
 
@@ -46,8 +47,8 @@ Example 1 - Basic Usage
     // connect to database with pdo
     $dbh = new PDO("mysql:host=localhost;dbname=test;", 'user', 'password');
 
-    // create LM object, pass in PDO connection
-    $lm = new lazy_mofo($dbh); 
+    // create LM object, pass in PDO connection, see i18n folder for language + country options 
+    $lm = new lazy_mofo($dbh, 'en-us'); 
 
     // table name for updates, inserts and deletes
     $lm->table = 'market';
@@ -73,8 +74,8 @@ Example 2 - Advanced Usage
     $dbh = new PDO("mysql:host=localhost;dbname=testdb;", "username", "password");
 
 
-    // create LM object, pass in PDO connection
-    $lm = new lazy_mofo($dbh); 
+    // create LM object, pass in PDO connection, see i18n folder for language + country options 
+    $lm = new lazy_mofo($dbh, 'en-us'); 
 
 
     // table name for updates, inserts and deletes

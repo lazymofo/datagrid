@@ -63,8 +63,8 @@ catch(PDOException $e) {
 	die('pdo connection error: ' . $e->getMessage());
 }
 
-// create LM object, pass in PDO connection
-$lm = new lazy_mofo($dbh); 
+// create LM object, pass in PDO connection, see i18n folder for country + language options 
+$lm = new lazy_mofo($dbh, 'en-us'); 
 
 
 // table name for updates, inserts and deletes
@@ -98,7 +98,8 @@ $lm->grid_output_control['photo'] = '--image'; // image clickable
 $lm->grid_show_search_box = true;
 
 
-// optional, query for grid(). LAST COLUMN MUST BE THE IDENTITY for [edit] and [delete] links to appear
+// optional, query for grid().
+// ** IMPORTANT - last column must be the identity/key for [edit] and [delete] links to appear **
 $lm->grid_sql = "
 select 
   m.market_id
