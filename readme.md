@@ -1,7 +1,4 @@
 
-Lazy Mofo Data Grid
-===================
-
 project home, demo and documentation: [http://lazymofo.wdschools.com/](http://lazymofo.wdschools.com/)
 MIT License
 
@@ -9,7 +6,6 @@ Lazy Mofo (LM) PHP Datagrid
 ====================================
 
 LM is a single PHP5 class for performing CRUD (create, read, update and delete) operations on a MySQL database table.
-What can LM do?
 
 -   Define grids and forms by SQL statements or table name
 -   Populate select, radio, and checkbox inputs with data from SQL statements
