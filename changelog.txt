@@ -1,5 +1,10 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to iansoko at gmail
 
+version 2017-10-09
+------------------
+  Added German language file.
+  Fixed a typo and a view unescaped ampersands. Thx Raffael
+
 version 2017-09-29
 ------------------
   Added tweaks to support i18n/internationalization. Thx Raffael and Fabio.

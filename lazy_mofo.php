@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions iansoko at gmail
-// version 2017-09-29
+// version 2017-10-09
 
 class lazy_mofo{
 
@@ -181,7 +181,7 @@ class lazy_mofo{
         // load requested internationalization file, en-us is defined above, in this class
         if(strlen($i18n) > 0 && $i18n != 'en-us'){
             if(!file_exists("i18n/{$i18n}.php"))
-                die("Error: Requested i18n file ({$i18n}.php) does not exists.");
+                die("Error: Requested i18n file ({$i18n}.php) does not exist.");
             include("i18n/{$i18n}.php");    
         }
     }
@@ -942,7 +942,7 @@ class lazy_mofo{
             if($column_name == $this->identity_name && $i == ($column_count - 1))
                 $head .= "    <th></th>\n"; // if identity is last column then this is the column with the edit and delete links
             else
-                $head .= "    <th><a href='{$uri_path}_order_by=" . ($i + 1) . "&_desc=$_desc_invert&" . $this->get_qs('_search') . "'>$title</a></th>\n";
+                $head .= "    <th><a href='{$uri_path}_order_by=" . ($i + 1) . "&amp;_desc=$_desc_invert&amp;" . $this->get_qs('_search') . "'>$title</a></th>\n";
         
             $i++;
 
@@ -1788,18 +1788,18 @@ class lazy_mofo{
 
         $use_paging_link = '';
         if($_pagination_off == 1)
-            $use_paging_link = "<a href='{$uri_path}_pagination_off=0&$get' rel='nofollow'>$this->pagination_text_use_paging</a>";
+            $use_paging_link = "<a href='{$uri_path}_pagination_off=0&amp;$get' rel='nofollow'>$this->pagination_text_use_paging</a>";
 
         if($_pagination_off == 1 || $count <= $limit) 
             return number_format($count) . " $this->pagination_text_records $use_paging_link";
 
         // simple text input for page number on giant datasets. use drop-down for smaller datasets.
         if($count > 100000){
-            $input = "<input type='text' size='7' id='active_page_$id' value='$active_page' ><input type='button' value='$this->pagination_text_go' onclick='window.location.href=\"{$uri_path}_offset=\" + ((document.getElementById(\"active_page_$id\").value * $limit) - $limit) + \"&$get\"'>";
+            $input = "<input type='text' size='7' id='active_page_$id' value='$active_page' ><input type='button' value='$this->pagination_text_go' onclick='window.location.href=\"{$uri_path}_offset=\" + ((document.getElementById(\"active_page_$id\").value * $limit) - $limit) + \"&amp;$get\"'>";
         }
         else
         {
-            $input = "<select onchange='window.location.href=\"{$uri_path}_offset=\" + this.options[this.selectedIndex].value + \"&$get\"'>";
+            $input = "<select onchange='window.location.href=\"{$uri_path}_offset=\" + this.options[this.selectedIndex].value + \"&amp;$get\"'>";
             for($i = 0, $p = 1; $i < $count; $i += $limit, $p++){
                 $sel = '';
                 if($p == $active_page)
@@ -1815,14 +1815,14 @@ class lazy_mofo{
         if($_offset == 0)
             $pagination .= " $this->pagination_text_back ";
         else
-            $pagination .= " <a href='{$uri_path}_offset=" . ($_offset - $limit) . "&$get'>$this->pagination_text_back</a> ";
+            $pagination .= " <a href='{$uri_path}_offset=" . ($_offset - $limit) . "&amp;$get'>$this->pagination_text_back</a> ";
 
         if($active_page >= $total_page)
             $pagination  .= " $this->pagination_text_next ";
         else
-            $pagination  .= " <a href='{$uri_path}_offset=" . ($_offset + $limit) . "&$get'>$this->pagination_text_next</a> ";
+            $pagination  .= " <a href='{$uri_path}_offset=" . ($_offset + $limit) . "&amp;$get'>$this->pagination_text_next</a> ";
 
-        $pagination .= " &nbsp; " . number_format($count) . " $this->pagination_text_records <a href='{$uri_path}_pagination_off=1&$get' rel='nofollow'>$this->pagination_text_show_all</a> ";
+        $pagination .= " &nbsp; " . number_format($count) . " $this->pagination_text_records <a href='{$uri_path}_pagination_off=1&amp;$get' rel='nofollow'>$this->pagination_text_show_all</a> ";
 
         $id++;
         return $pagination;
@@ -1843,9 +1843,9 @@ class lazy_mofo{
         $arr = explode(',', trim($query_string_list, ','));
         foreach($arr as $var)
             if(mb_strlen(@$_REQUEST[$var]) > 0)
-                $get .= "&$var=" . urlencode($_REQUEST[$var]);
+                $get .= "&amp;$var=" . urlencode($_REQUEST[$var]);
 
-        return ltrim($get, '&');
+        return ltrim($get, '&amp;');
 
     }
 
