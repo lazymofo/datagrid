@@ -1,9 +1,7 @@
 
-MIT License
-
 ![logo](https://i.imgur.com/CGDTkQL.png)
 
-Lazy Mofo (LM) PHP Datagrid
+Lazy Mofo (LM) PHP Datagrid - MIT License
 ====================================
 
 LM is a single PHP5 class for performing CRUD (create, read, update and delete) operations on a MySQL database table.
@@ -166,5 +164,5 @@ Example 2 - Advanced Usage
     $lm->run();
   
     
-[HTML Documentation](https://rawgit.com/lazymofo/datagrid/master/index.html)
+**[Full HTML Documentation](https://rawgit.com/lazymofo/datagrid/master/index.html)**
 
