@@ -14,18 +14,7 @@
 </head>
 <body>
 
-<img src='//lazymofo.wdschools.com/images/logo_color.png' alt='logo' align='left' style='margin: 10px; clear: both;' />
-
-<a href='//lazymofo.wdschools.com/code/current/demo.php' target='_blank' rel='nofollow'><b>Live Demo</b></a> | 
-<a href='//lazymofo.wdschools.com/code/current/_show_source.php?demo=1' target='_blank'>Demo Source</a> | 
-<a href='//lazymofo.wdschools.com/code/current/_show_source.php' target='_blank'>Class Source</a> | 
-<a href='https://github.com/lazymofo/datagrid/archive/master.zip'>Download</a> | 
-<a href='https://github.com/lazymofo/datagrid' target='_blank'>GitHub</a> | 
-<a href='m&#97;i&#108;t&#111;&#58;ian&#115;&#111;ko&#64;%&#54;7m&#97;i&#108;&#46;co%6D'>Email Me</a>
-
-<br>current version: 2017-09-29
-<br>project home and demos: <a href='http://lazymofo.wdschools.com/'>http://lazymofo.wdschools.com/</a>
-
+<img src='https://i.imgur.com/CGDTkQL.png' alt='logo' align='left' style='margin: 10px; clear: both;' />
 
 <h1 style='clear:left;'>Lazy Mofo (LM) PHP Datagrid</h1>
 <p>LM is a single PHP5 class for performing CRUD (create, read, update and delete) operations on a MySQL database table.</p>
@@ -61,6 +50,7 @@
 	<li><a href='#validation'>Validation</a></li>
 	<li><a href='#on_insert_update_delete_events'>On Insert/Update/Delete Events</a></li>
 	<li><a href='#cross_site_request_forgery_protection_token'>Cross Site Request Forgery Protection Token</a></li>
+	<li><a href='#i18n'>i18n/Internationalization</a></li>
 	<li><a href='#date_formats'>Date Formats</a></li>
 	<li><a href='#adding_jquery_ui_datepicker'>Adding JQuery UI Datepicker</a></li>
 	<li><a href='#export_to_csv'>Export to CSV</a></li>
@@ -71,6 +61,7 @@
 
 <h1 style='clear:left;'><a name='whats_new'>What's New</a></h1>
 <ul>
+    <li>Sorry, no more online demo. Simplifying my life and don't feel like running servers for fun.</li>
     <li>Added i18n/internationalization. See i18n/template.php if want to submit your county + language file.</li>
     <li>Switched default mysql charset from utf8 to utf8mb4</li>
     <li>Replaced preg_match_all with one that works properly with multibyte</li>
@@ -564,6 +555,20 @@ $_SESSION['_csrf'] = base64_encode(openssl_random_pseudo_bytes(15));
 if($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['_csrf'] != $_POST['_csrf'])
 	die('Invalid csrf token');
 </pre>
+
+
+
+<h1><a name='i18n'>i18n/Internationalization</a></h1>
+<p>By default LM datagrid is us-en (United States - English). At this time very few country-language files are available. Check the i18n folder to see what is available. </p>
+<pre>
+Example: 
+
+// create LM object, pass in PDO connection, see i18n folder for language + country options 
+$lm = new lazy_mofo($dbh, 'en-us'); 
+
+</pre>
+
+
 
 
 <h1><a name='date_formats'>Date Formats</a></h1>

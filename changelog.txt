@@ -1,4 +1,9 @@
-lazy mofo - php data grid for mysql - send bugs and feedback to iansoko at gmail
+lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
+
+version 2017-10-16
+------------------
+  js and css fix to text input for large datasets. Thx Raffael
+  Added full docs to read me
 
 version 2017-09-29
 ------------------

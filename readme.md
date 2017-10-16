@@ -1,6 +1,7 @@
 
-project home, demo and documentation: [http://lazymofo.wdschools.com/](http://lazymofo.wdschools.com/)
 MIT License
+
+![logo](https://i.imgur.com/CGDTkQL.png)
 
 Lazy Mofo (LM) PHP Datagrid
 ====================================
@@ -13,12 +14,17 @@ LM is a single PHP5 class for performing CRUD (create, read, update and delete) 
 -   Grid features include pagination, sorting, and inline editing. Searching can be added.
 -   Grid uses SQL_CALC_FOUND_ROWS, limit + offset for efficiency and low memory usage on large datasets
 -   Built-in validation, error reported next to input
--   i18n/internationalization enabled. See i18n/template.php if want to submit your county + language file.
+-   i18n/internationalization enabled. See i18n/template.php if want to submit your language + county file.
 -   Lightweight; a single class
+
+![grid](https://i.imgur.com/wHUpMan.png)
+![form](https://i.imgur.com/ig6ci5R.png)
+
 
 What's New
 ==========
--   Added i18n/internationalization. See i18n/template.php if want to submit your county + language file.
+-   Sorry no more online demo site. I don't feel like maintaining the personal server anymore. 
+-   Added i18n/internationalization. See i18n/template.php if want to submit your language + county file.
 -   Switched default mysql charset from utf8 to utf8mb4
 -   Replaced preg_match_all with one that works properly with multibyte
 
@@ -160,5 +166,5 @@ Example 2 - Advanced Usage
     $lm->run();
   
     
-project home and documentation: [http://lazymofo.wdschools.com/](http://lazymofo.wdschools.com/)
-   
+[HTML Documentation](https://rawgit.com/lazymofo/datagrid/master/index.html)
+

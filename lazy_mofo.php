@@ -1128,6 +1128,7 @@ class lazy_mofo{
             return true;
 
         }
+
         </script>
         ";
     }
@@ -1777,7 +1778,6 @@ class lazy_mofo{
 
         // purpose: pagination for grid
 
-        static $id = 0;    // for unique active page input id
         $get = $this->get_qs('_order_by,_desc,_search');
         $active_page = floor($_offset / $limit) + 1; 
         $total_page = ceil($count / $limit);
@@ -1795,7 +1795,7 @@ class lazy_mofo{
 
         // simple text input for page number on giant datasets. use drop-down for smaller datasets.
         if($count > 100000){
-            $input = "<input type='text' size='7' id='active_page_$id' value='$active_page' ><input type='button' value='$this->pagination_text_go' onclick='window.location.href=\"{$uri_path}_offset=\" + ((document.getElementById(\"active_page_$id\").value * $limit) - $limit) + \"&$get\"'>";
+            $input = "<input type='text' size='7' class='lm_active_page' value='$active_page' onkeyup='document.getElementsByClassName(\"lm_active_page\")[0].value = this.value; // send data to first input' > <input type='button' class='lm_button' value='$this->pagination_text_go' onclick='window.location.href=\"{$uri_path}_offset=\" + ((document.getElementsByClassName(\"lm_active_page\")[0].value * $limit) - $limit) + \"&$get\"'>";
         }
         else
         {
@@ -1824,7 +1824,6 @@ class lazy_mofo{
 
         $pagination .= " &nbsp; " . number_format($count) . " $this->pagination_text_records <a href='{$uri_path}_pagination_off=1&$get' rel='nofollow'>$this->pagination_text_show_all</a> ";
 
-        $id++;
         return $pagination;
 
     }
