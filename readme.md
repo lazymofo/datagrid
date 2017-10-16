@@ -1,4 +1,6 @@
 
+**[Full HTML Documentation](https://rawgit.com/lazymofo/datagrid/master/index.html)**
+
 ![logo](https://i.imgur.com/CGDTkQL.png)
 
 Lazy Mofo (LM) PHP Datagrid - MIT License
