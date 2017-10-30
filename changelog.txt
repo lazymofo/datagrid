@@ -1,5 +1,9 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2017-10-30
+------------------
+  Fixed html_checkbox() was not preserving input when validation errors were displayed. Thx Raffael.
+
 version 2017-10-16
 ------------------
   js and css fix to text input for large datasets. Thx Raffael

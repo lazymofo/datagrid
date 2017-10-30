@@ -23,6 +23,7 @@ LM is a single PHP5 class for performing CRUD (create, read, update and delete) 
 
 What's New
 ==========
+
 -   Sorry no more online demo site. I don't feel like maintaining the personal server anymore. 
 -   Added i18n/internationalization. See i18n/template.php if want to submit your language + county file.
 -   Switched default mysql charset from utf8 to utf8mb4
@@ -104,7 +105,7 @@ Example 2 - Advanced Usage
 
     // optional, define output control on the grid 
     $lm->grid_output_control['contact_email'] = '--email'; // make email clickable
-    $lm->grid_output_control['photo'] = '--image'; // image clickable  
+    $lm->grid_output_control['photo'] = '--image'; // image clickable 
 
 
     // new in version >= 2015-02-27 all searches have to be done manually
@@ -123,7 +124,7 @@ Example 2 - Advanced Usage
     , m.create_date
     , m.market_id 
     from  market m 
-    left  
+    left
     join  country c 
     on    m.country_id = c.country_id 
     where coalesce(m.market_name, '') like :_search 
@@ -134,7 +135,7 @@ Example 2 - Advanced Usage
     $lm->grid_sql_param[':_search'] = '%' . trim(@$_REQUEST['_search']) . '%';
 
 
-    // optional, define what is displayed on edit form. identity id must be passed in also.  
+    // optional, define what is displayed on edit form. identity id must be passed in also.
     $lm->form_sql = "
     select 
       market_id
@@ -159,7 +160,7 @@ Example 2 - Advanced Usage
 
 
     // copy validation rules to update - same rules
-    $lm->on_update_validate = $lm->on_insert_validate;  
+    $lm->on_update_validate = $lm->on_insert_validate;
 
 
     // use the lm controller

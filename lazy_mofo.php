@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions iansoko at gmail
-// version 2017-09-29
+// version 2017-10-30
 
 class lazy_mofo{
 
@@ -1359,16 +1359,23 @@ class lazy_mofo{
             return "<label><input type='checkbox' name='$field_name' class='$class' value='1' $checked ></label><input type='hidden' name='$field_name_hidden' value=''>";
         }
 
+        // static for optimization
         static $prev_sql = '';
         static $result;
 
-        // simple optimization
+        // not saved yet, then run query
         if($prev_sql != $sql)
             $result = $this->query($sql, $sql_param, 'html_radio()');
 
+        // save into static var for optimization comparison on next loop
         $prev_sql = $sql;
 
-        $value  = "$this->delim$value$this->delim";
+        // make delimited string of previous post
+        if(is_array($value))
+            $value = $this->delim . implode($this->delim, $value) . $this->delim;
+        else
+            $value = $this->delim . $value . $this->delim;
+
         $html = '';
         foreach($result as $row){
 
@@ -1376,7 +1383,7 @@ class lazy_mofo{
             $opt = next($row);
 
             $checked = '';    
-            if(mb_strstr($value, "$this->delim$val$this->delim"))
+            if(mb_strstr($value, $this->delim . $val . $this->delim))
                 $checked = "checked='checked'";
 
             $html .= "<label><input type='checkbox' name='{$field_name}[]' class='$class' value='" . $this->clean_out($val) . "' $checked >" . $this->clean_out($opt) . "</label>&nbsp;";
