@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions iansoko at gmail
-// version 2017-10-30
+// version 2018-04-09
 
 class lazy_mofo{
 
@@ -2312,6 +2312,9 @@ class lazy_mofo{
             foreach($pa_matches as &$ha_match)
                 foreach($ha_match as &$ha_match)
                     $ha_match[1] = mb_strlen(substr($ps_subject, 0, $ha_match[1]), $ps_encoding);
+
+        $pa_matches = array_filter($pa_matches); // php <=5.3 returns array with 1 empty element on non-match, this will change to 0 element
+
         return $ret;
 
     }
