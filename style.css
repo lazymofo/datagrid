@@ -32,6 +32,7 @@ a    { color: #0074d9;}
 #lm div.lm_form_button_bar       { margin: 10px auto; }   
 
 /* grid */
+#lm table.lm_grid { margin-bottom: 11px; }
 #lm table.lm_grid tr:nth-child(even)                        { background: #eee; }
 #lm table.lm_grid tr.lm_active, #lm table.lm_grid tr:hover { background: #c2e3ff; } /* highlight hover and current row edited */ 
 

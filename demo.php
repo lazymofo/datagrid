@@ -1,6 +1,8 @@
 <?php
 /*
+
 -- sample sql script to populate database for demo
+-- for older mysql < 5.5 replace utf8mb4 with utf8
 
 create table if not exists country
 ( country_id int unsigned not null auto_increment primary key
