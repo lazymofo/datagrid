@@ -18,6 +18,9 @@ Thanks for your help!
 $this->delete_confirm      = 'Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?';
 $this->update_grid_confirm = 'Sind Sie sicher, dass Sie diese [count] Einträge löschen möchten?';
 
+// validation general error 
+$this->validation_error_msg = "Fehlender oder ungültiger Eintrag";
+
 // form buttons
 $this->form_add_button    = "<input type='submit' value='Hinzufügen' class='lm_button'>";
 $this->form_update_button = "<input type='submit' value='Aktualisieren' class='lm_button'>"; 

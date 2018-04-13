@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions iansoko at gmail
-// version 2018-04-09
+// version 2018-04-11
 
 class lazy_mofo{
 
@@ -101,6 +101,9 @@ class lazy_mofo{
     // javascript dialogs
     public $delete_confirm      = 'Are you sure you want to delete this record?';
     public $update_grid_confirm = 'Are you sure you want to delete [count] record(s)?';
+
+    // validation general error 
+    public $validation_error_msg = "Missing or Invalid Input";
 
     // form buttons
     public $form_add_button    = "<input type='submit' value='Add' class='lm_button'>";
@@ -2495,11 +2498,11 @@ class lazy_mofo{
         // alters the $validate array adding bool flag corresponding to column name
 
         // $validate is an array of arrays
-        // [0] string  $regexp_or_user_function
-        // [1] string  $error_message
-        // [2] string  $tip_placeholder
-        // [3] boolean $optional_input
-        // [4] boolean - holds result from validation process - false means input failed validation 
+        // [0] string  $regexp_or_user_function or "email", required
+        // [1] string  $error_message   optional
+        // [2] string  $tip_placeholder optional
+        // [3] boolean $optional_input  optional, default false
+        // [4] boolean - internal use - validate() writes true or false to this field
 
         $columns = $this->get_columns('form');
         $all_valid = true;
@@ -2531,7 +2534,7 @@ class lazy_mofo{
             
             // add error msg if missing for some reason
             if(@$validate[$column_name][1] == '')
-                $validate[$column_name][1] == 'Missing or Invalid Input';
+                $validate[$column_name][1] = $this->validation_error_msg;
 
             if(!$is_valid)
                 $all_valid = false;

@@ -1,5 +1,9 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2018-04-11
+------------------
+  Fixed bug in validate(), added i18n validation error message. Thx again RenZo!
+
 version 2018-04-09
 ------------------
   Fixed mb_preg_match_all() was returning 1 empty element in php <~5.3. Added filter to prevent this. Thx RenZo!

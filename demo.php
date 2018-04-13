@@ -141,8 +141,7 @@ where market_id = :market_id
 $lm->form_sql_param[":$lm->identity_name"] = @$_REQUEST[$lm->identity_name]; 
 
 
-// optional, validation. input:  regular expression (with slashes), error message, tip/placeholder
-// first element can also be a user function or 'email'
+// optional, validation - array(regexp_or_email_or_user_function, optional_error_msg, optional_placeholder, optional_is_input_optional_bool)
 $lm->on_insert_validate['market_name'] = array('/.+/', 'Missing Market Name', 'this is required'); 
 $lm->on_insert_validate['contact_email'] = array('email', 'Invalid Email', 'this is optional', true); 
 
