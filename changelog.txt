@@ -2,7 +2,7 @@ lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansok
 
 version 2018-04-14
 ------------------
-  Doh! The last update was flawed. Fixes around variable used for the general vaidation error messages.
+  Doh! The last update was flawed. Meant to use $validate_text_general.
 
 version 2018-04-11
 ------------------
