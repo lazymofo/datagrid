@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions iansoko at gmail
-// version 2018-04-11
+// version 2018-04-14
 
 class lazy_mofo{
 
@@ -48,7 +48,6 @@ class lazy_mofo{
     public $on_insert_validate = array();       // example : $lm->on_insert_validate['field_name'] = array(string $regexp_or_user_function, string $error_message[, string $tip_placeholder , boolean optional_input]); 
     public $on_update_validate = array();
     public $validate_tip_in_placeholder = true; // allow input placeholder to display validation tip
-    public $validate_text_general = "Missing or Invalid Input"; // generic message displayed at the top when validation error occurs, optional
 
     public $on_insert_user_function = '';       // user function called before data is inserted, updated, or deleteed. return a string error message for server-side validation. Can be used to formating _POST data.
     public $on_update_user_function = '';
@@ -102,8 +101,8 @@ class lazy_mofo{
     public $delete_confirm      = 'Are you sure you want to delete this record?';
     public $update_grid_confirm = 'Are you sure you want to delete [count] record(s)?';
 
-    // validation general error 
-    public $validation_error_msg = "Missing or Invalid Input";
+    // validation general error - this is displayed at the top when a validation error occurs
+    public $validate_text_general = "Missing or Invalid Input";
 
     // form buttons
     public $form_add_button    = "<input type='submit' value='Add' class='lm_button'>";
@@ -2534,7 +2533,7 @@ class lazy_mofo{
             
             // add error msg if missing for some reason
             if(@$validate[$column_name][1] == '')
-                $validate[$column_name][1] = $this->validation_error_msg;
+                $validate[$column_name][1] = $this->validate_text_general;
 
             if(!$is_valid)
                 $all_valid = false;

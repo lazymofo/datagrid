@@ -1,5 +1,9 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2018-04-14
+------------------
+  Doh! The last update was flawed. Fixes around variable used for the general vaidation error messages.
+
 version 2018-04-11
 ------------------
   Fixed bug in validate(), added i18n validation error message. Thx again RenZo!

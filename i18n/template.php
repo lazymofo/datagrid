@@ -19,7 +19,7 @@ $this->delete_confirm      = 'Are you sure you want to delete this record?';
 $this->update_grid_confirm = 'Are you sure you want to delete [count] record(s)?';
 
 // validation general error 
-$this->validation_error_msg = "Missing or Invalid Input";
+$this->validate_text_general = "Missing or Invalid Input";
 
 // form buttons
 $this->form_add_button    = "<input type='submit' value='Add' class='lm_button'>";

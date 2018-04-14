@@ -8,7 +8,7 @@ $this->delete_confirm      = 'Etes-vous sûr de vouloir supprimer cette entrée?
 $this->update_grid_confirm = 'Etes-vous sûr de vouloir supprimer [count] entrée(s)?';
 
 // validation general error 
-$this->validation_error_msg = "Entrée manquante ou invalide";
+$this->validate_text_general = "Entrée manquante ou invalide";
 
 // form buttons
 $this->form_add_button    = "<input type='submit' value='Ajouter' class='lm_button'>";
