@@ -66,7 +66,7 @@ catch(PDOException $e) {
 }
 
 // create LM object, pass in PDO connection, see i18n folder for country + language options 
-$lm = new lazy_mofo($dbh, 'de-de'); 
+$lm = new lazy_mofo($dbh, 'en-us'); 
 
 
 // table name for updates, inserts and deletes
@@ -143,7 +143,7 @@ $lm->form_sql_param[":$lm->identity_name"] = @$_REQUEST[$lm->identity_name];
 
 // optional, validation - array(regexp_or_email_or_user_function, optional_error_msg, optional_placeholder, optional_is_input_optional_bool)
 $lm->on_insert_validate['market_name'] = array('/.+/', 'Missing Market Name', 'this is required'); 
-$lm->on_insert_validate['contact_email'] = array('email'); 
+$lm->on_insert_validate['contact_email'] = array('email', 'Invalid Email', 'this is optional', true);
 
 
 // copy validation rules to update - same rules
