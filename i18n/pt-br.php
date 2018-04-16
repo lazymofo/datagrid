@@ -37,7 +37,7 @@ $this->grid_delete_link = "<a href='#' onclick='return _delete(\"[identity_id]\"
 $this->grid_export_link = "<a href='[script_name]_export=1&amp;[qs]' title='Download CSV'>Exportar</a>";
 
 // search box
-$this->grid_search_box = "3
+$this->grid_search_box = "
 <form action='[script_name]' class='lm_search_box'>
     <input type='text' name='_search' value='[_search]' size='20' class='lm_search_input'>
     <a href='[script_name]' style='margin: 0 10px 0 -20px; display: inline-block;' title='Limpar Busca'>x</a> <!-- this title attribute may be localized -->
