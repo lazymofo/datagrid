@@ -18,6 +18,9 @@ Thanks for your help!
 $this->delete_confirm      = 'Tem certeza de que deseja excluir este registro?';
 $this->update_grid_confirm = 'Tem certeza de que deseja excluir [count] registro(s)?';
 
+// validation general error 
+$this->validate_text_general = "Entrada Ausente ou Inválida";
+
 // form buttons
 $this->form_add_button    = "<input type='submit' value='Adicionar' class='lm_button'>";
 $this->form_update_button = "<input type='submit' value='Alterar' class='lm_button'>"; 
