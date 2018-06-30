@@ -1,5 +1,5 @@
 
-**[Full HTML Documentation](https://rawgit.com/lazymofo/datagrid/master/index.html)**
+**[Full HTML Documentation](https://htmlpreview.github.io/?https://github.com/lazymofo/datagrid/blob/master/index.html)**
 
 ![logo](https://i.imgur.com/CGDTkQL.png)
 
