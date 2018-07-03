@@ -3,7 +3,8 @@ lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansok
 version 2018-06-30
 ------------------
   Added check for GD before image_crop().
-  Switched header call in redirect() to use relative URLs.
+  Switched header call in redirect() to use relative URLs. This helps with port forwarding and hurts really old browsers.
+
 
 version 2018-04-14
 ------------------
