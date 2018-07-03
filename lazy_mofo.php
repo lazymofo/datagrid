@@ -1,9 +1,9 @@
 <?php
 
-// php crud datagrid for mysql and php5
+// php crud datagrid for mysql and php5+
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions iansoko at gmail
-// version 2018-04-14
+// version 2018-06-30
 
 class lazy_mofo{
 
@@ -13,7 +13,9 @@ class lazy_mofo{
 
     public $rename = array();               // associative array of column names and friendly names. example: array('prod_id' => 'Product ID') 
 
-    public $uri_path = '';                  // experimental - to specify URI used for WordPress admin plugins
+    public $uri_path = '';                  // experimental - to specify URI used for WordPress admin plugins, example: http://localhost:80/demo.php
+
+    public $absolute_redirect = false;      // 2018-06 switched to relative redirects since it should be supported now, also port forwards don't work with absolute redirects 
 
     public $query_string_list = '';         // comma delimited list of variable names to carry around in the URL
 
@@ -2172,6 +2174,9 @@ class lazy_mofo{
         // purpose: crop image changes aspect ratio to match the requested dimensions. if output_to_browser = false, then file is altered and saved. 
         // returns: nothing
 
+        if(!function_exists('imagecreatetruecolor'))
+            die("Error: GD must be installed for image resize/cropping");
+
         $ext = mb_strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
         if(!($ext == 'jpg' || $ext == 'jpeg' || $ext == 'gif' || $ext == 'png'))
@@ -2339,6 +2344,17 @@ class lazy_mofo{
             return;
         }
 
+        // before calling header so any sessions changes are saved
+        if(!isset($_SESSION))
+            session_write_close();
+
+        // relative redirect
+        if(!$this->absolute_redirect){
+            header("Location: $url");
+            die;
+        }
+
+        // absolute redirect, will not work with port forwarding if server port is different from reverse proxy
         $port = '';    
         $host = preg_replace('/:[0-9]+$/', '', $_SERVER['HTTP_HOST']); // host without port number
         $protocol = 'http://';
@@ -2346,9 +2362,7 @@ class lazy_mofo{
             $protocol = 'https://';
         if(!($_SERVER['SERVER_PORT'] == '80' || $_SERVER['SERVER_PORT'] == '443'))
             $port = ':' . $_SERVER['SERVER_PORT'];
-        if(!isset($_SESSION))
-            session_write_close();
-        
+
         header("Location: $protocol$host$port$url");
         die;
     
