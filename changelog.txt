@@ -1,5 +1,9 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2018-07-08
+------------------
+  i18n path issues fixed. Thanks Fred.
+
 version 2018-06-30
 ------------------
   Added check for GD before image_crop().

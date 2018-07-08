@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5+
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions iansoko at gmail
-// version 2018-06-30
+// version 2018-07-08
 
 class lazy_mofo{
 
@@ -184,10 +184,13 @@ class lazy_mofo{
 
         // load requested internationalization file, en-us is defined above, in this class
         if(strlen($i18n) > 0 && $i18n != 'en-us'){
-            if(!file_exists("i18n/{$i18n}.php"))
-                die("Error: Requested i18n file ({$i18n}.php) does not exists.");
-            include("i18n/{$i18n}.php");    
+            $arr = pathinfo(__FILE__);
+            $path = $arr['dirname'] . "/i18n/{$i18n}.php";
+            if(!file_exists($path))
+                die("Error: Requested file $path does not exists.");
+            include($path);    
         }
+
     }
 
     
