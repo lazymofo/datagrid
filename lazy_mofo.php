@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5+
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions iansoko at gmail
-// version 2018-07-08
+// version 2018-07-10
 
 class lazy_mofo{
 
@@ -36,7 +36,7 @@ class lazy_mofo{
     public $grid_output_control = array();  // for grid(). define outputs like --email to make a clickable mailto or --document to make a link. *info on usage below*
     public $grid_multi_delete = false;      // display checkboxes on grid to allow for multiple record delete
     public $grid_show_search_box = false;   // display search field at the top - grid_sql must be altered to accomodate search
-    public $grid_limit = 200;               // pagination limit number of records per page
+    public $grid_limit = 200;               // pagination limit number of records per page, verion >= 2018-07-10 set to 0 to disable pagination
     public $grid_repeat_header_at = 0;      // interval of records to repeat header column titles at
     public $grid_show_images = false;       // option to show images inside the grid, otherwise a link is displayed for --image type
     public $grid_ellipse_at = 30;           // limit number of characters displayed, set to 0 to disable truncation
@@ -870,7 +870,7 @@ class lazy_mofo{
         $sql = preg_replace('/\s+limit\s+[0-9,\s]+$/i', '', $sql); 
 
         // add limit and offset for pagination
-        if($_pagination_off == 0 && $_export == 0)
+        if($_pagination_off == 0 && $_export == 0 && $grid_limit > 0)
             $sql .= " limit $_offset, $grid_limit"; 
 
         // run query
@@ -1792,13 +1792,14 @@ class lazy_mofo{
 
         // purpose: pagination for grid
 
+        if($count <= 0 || $limit <= 0)
+            return;
+
         $get = $this->get_qs('_order_by,_desc,_search');
         $active_page = floor($_offset / $limit) + 1; 
         $total_page = ceil($count / $limit);
         $uri_path = $this->get_uri_path();
 
-        if($count <= 0)
-            return;
 
         $use_paging_link = '';
         if($_pagination_off == 1)
