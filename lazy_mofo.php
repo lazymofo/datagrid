@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5+
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions iansoko at gmail
-// version 2018-07-10
+// version 2018-09-06
 
 class lazy_mofo{
 
@@ -603,7 +603,7 @@ class lazy_mofo{
         // upload files
         if($run_upload)
             foreach($arr_identity_id as $identity_id)
-                $this->get_upload($columns, $table, $identity_name, $identity_id, $context);
+                $this->get_upload($columns, $table, $identity_name, $identity_id, 'grid');
 
         // get records to delete
         $arr_delete = @$_POST['_delete'];

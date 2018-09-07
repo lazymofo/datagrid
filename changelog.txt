@@ -1,5 +1,9 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2018-09-06
+------------------
+  Fixed bug in sql_update_grid, uploads were not working from grid. Thanks RenZo 
+
 version 2018-07-10
 ------------------
   Allow grid_limit = 0 to disable pagination
