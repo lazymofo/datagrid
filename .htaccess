@@ -1,7 +1,0 @@
-# LoadModule mod_rewrite.so
-
-RewriteEngine on
-
-RewriteRule ^_demo.php$ demo.php [R=301,NC]
-
-
