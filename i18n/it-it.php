@@ -19,7 +19,7 @@ $this->delete_confirm      = 'Sei sicuro di voler eliminare questo record?';
 $this->update_grid_confirm = 'Sei sicuro di voler eliminare [count] record?';
 
 // validation general error 
-$this->validate_text_general = "Input Mancante o Invalido";
+$this->validate_text_general = "Inserimento Mancante o Invalido";
 
 // form buttons
 $this->form_add_button    = "<input type='submit' value='Aggiungi' class='lm_button'>";
@@ -58,7 +58,7 @@ $this->grid_text_delete           = "Elimina";
 $this->grid_text_no_records_found = "Nessun record trovato";
 
 // pagination text
-$this->pagination_text_use_paging = 'use paging';
+$this->pagination_text_use_paging = 'usa la paginazione';
 $this->pagination_text_show_all   = 'mostra tutti';
 $this->pagination_text_records    = 'Record';
 $this->pagination_text_go         = 'Vai';
