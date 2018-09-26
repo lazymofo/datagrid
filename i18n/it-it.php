@@ -51,9 +51,9 @@ $this->grid_search_box = "
 
 // grid messages
 $this->grid_text_record_added     = "Record Aggiunto";
-$this->grid_text_changes_saved    = "Cambiamenti salvati";
+$this->grid_text_changes_saved    = "Modifiche salvate";
 $this->grid_text_record_deleted   = "Record Eliminato";
-$this->grid_text_save_changes     = "Salva Cambiamenti";
+$this->grid_text_save_changes     = "Salva Modifiche";
 $this->grid_text_delete           = "Elimina";
 $this->grid_text_no_records_found = "Nessun record trovato";
 
