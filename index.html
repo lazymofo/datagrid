@@ -1,68 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<title>Lazy Mofo Datagrid for PHP + MySQL CRUD</title>
-	<meta name="keywords" content="PHPGrid Free, PHP DataGrid, Automatic CRUD, PHP CRUD" />
-	<meta name="description" content="Lazy Mofo is a SQL meta driven form and grid generator for PHP and MySQL." />
-	<style>
-		*   { font-family: sans-serif; }
-        body { margin: 40px; }
-		pre { font-family: monospace, courier; color: blue; margin-left: 10px; padding: 10px; border: 1px solid #999; border-radius: 2px; border-right: 0; background-color: #ff; width: 100%; }
-		li  { margin: 6px; }
+    <meta charset="utf-8" />
+    <title>Lazy Mofo Datagrid for PHP &amp; MySQL CRUD</title>
+    <meta name="keywords" content="PHPGrid Free, PHP DataGrid, Automatic CRUD, PHP CRUD" />
+    <meta name="description" content="Lazy Mofo is a SQL meta driven form and grid generator for PHP and MySQL." />
+    <style>
+        *     { font-family: sans-serif; }
+        body  { margin: 40px; }
+        pre   { font-family: monospace, courier; color: blue; margin-left: 10px; padding: 10px; border: 1px solid #999; border-radius: 2px; border-right: 0; background-color: #ff; width: 100%; }
+        li    { margin: 6px; }
+        .gray { color: #555; }
     </style>
 </head>
 <body>
 
 <img src='https://i.imgur.com/CGDTkQL.png' alt='logo' align='left' style='margin: 10px; clear: both;' />
 
+
 <h1 style='clear:left;'>Lazy Mofo (LM) PHP Datagrid</h1>
-<p>LM is a single PHP5 class for performing CRUD (create, read, update and delete) operations on a MySQL database table.</p>
+<div><a href='https://github.com/lazymofo/datagrid'>github</a> | <a href='http://lmdatagrid.hopto.org/'>live demo</a> | <a href='&#105;&#97;&#110;&#115;&#111;&#107;&#111;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;'>email</a></div>
+<p>LM is a single PHP class for performing CRUD (create, read, update and delete) operations on a MySQL database table.</p>
+
 <ul>
     <li>Define grids and forms by SQL statements or table name</li>
     <li>Populate select, radio, and checkbox inputs with data from SQL statements</li>
     <li>Upload documents, resize or crop images</li>
-	<li>Grid features include pagination, sorting, and inline editing. Searching can be added.</li>
+    <li>Grid features include pagination, sorting, and inline editing. Searching can be added.</li>
     <li>Grid uses SQL_CALC_FOUND_ROWS, limit + offset for efficiency and low memory usage on large datasets</li>
     <li>Built-in validation, error reported next to input</li>
-	<li>i18n/internationalization enabled. See i18n/template.php if want to submit your county + language file.</li>
-	<li>Lightweight; a single class</li>
+    <li>i18n/internationalization enabled. See i18n/template.php to submit your county-language file.</li>
+    <li>Lightweight; a single class</li>
 </ul>
 
 <h1>Contents</h1>
 <ul>
-	<li><a href='#whats_new'>What's New</a></li>
-	<li><a href='#requirements'>Requirements</a></li>
-	<li><a href='#example_1'>Example 1 - Basic Usage</a></li>
-	<li><a href='#example_2'>Example 2 - Advanced Usage</a></li>
-	<li><a href='#hiding_or_altering_links_and_buttons'>Hiding or Altering Links and Buttons</a></li>
-	<li><a href='#redirect_to_edit_screen_after_update_and_insert'>Redirect to Grid Screen After Update and Insert</a></li>
-	<li><a href='#input_and_output_controls'>Input and Output Controls - define how a field is rendered</a></li>
-	<ul>
-		<li><a href='#defining_custom_input_and_output_controls'>Defining Custom Input and Output Controls</li>
-		<li><a href='#Controls Which are Automatically Populated'>Controls Which are Automatically Populated</li>
-		<li><a href='#native_input_controls'>Native Input Controls</a></li>
-		<li><a href='#native_output_controls'>Native Output Control</a></li>
-	</ul>
-	<li><a href='#adding_search'>Adding Search</a></li>
-	<li><a href='#customizing_the_search_form'>Customizing the Search Form</a></li>
-	<li><a href='#defining_separate_add_and_edit_forms'>Defining Separate Add and Edit Forms</a></li>
-	<li><a href='#validation'>Validation</a></li>
-	<li><a href='#on_insert_update_delete_events'>On Insert/Update/Delete Events</a></li>
-	<li><a href='#cross_site_request_forgery_protection_token'>Cross Site Request Forgery Protection Token</a></li>
-	<li><a href='#i18n'>i18n/Internationalization</a></li>
-	<li><a href='#date_formats'>Date Formats</a></li>
-	<li><a href='#adding_jquery_ui_datepicker'>Adding JQuery UI Datepicker</a></li>
-	<li><a href='#export_to_csv'>Export to CSV</a></li>
-	<li><a href='#more_features_and_settings'>More Features and Settings</a></li>
+    <li><a href='#whats_new'>What's New</a></li>
+    <li><a href='#requirements'>Requirements</a></li>
+    <li><a href='#example_1'>Example 1 - Basic Usage</a></li>
+    <li><a href='#example_2'>Example 2 - Advanced Usage</a></li>
+    <li><a href='#hiding_or_altering_links_and_buttons'>Hiding or Altering Links and Buttons</a></li>
+    <li><a href='#redirect_to_edit_screen_after_update_and_insert'>Redirect to Grid Screen After Update and Insert</a></li>
+    <li><a href='#input_and_output_controls'>Input and Output Controls - define how a field is rendered</a></li>
+    <ul>
+        <li><a href='#native_input_controls'>Native Input Controls</a></li>
+        <li><a href='#native_output_controls'>Native Output Control</a></li>
+        <li><a href='#defining_custom_input_and_output_controls'>Defining Custom Input and Output Controls</li>
+        <li><a href='#Automatically Populated Controls'>Automatically Populated Controls</li>
+    </ul>
+    <li><a href='#adding_search'>Adding Search</a></li>
+    <li><a href='#customizing_the_search_form'>Customizing the Search Form</a></li>
+    <li><a href='#defining_separate_add_and_edit_forms'>Defining Separate Add and Edit Forms</a></li>
+    <li><a href='#validation'>Validation</a></li>
+    <li><a href='#on_insert_update_delete_events'>On Insert/Update/Delete Events</a></li>
+    <li><a href='#cross_site_request_forgery_protection_token'>Cross Site Request Forgery Protection Token</a></li>
+    <li><a href='#i18n'>i18n/Internationalization</a></li>
+    <li><a href='#date_formats'>Date Formats</a></li>
+    <li><a href='#adding_jquery_ui_datepicker'>Adding JQuery UI Datepicker</a></li>
+    <li><a href='#export_to_csv'>Export to CSV</a></li>
+    <li><a href='#more_features_and_settings'>More Features and Settings</a></li>
 </ul>
 
 
 
 <h1 style='clear:left;'><a name='whats_new'>What's New</a></h1>
 <ul>
+    <li>New syntax for input/output controls and validation; backward compatible, no worries.</li>
+    <li>Online demo is back, running on my Raspberry PI.</li>
     <li>Header redirect are now relative. This will breaks ancient web browsers but helps in the modern world where port forwarding is common.</li>
-    <li>Sorry, no more online demo. Simplifying my life and don't feel like running servers for fun.</li>
     <li>Added i18n/internationalization. See i18n/template.php if want to submit your county + language file.</li>
     <li>Switched default mysql charset from utf8 to utf8mb4</li>
     <li>Replaced preg_match_all with one that works properly with multibyte</li>
@@ -109,16 +114,22 @@ $lm-&gt;run();
 <pre>
 include('lazy_mofo.php');
 
-
-// required for csv export
-ob_start();
+// enter your database host, name, username, and password
+$db_host = 'localhost';
+$db_name = 'test';
+$db_user = 'root';
+$db_pass = '';
 
 
 // connect with pdo 
-$dbh = new PDO("mysql:host=localhost;dbname=testdb;", "username", "password");
+try {
+    $dbh = new PDO("mysql:host=$db_host;dbname=$db_name;", $db_user, $db_pass);
+}
+catch(PDOException $e) {
+    die('pdo connection error: ' . $e-&gt;getMessage());
+}
 
-
-// create LM object, pass in PDO connection, see i18n folder for language + country options 
+// create LM object, pass in PDO connection, see i18n folder for country + language options 
 $lm = new lazy_mofo($dbh, 'en-us'); 
 
 
@@ -135,25 +146,26 @@ $lm-&gt;rename['country_id'] = 'Country';
 
 
 // optional, define input controls on the form
-$lm-&gt;form_input_control['photo'] = '--image';
-$lm-&gt;form_input_control['is_active'] = "select 1, 'Yes' union select 0, 'No' union select 2, 'Maybe'; --radio";
-$lm-&gt;form_input_control['country_id'] = 'select country_id, country_name from country; --select';
+$lm-&gt;form_input_control['photo'] = array('type' =&gt; 'image');
+$lm-&gt;form_input_control['is_active'] = array('type' =&gt; 'radio', 'sql' =&gt; "select 1, 'Yes' union select 0, 'No' union select 2, 'Maybe'");
+$lm-&gt;form_input_control['country_id'] = array('type' =&gt; 'select', 'sql' =&gt; 'select country_id, country_name from country');
 
 
 // optional, define editable input controls on the grid
-$lm-&gt;grid_input_control['is_active'] = '--checkbox';
+$lm-&gt;grid_input_control['is_active'] = array('type' =&gt; 'checkbox');
 
 
 // optional, define output control on the grid 
-$lm-&gt;grid_output_control['contact_email'] = '--email'; // make email clickable
-$lm-&gt;grid_output_control['photo'] = '--image'; // image clickable  
+$lm-&gt;grid_output_control['contact_email'] = array('type' =&gt; 'email'); // make email clickable
+$lm-&gt;grid_output_control['photo'] = array('type' =&gt; 'image');         // make image clickable  
 
 
 // new in version &gt;= 2015-02-27 all searches have to be done manually
 $lm-&gt;grid_show_search_box = true;
 
 
-// optional, query for grid(). LAST COLUMN MUST BE THE IDENTITY for [edit] and [delete] links to appear
+// optional, query for grid().
+// ** IMPORTANT - last column must be the identity/key for [edit] and [delete] links to appear **
 $lm-&gt;grid_sql = "
 select 
   m.market_id
@@ -190,17 +202,15 @@ select
 from  market 
 where market_id = :market_id
 ";
-
 $lm-&gt;form_sql_param[":$lm-&gt;identity_name"] = @$_REQUEST[$lm-&gt;identity_name]; 
 
 
-// optional, validation. input:  regular expression (with slashes), error message, tip/placeholder
-// first element can also be a user function or 'email'
-$lm-&gt;on_insert_validate['market_name'] = array('/.+/', 'Missing Market Name', 'this is required'); 
-$lm-&gt;on_insert_validate['contact_email'] = array('email', 'Invalid Email', 'this is optional', true); 
+// optional, validation - regexp may be 'email' or a user defined function, all other parameters optional 
+$lm-&gt;on_insert_validate['market_name']   = array('regexp' =&gt; '/.+/',  'error_msg' =&gt; 'Missing Market Name', 'placeholder' =&gt; 'this is required', 'optional' =&gt; false); 
+$lm-&gt;on_insert_validate['contact_email'] = array('regexp' =&gt; 'email', 'error_msg' =&gt; 'Invalid Email',       'placeholder' =&gt; 'this is optional', 'optional' =&gt; true);
 
 
-// copy validation rules to update - same rules
+// copy validation rules, same rules when updating
 $lm-&gt;on_update_validate = $lm-&gt;on_insert_validate;  
 
 
@@ -246,38 +256,79 @@ $lm-&gt;grid_text_record_added = "New Record Added";
 
 <h1><a name='input_and_output_controls'>Input and Output Controls - define how a field is rendered</a></h1>
 <p>Input and Output Controls are associative arrays used to define how to render input or output for a field.</p>
-<p>Inputs render form inputs such as text, select, or checkbox. </p>
-<p>Outputs render: text, links, and images. Output controls only apply to the grid view and are defined in grid_output_control.</p>
+<p><b>Inputs</b> render form inputs such as textarea, select, or checkbox. </p>
+<p><b>Outputs</b> render text, links, and images. Output controls only apply to the grid view and are defined in grid_output_control.</p>
+
+For inputs where sql statements are used, the first column in the sql statement corresponds to the select/checkbox/radio value, the second column is the displayed text.
 
 <pre>
 Define Inputs on edit form()
-$lm-&gt;form_input_control["field_name"] = "[sql] --command";
+$lm-&gt;form_input_control["field_name"] = array("type" => string [, "sql" => string [, "sql_param" => array]]);
 
 Define Inputs on grid()
-$lm-&gt;grid_input_control["field_name"] = "[sql] --command";
+$lm-&gt;grid_input_control["field_name"] = array("type" => string [, "sql" => string [, "sql_param" => array]]);
 
 Define Output on grid()
-$lm-&gt;grid_output_control["field_name"] = "[sql] --command";
+$lm-&gt;grid_output_control["field_name"] = array("type" => string);
 </pre>
 
+<pre class="gray">
+// old style syntax still supported (changed in version 2019-01-10)
+// optional sql string depending on control, type is prefixed with --
+$lm-&gt;form_input_control["field_name"] = "[sql]--type";
+</pre>
 
 <pre>
 
 Examples: 
 
-    $lm-&gt;form_input_control['client_pic'] = '--image';
+    $lm-&gt;form_input_control['client_pic'] = array("type" => "image");
 
-    $lm-&gt;form_input_control['pdf'] = '--document';
+    $lm-&gt;form_input_control['pdf'] = array("type" => "document");
 
-    $lm-&gt;form_input_control['weird_data']  = '--my_user_function';
+    $lm-&gt;form_input_control['is_active'] = array("type" => "checkbox"); 
 
-    $lm-&gt;form_input_control['will_you_attend'] = "select 1 as key, 'Yes' as val union select 0, 'No' union select 3, 'Maybe'; --radio";
+    $lm-&gt;form_input_control['will_you_attend'] = array("type" => "radio", "sql" => "select 1 as key, 'Yes' as val union select 0, 'No' union select 3, 'Maybe'");
 
-    $lm-&gt;form_input_control['country_id'] = 'select country_id as val, country_name as opt from country; --select';
-
-    $lm-&gt;form_input_control['is_active'] = "--checkbox"; // without a sql prefix this control will default to yes/no
+    $lm-&gt;form_input_control['country_id'] = array("type" => "select", sql => "select country_id as val, country_name as opt from country");
 
 </pre>
+
+<h2><a name='native_input_controls'>Native Input Controls</a></h2>
+<p>For use with form_input_control and grid_input_control arrays.</p>
+
+<table border='1'>
+    <tr><th>type</th><th>description</th></tr>
+    <tr><td>text</td><td>text input (default)</td></tr>
+    <tr><td>password</td><td>password input</td></tr>
+    <tr><td>number</td><td>text input for number, when cast numbers are filtered through restricted_numeric_input pattern.</td></tr>
+    <tr><td>date</td><td>text input, date is formatted according to public $date_format variable</td></tr>
+    <tr><td>datetime</td><td>text input, date is formatted according to public $date_format variable</td></tr>
+    <tr><td>textarea</td><td>textarea input</td></tr>
+    <tr><td>readonly</td><td>plain text (not an input, just displays data)</td></tr>
+    <tr><td>readonly_date</td><td>plain text formatted with date settings (not an input, just displays data)</td></tr>
+    <tr><td>readonly_datetime</td><td>plain text formatted with datetime settings (not an input, just displays data)</td></tr>
+    <tr><td>image</td><td>file input for uploading, if image exists then image is displayed with 'delete' checkbox.</td></tr>
+    <tr><td>document</td><td>file input for uploading, if document exists then display link with 'delete' checkbox.</td></tr>
+    <tr><td>select</td><td>select dropdown, sql statement is optional.</td></tr>
+    <tr><td>selectmultiple</td><td>select dropdown with multiple options. values are stored in a delimited list. sql is optional. sql_param is optional.</td></tr>
+    <tr><td>checkbox</td><td>input checkboxes. values are stored in a delimited list. sql is optional. sql_param is optional. </td></tr>
+    <tr><td>radio</td><td>radio buttons. sql is optional. sql_param is optional.</td></tr>
+</table>
+
+<h2><a name='native_output_controls'>Native Output Controls</a></h2>
+<p>For use with form_output_control and grid_output_control arrays.</p>
+
+<table border='1'>
+    <tr><th>type</th><th>description</th></tr>
+    <tr><td>text</td><td>outputs plain text (default)</td></tr>
+    <tr><td>date</td><td>outputs date according to date_out setting</td></tr>
+    <tr><td>datetime</td><td>outputs datetime according to datetime_out setting</td></tr>
+    <tr><td>email</td><td>outputs a clickable email link</td></tr>
+    <tr><td>image</td><td>outputs a clickable link to the image, or display image if grid_show_images = true</td></tr>
+    <tr><td>document</td><td>outputs a clickable link to the document</td></tr>
+    <tr><td>html</td><td>outputs text without escaping</td></tr>
+</table>
 
 <h2><a name='defining_custom_input_and_output_controls'>Defining Custom Input and Output Controls</h2>
 <p>User defined functions can be defined to render an input or output control. </p>
@@ -285,14 +336,14 @@ Examples:
 <pre>
 Example: 
 
-$lm->form_input_control['weird_data'] = '--my_user_function';
+$lm->form_input_control['weird_data'] = array("type" => "my_user_function");
 
 function my_user_function($column_name, $value, $command, $called_from){
 
     // $column_name: field name
     // $value: field value  
-    // $command: full command as defined in the arrays: form_input_control, grid_input_control, or grid_output_control
-    // $called_from: which function called this user function; form, or grid
+    // $command: array defined in the control; rarely needed
+    // $called_from: orgin of call; 'form', or 'grid'; rarely needed
 
     global $lm;
     $val = $lm-&gt;clean_out($value);
@@ -302,48 +353,13 @@ function my_user_function($column_name, $value, $command, $called_from){
 </pre>
 
 
-<h2><a name='Controls Which are Automatically Populated'>Controls Which are Automatically Populated</h2>
-<p>By default LM will populate form_input_control and grid_output_control with --date, --datetime, --number and --textarea according to meta data. To disable this behavior set auto_populate_controls = false.</p>
+<h2><a name='Automatically Populated Controls'>Automatically Populated Controls</h2>
+<p>By default form_input_control and grid_output_control will populate with date, datetime, number and textarea according to meta data. To disable this behavior set auto_populate_controls = false.</p>
 
-
-<h2><a name='native_input_controls'>Native Input Controls</a></h2>
-<p>For use with form_input_control and grid_input_control arrays.</p>
-
-<ul>
-	<li>--my_input_control<p>define your own function and return any HTML. example: function my_input_control($column_name, $value, $command, $called_from)</li>
-	<li>--text<p>text input (default)</li>
-	<li>--password<p>password input</li>
-	<li>--number<p>text input for number, when cast numbers are filtered through restricted_numeric_input pattern.</li>
-	<li>--date<p>text input, date is formatted according to public $date_format variable</li>
-	<li>--datetime<p>text input, date is formatted according to public $date_format variable</li>
-	<li>--textarea<p>textarea input</li>
-	<li>--readonly<p>plain text (not an input, just displays data)</li>
-	<li>--readonly_date<p>plain text formatted with date settings (not an input, just displays data)</li>
-	<li>--readonly_datetime<p>plain text formatted with datetime settings (not an input, just displays data)</li>
-	<li>--image<p>file input for uploading, if image exists then image is displayed with 'delete' checkbox.</li>
-	<li>--document<p>file input for uploading, if document exists then display link with 'delete' checkbox.</li>
-	<li>[sql] --select<p>select dropdown, sql statement is optional.</li>
-	<li>[sql] --selectmultiple<p>select dropdown with multiple options. values are stored in a delimited list. sql statement is optional.</li>
-	<li>[sql] --checkbox<p>input checkboxes. values are stored in a delimited list. sql statement is optional. </li>
-	<li>[sql] --radio<p>radio buttons. sql statement is optional.</li>
-</ul>
-
-<h2><a name='native_output_controls'>Native Output Controls</a></h2>
-<p>For use with form_output_control and grid_output_control arrays.</p>
-
-<ul>
-	<li>--my_output_control<p>define your own function and return any HTML. example: function my_output_control($column_name, $value, $command, $called_from)</li>
-	<li>--text<p>outputs plain text (default)</li>
-	<li>--date<p>outputs date according to date_out setting</li>
-	<li>--datetime<p>outputs datetime according to datetime_out setting</li>
-	<li>--email<p>outputs a clickable email link</li>
-	<li>--image<p>outputs a clickable link to the image, or display image if grid_show_images = true</li>
-	<li>--document<p>outputs a clickable link to the document</li>
-	<li>--html<p>outputs html without tags or formatting</li>
-</ul>
 
 <h1><a name='adding_search'>Adding Search</a></h1>
-In version &lt;= 2015-02-27 search was automatic.
+In versions &lt;= 2015-02-27 search was automatic. Now search requires grid_sql and grid_sql_param to be defined.
+
 <pre>
 Example:
 
@@ -364,13 +380,13 @@ $lm-&gt;grid_show_search_box = true; // show html defined in grid_search_box
 $new_search_1 = $lm->clean_out(@$_REQUEST['new_search_1']);
 $new_search_2 = $lm->clean_out(@$_REQUEST['new_search_2']);
 
-// define our own search form with two inputs instead of the default one
+// redefine our own search form with two inputs instead of the default one
 $lm-&gt;grid_search_box = "
 &lt;form class='lm_search_box'&gt;
-	&lt;input type='text' name='new_search_1' value='$new_search_1' size='20' class='lm_search_input' placeholder='market'&gt;
-	&lt;input type='text' name='new_search_2' value='$new_search_2' size='20' class='lm_search_input' placeholder='email'&gt;
-	&lt;input type='submit' value='Search' class='lm_button'&gt;
-	&lt;input type='hidden' name='action' value='search'&gt;
+    &lt;input type='text' name='new_search_1' value='$new_search_1' size='20' class='lm_search_input' placeholder='market'&gt;
+    &lt;input type='text' name='new_search_2' value='$new_search_2' size='20' class='lm_search_input' placeholder='email'&gt;
+    &lt;input type='submit' value='Search' class='lm_button'&gt;
+    &lt;input type='hidden' name='action' value='search'&gt;
 &lt;/form&gt;
 "; 
 
@@ -409,16 +425,16 @@ order by m.market_id desc
 <pre>
 Example:
 
-if(!isset(@$_REQUEST[$lm->identity_name])){
-	// form for adding records
-	$lm->form_sql = 'select * from market where market_id = :market_id';
+if(!isset($_REQUEST['market_id'])){
+    // form for adding records
+    $lm->form_sql = 'select * from market where market_id = :market_id';
 }
 else{
-	// form for editing records
-	$lm->form_sql = 'select market_id, market_name, country_id, photo, is_active, create_date, notes from market where market_id = :market_id';
+    // form for editing records
+    $lm->form_sql = 'select market_id, market_name, country_id, photo, is_active, create_date, notes from market where market_id = :market_id';
 }
 
-$lm->form_sql_param = array(':' . $lm->identity_name => @$_REQUEST[$lm->identity_name]); 
+$lm->form_sql_param = array(":market_id" => @$_REQUEST['market_id']); 
 
 </pre>
 
@@ -428,35 +444,48 @@ $lm->form_sql_param = array(':' . $lm->identity_name => @$_REQUEST[$lm->identity
 <p>Separate arrays are used for inserts and updates. If the validate needs are the same for both inserts and updates then just copy the existing array to duplicate the rules.</p>
 <p>Alternatively, validation can be handled in On Insert/Update/Delete events <a href='#on_insert_update_delete_events'>(see below)</a>.</p>
 <pre>
-$lm-gt;on_insert_validate['field_name'] = array(string $regexp_or_user_function, string $error_message[, string $tip_placeholder , boolean optional_input]);
+$lm-gt;on_insert_validate["field_name"] = array("regexp" => string, "error_msg" => string [, "placeholder" => string [, "optional" => boolean]]);
 
-$lm-gt;on_update_validate['field_name'] = array(string $regexp_or_user_function, string $error_message[, string $tip_placeholder , boolean optional_input]);
+$lm-gt;on_update_validate["field_name"] = array("regexp" => string, "error_msg" => string [, "placeholder" => string [, "optional" => boolean]]);
 </pre>
 
+<pre class="gray">
+// old style syntax still supported (changed in version 2019-01-10)
+// same values, without keys 
+$lm-gt;on_insert_validate["field_name"] = array(string regexp, string error_msg, string placeholder, boolean optional);
+</pre>
+
+
 <ul>
-<li>First element is a regular expression /slashes required/, 'email', or user defined function name.</li>
-<li>Second element is the error message.</li>
-<li>Third element is the optional tip, or placeholder for text inputs.</li>
-<li>Fouth element is a boolean flag defining if any input is optional. Default false.</li>
+<li><b>regexp</b> regular expression /slashes required/, 'email', or user defined function name.</li>
+<li><b>error_msg</b> Error message to be displayed next to the element.</li>
+<li><b>placeholder</b> Populate placeholder attribute of input with a tip. If placeholder is not applicable, text is displayed along side input. </li>
+<li><b>optional</b> Is this input optional? Default is false. </li>
 
 </ul>
 
 <pre>
 Example: 
 
-$lm->on_insert_validate['market_name'] = array('/.+/', 'Missing Market Name', 'This is Required'); 
-$lm->on_insert_validate['contact_email'] = array('email', 'Missing or invalid Email', 'Optional Email', true); // built in validator for email, set to optional input
-$lm->on_insert_validate['country_id'] = array('my_validate', 'Missing or invalid country', 'Required');        // user defined function
+// validation using regular expression, slashes required
+$lm->on_insert_validate["market_name"]   = array("regexp" => "/.+/", "error_msg" => "Missing Market Name", "placeholder" => "This is Required"); 
+
+// built-in "email" validation
+$lm->on_insert_validate["contact_email"] = array("regexp" => "email", "error_msg" => "Missing or invalid Email", "placeholder" => "Optional Email", "optional" => true);
+
+// user defined validation
+$lm->on_insert_validate["country_id"]    = array("regexp" => "my_validate", "error_msg" => "Missing or invalid country", "placeholder" => "Required"); 
 
 // copy array - same setting for updates
 $lm->on_update_validate = $lm->on_insert_validate;
 
+// user defined validation example
 function my_validate(){
 
-	if($_POST['country_id') == '')
-		return false;
-	else
-		return true;
+    if($_POST['country_id') == '')
+        return false;
+    else
+        return true;
 
 }
 </pre>
@@ -480,11 +509,12 @@ $lm->on_update_user_function = 'my_hash';
 
 function my_hash(){
 
-	if(isset($_POST['password_reset']))
-		$_POST['password'] = password_hash($_POST['password_reset']);
-	
-	if(mb_strlen($_POST['password_reset']) &gt; 100)
-		return "Password too long";
+    if(isset($_POST['password_reset']))
+        $_POST['password'] = password_hash($_POST['password_reset']);
+    
+    // returned string will be displayed as an error message
+    if(mb_strlen($_POST['password_reset']) &gt; 100)
+        return "Password too long";
 
 }
 </pre>
@@ -509,15 +539,15 @@ Example:
 $lm->after_insert_user_function = 'my_after_insert';
 
 function my_after_insert($id){
-	
-	// after_insert_user_function is the only action to get the identity id
-	// now that the record is added we can do anything we need to
+    
+    // after_insert_user_function is the only action to get the identity id
+    // now that the record is added we can do anything we need to
 
-	global $lm;
+    global $lm;
 
-	$sql_param = array(':market_id' =&gt; $id);
-	$sql = "insert into related_table(field1, market_id) values (now(), :market_id)";
-	$lm->query($sql, $sql_param);
+    $sql_param = array(':market_id' =&gt; $id);
+    $sql = "insert into related_table(field1, market_id) values (now(), :market_id)";
+    $lm->query($sql, $sql_param);
 
 }
 </pre>
@@ -536,9 +566,9 @@ Example:
 $lm->cat_user_function['is_active'] = 'my_cast';
 
 function my_cast($val){
-	
-	return intval($val);
-	
+    
+    return intval($val);
+    
 }
 </pre>
 
@@ -554,13 +584,15 @@ $_SESSION['_csrf'] = base64_encode(openssl_random_pseudo_bytes(15));
 
 // somewhere else, before the page is processed, run some code like this 
 if($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['_csrf'] != $_POST['_csrf'])
-	die('Invalid csrf token');
+    die('Invalid csrf token');
 </pre>
 
 
 
 <h1><a name='i18n'>i18n/Internationalization</a></h1>
-<p>By default LM datagrid is us-en (United States - English). At this time very few country-language files are available. Check the i18n folder to see what is available. </p>
+<p>By default LM datagrid is us-en (United States - English).
+At this time very few country-language files are available. Check the i18n folder to see what is available.
+If your coutry-language is not available consider making an open source contribution using i18n/template.php</p>
 <pre>
 Example: 
 
@@ -581,7 +613,7 @@ Example:
 $lm-&gt;date_out = 'm/d/Y';
 $lm-&gt;datetime_out = 'm/d/Y h:i A';
 
-// or set non-US date format
+// or set non US date format
 $lm-&gt;date_out = 'd/m/Y';
 $lm-&gt;datetime_out = 'd/m/Y h:i A';
 
@@ -601,13 +633,13 @@ Example:
 &lt;script src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js'&gt;&lt;/script&gt;
 &lt;script&gt;
 $(function() {
-	
-	// note how field class names are prefixed with 'lm_'
-	$('input.lm_create_date').datepicker(); 
-	
-	// non US date example dd/mm/yy and week starting on monday(1) instead of sunday(0)
-	// make sure lazy mofo class members for date_out and datetime_out correspond with your local date format
-	//$('input.lm_create_date').datepicker({ dateFormat: 'dd/mm/yy', firstDay: 1 });
+    
+    // note how field class names are prefixed with 'lm_'
+    $('input.lm_create_date').datepicker(); 
+    
+    // non US date example dd/mm/yy and week starting on monday(1) instead of sunday(0)
+    // make sure lazy mofo class members for date_out and datetime_out correspond with your local date format
+    //$('input.lm_create_date').datepicker({ dateFormat: 'dd/mm/yy', firstDay: 1 });
 
 
 });
@@ -617,11 +649,12 @@ $(function() {
 
 
 <h1><a name='export_to_csv'>Export to CSV</a></h1>
-<p>Output buffering (ob_start) must be used at the beginning of the script for the export to CSV feature to function properly.</p>
+<p>Clicking the Export link will convert the grid output to a CSV file for downloading.
+Output buffering (ob_start) must be used at the beginning of the script for the export to CSV feature to function properly.</p>
 
 
 <h1><a name='more_features_and_settings'>More Features and Settings</a></h1>
-<p>View class source code to see all the available settings and features.</p>
+<p>View class source code to see all the property settings.</p>
 
 
 

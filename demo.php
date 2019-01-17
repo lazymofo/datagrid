@@ -45,6 +45,7 @@ echo "
 <head>
 	<meta charset='UTF-8'>
 	<link rel='stylesheet' type='text/css' href='style.css'>
+    <meta name='robots' content='noindex,nofollow'>
 </head>
 <body>
 "; 
@@ -82,18 +83,18 @@ $lm->rename['country_id'] = 'Country';
 
 
 // optional, define input controls on the form
-$lm->form_input_control['photo'] = '--image';
-$lm->form_input_control['is_active'] = "select 1, 'Yes' union select 0, 'No' union select 2, 'Maybe'; --radio";
-$lm->form_input_control['country_id'] = 'select country_id, country_name from country; --select';
+$lm->form_input_control['photo'] = array('type' => 'image');
+$lm->form_input_control['is_active'] = array('type' => 'radio', 'sql' => "select 1, 'Yes' union select 0, 'No' union select 2, 'Maybe'");
+$lm->form_input_control['country_id'] = array('type' => 'select', 'sql' => 'select country_id, country_name from country');
 
 
 // optional, define editable input controls on the grid
-$lm->grid_input_control['is_active'] = '--checkbox';
+$lm->grid_input_control['is_active'] = array('type' => 'checkbox');
 
 
 // optional, define output control on the grid 
-$lm->grid_output_control['contact_email'] = '--email'; // make email clickable
-$lm->grid_output_control['photo'] = '--image'; // image clickable  
+$lm->grid_output_control['contact_email'] = array('type' => 'email'); // make email clickable
+$lm->grid_output_control['photo'] = array('type' => 'image');         // make image clickable  
 
 
 // new in version >= 2015-02-27 all searches have to be done manually
@@ -141,12 +142,12 @@ where market_id = :market_id
 $lm->form_sql_param[":$lm->identity_name"] = @$_REQUEST[$lm->identity_name]; 
 
 
-// optional, validation - array(regexp_or_email_or_user_function, optional_error_msg, optional_placeholder, optional_is_input_optional_bool)
-$lm->on_insert_validate['market_name'] = array('/.+/', 'Missing Market Name', 'this is required'); 
-$lm->on_insert_validate['contact_email'] = array('email', 'Invalid Email', 'this is optional', true);
+// optional, validation - regexp may be 'email' or a user defined function, all other parameters optional 
+$lm->on_insert_validate['market_name']   = array('regexp' => '/.+/',  'error_msg' => 'Missing Market Name', 'placeholder' => 'this is required', 'optional' => false); 
+$lm->on_insert_validate['contact_email'] = array('regexp' => 'email', 'error_msg' => 'Invalid Email',       'placeholder' => 'this is optional', 'optional' => true);
 
 
-// copy validation rules to update - same rules
+// copy validation rules, same rules when updating
 $lm->on_update_validate = $lm->on_insert_validate;  
 
 
@@ -155,3 +156,5 @@ $lm->run();
 
 
 echo "</body></html>";
+
+
