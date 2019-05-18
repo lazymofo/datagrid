@@ -487,10 +487,10 @@ $lm->on_update_validate = $lm->on_insert_validate;
 // user defined validation example
 function my_validate(){
 
-    if($_POST['country_id') == '')
-        return false;
+    if(empty($_POST['country_id'])
+        return false; // fail
     else
-        return true;
+        return true; // success
 
 }
 </pre>

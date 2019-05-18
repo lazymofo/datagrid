@@ -3,7 +3,7 @@
 // php crud datagrid for mysql and php5+
 // MIT License - http://lazymofo.wdschools.com/
 // send feedback or questions iansoko at gmail
-// version 2018-12-24
+// version 2019-05-18
 
 class lazy_mofo{
 
@@ -1655,7 +1655,7 @@ class lazy_mofo{
         elseif($type == 'checkbox')
             return $this->html_checkbox($column_name, $value, $sql, $sql_param) . $validate_tip . $validate_error_msg;
 		elseif(is_callable($type))
-            return call_user_func($type, $column_name, $value, $command, $called_from, $validate_placeholder) . $validate_tip . $validate_error_msg;
+            return call_user_func($type, $column_name, $value, $type, $called_from, $validate_placeholder) . $validate_tip . $validate_error_msg;
         else
             $this->display_error("Input command or user function not found: $type", 'get_input_control()');
 
@@ -1686,7 +1686,7 @@ class lazy_mofo{
         elseif($type == 'html')
             return $this->html_html_output($value);
 		elseif(is_callable($type))
-            return call_user_func($type, $column_name, $value, $command, $called_from);
+            return call_user_func($type, $column_name, $value, $type, $called_from);
         else
             $this->display_error("Output command or user function not found: $type. Be sure to prefix control type with 2 dashes --", 'get_output_control()');
 
