@@ -1,9 +1,9 @@
 <?php
 
-// php crud datagrid for mysql and php5+
-// MIT License - http://lazymofo.wdschools.com/
+// CRUD datagrid for MySQL and PHP
+// MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2019-05-18
+// version 2019-05-23
 
 class lazy_mofo{
 
@@ -2113,6 +2113,11 @@ class lazy_mofo{
         // purpose: resize image but keep orignal aspect ratio.  if output_to_browser = false, then file is altered and saved. 
         // returns: nothing 
 
+        if(!function_exists('imagecreatetruecolor'))
+            die("Error: GD must be installed for image resize/cropping");
+
+        $this->image_exif_rotate($file_name);
+
         $ext = mb_strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
         if(!($ext == 'jpg' || $ext == 'jpeg' || $ext == 'gif' || $ext == 'png'))
@@ -2192,6 +2197,8 @@ class lazy_mofo{
         if(!function_exists('imagecreatetruecolor'))
             die("Error: GD must be installed for image resize/cropping");
 
+        $this->image_exif_rotate($file_name);
+
         $ext = mb_strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
         if(!($ext == 'jpg' || $ext == 'jpeg' || $ext == 'gif' || $ext == 'png'))
@@ -2266,6 +2273,50 @@ class lazy_mofo{
 
     }
 
+
+    function image_exif_rotate($file_name){
+
+        // purpose: stand-alone exif image rotation, used by image_crop() and image_resize()
+
+        $ext = mb_strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+
+        if(!($ext == 'jpg' || $ext == 'jpeg' || $ext == 'gif' || $ext == 'png'))
+            return;
+
+        if($ext == 'png')
+            $image = imagecreatefrompng($file_name);    
+        elseif($ext == 'gif')
+            $image = imagecreatefromgif($file_name);    
+        else
+            $image = imagecreatefromjpeg($file_name);
+
+        $o = intval(exif_read_data($file_name)['Orientation']);
+
+        // nothing to do
+        if($o == 0)
+            return;
+
+        if($o == 3 || $o == 4)
+            $image = imagerotate($image, 180, 0);
+        elseif($o == 5 || $o == 6)
+            $image = imagerotate($image, -90, 0);
+        elseif($o == 7 || $o == 8)
+            $image = imagerotate($image, 90, 0);
+
+        if($o == 2 || $o == 4 || $o == 5 || $o == 7)
+            imageflip($image, IMG_FLIP_HORIZONTAL);
+
+        if($ext == 'gif')
+            imagegif($image, $file_name);
+        elseif($ext == 'png')
+            imagepng($image, $file_name);
+        else
+            imagejpeg($image, $file_name, 100); 
+
+        unset($image);
+        return;
+    }
+    
     
     function display_error($error, $source_function){
         

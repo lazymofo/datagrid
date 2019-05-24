@@ -97,7 +97,7 @@ $lm->grid_output_control['contact_email'] = array('type' => 'email'); // make em
 $lm->grid_output_control['photo'] = array('type' => 'image');         // make image clickable  
 
 
-// new in version >= 2015-02-27 all searches have to be done manually
+// new in version >= 2015-02-27 all searches have to be done manually, added in where clause of grid_sql
 $lm->grid_show_search_box = true;
 
 
@@ -151,7 +151,7 @@ $lm->on_insert_validate['contact_email'] = array('regexp' => 'email', 'error_msg
 $lm->on_update_validate = $lm->on_insert_validate;  
 
 
-// use the lm controller
+// run the controller
 $lm->run();
 
 
