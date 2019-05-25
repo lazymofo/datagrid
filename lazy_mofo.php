@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2019-05-23
+// version 2019-05-25
 
 class lazy_mofo{
 
@@ -2277,6 +2277,10 @@ class lazy_mofo{
     function image_exif_rotate($file_name){
 
         // purpose: stand-alone exif image rotation, used by image_crop() and image_resize()
+
+        // tough luck if imagerotate isn't with your gd
+        if(!function_exists('imagerotate'))
+            return;
 
         $ext = mb_strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
