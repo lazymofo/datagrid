@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2019-05-25
+// version 2019-05-28
 
 class lazy_mofo{
 
@@ -2294,7 +2294,8 @@ class lazy_mofo{
         else
             $image = imagecreatefromjpeg($file_name);
 
-        $o = intval(exif_read_data($file_name)['Orientation']);
+        $arr = exif_read_data($file_name);
+        $o = intval($arr['Orientation']);
 
         // nothing to do
         if($o == 0)

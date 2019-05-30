@@ -1,5 +1,13 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2019-05-28
+------------------
+  Syntax in new exif method wasn't valid for older versions of php. Tweaked for compatibility with php < 5.4  
+
+version 2019-05-25
+------------------
+  Wow, imagerotate may not be in GD. Added imagerotate check before use. Sorry, no imagerotate then no exif rotation.
+
 version 2019-05-23
 ------------------
   Added exif rotation to image upload.
