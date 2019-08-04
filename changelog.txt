@@ -1,5 +1,9 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2019-08-04
+------------------
+  COLUMN_DEFAULT in MariaDB 10.2.7 changed behavior, query gathering meta data needed altering. Thanks RenZO
+
 version 2019-05-28
 ------------------
   Syntax in new exif method wasn't valid for older versions of php. Tweaked for compatibility with php < 5.4  

@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2019-05-28
+// version 2019-08-04
 
 class lazy_mofo{
 
@@ -1783,7 +1783,7 @@ class lazy_mofo{
         }
 
         // populate default values
-        $sql = "select column_name, column_default from information_schema.columns where column_default is not null and table_name = :table and table_schema = database()";
+        $sql = "select column_name, column_default from information_schema.columns where column_default != 'NULL' and column_default is not null and table_name = :table and table_schema = database()";
         $sql_param = array(':table' => $table);
         $result = $this->query($sql, $sql_param, 'get_columns() - populate form_default_value');
         foreach($result as $row){
