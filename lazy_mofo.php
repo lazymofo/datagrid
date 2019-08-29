@@ -924,15 +924,15 @@ class lazy_mofo{
         $links = $grid_edit_link . ' ' . $grid_delete_link;
 
         // pagination and save changes link bar
-		$pagination = $this->get_pagination($count, $grid_limit, $_offset, $_pagination_off);
+        $pagination = $this->get_pagination($count, $grid_limit, $_offset, $_pagination_off);
         $button = '';
-		if(count($this->grid_input_control) > 0 || $this->grid_multi_delete == true)
+        if(count($this->grid_input_control) > 0 || $this->grid_multi_delete == true)
             $button = "<input type='submit' name='__update_grid' value='$this->grid_text_save_changes' class='lm_button lm_save_changes_button'>";
-		$pagination_button_bar = "<table cellpadding='2' cellspacing='1' border='0' width='100%' class='lm_pagination'><tr><td style='text-align: left'>$pagination</td><td style='text-align: right'>$button</td></tr></table>\n";
+        $pagination_button_bar = "<table cellpadding='2' cellspacing='1' border='0' width='100%' class='lm_pagination'><tr><td style='text-align: left'>$pagination</td><td style='text-align: right'>$button</td></tr></table>\n";
 
         // search bar
         $search_box = '';
-		if($this->grid_show_search_box){
+        if($this->grid_show_search_box){
     
             // carry values defined in query_string_list
             $query_string_list_inputs = '';
@@ -943,13 +943,13 @@ class lazy_mofo{
             }
             
             $search_box = $this->grid_search_box;
-			$search_box = str_replace('[script_name]', $uri_path . $this->get_qs('') , $search_box); // for 'x' cancel do add get_qs('') to carry query_string_list
-			$search_box = str_replace('[_search]', $_search, $search_box);
-			$search_box = str_replace('[_csrf]', $_SESSION['_csrf'], $search_box);
-			$search_box = str_replace('[query_string_list]', $query_string_list_inputs, $search_box);
+            $search_box = str_replace('[script_name]', $uri_path . $this->get_qs('') , $search_box); // for 'x' cancel do add get_qs('') to carry query_string_list
+            $search_box = str_replace('[_search]', $_search, $search_box);
+            $search_box = str_replace('[_csrf]', $_SESSION['_csrf'], $search_box);
+            $search_box = str_replace('[query_string_list]', $query_string_list_inputs, $search_box);
         }
 
-		$add_record_search_bar = "<table cellpadding='2' cellspacing='1' border='0' width='100%' class='lm_add_search'><tr><td style='text-align: left'>$grid_add_link &nbsp; $grid_export_link</td><td style='text-align: right'>$search_box</td></tr></table>\n";
+        $add_record_search_bar = "<table cellpadding='2' cellspacing='1' border='0' width='100%' class='lm_add_search'><tr><td style='text-align: left'>$grid_add_link &nbsp; $grid_export_link</td><td style='text-align: right'>$search_box</td></tr></table>\n";
 
         // generate table header
         $head = "<tr>\n";
@@ -1060,7 +1060,7 @@ class lazy_mofo{
         $html .= $pagination_button_bar;
         $html .= "</form>\n";
         $html .= "</div><!-- close #lm -->\n";
-		$html .= $this->delete_js(0, 'grid');
+        $html .= $this->delete_js(0, 'grid');
 
         return $html;
 
@@ -1093,8 +1093,8 @@ class lazy_mofo{
         </form>
 
         <script type='text/javascript'>
-		
-		function _delete(id){
+        
+        function _delete(id){
 
             if(!confirm('$delete_confirm'))
                 return false;
@@ -1253,8 +1253,8 @@ class lazy_mofo{
 
     }
 
-	
-	function html_radio($field_name, $value, $sql){    
+    
+    function html_radio($field_name, $value, $sql){    
 
         // purpose: render html radio input, note sql query should return 2 columns
         // returns: html
@@ -1305,7 +1305,7 @@ class lazy_mofo{
         // if no sql is provided render 1 = yes, 0 = no
         if($sql == '')
             $sql = "select 1 as val, 'Yes' as opt union select 0, 'No'";
-	
+    
         // simple optimization
         if($prev_sql != $sql)
             $result = $this->query($sql, $sql_param, 'html_select()');
@@ -1451,16 +1451,16 @@ class lazy_mofo{
     }
 
 
-	function cast_id($str){
+    function cast_id($str){
 
-		// purpose: similar to intval() but supports mysql bigint and does not overflow
+        // purpose: similar to intval() but supports mysql bigint and does not overflow
 
-		if(preg_match('/-?[0-9]{1,30}/', $str))
-			return $str;
-		else
-			return 0;
+        if(preg_match('/-?[0-9]{1,30}/', $str))
+            return $str;
+        else
+            return 0;
 
-	}
+    }
 
     
     function clean_file_name($file_name){
@@ -1547,7 +1547,7 @@ class lazy_mofo{
         $friendly_name = preg_replace('/([a-z]{1})([A-Z]{1})/', '\1 \2', $friendly_name);
         $friendly_name = preg_replace('/([a-z]{1})([0-9]+)/i', '\1 \2 ', $friendly_name);
         $friendly_name = str_replace('_', ' ', $friendly_name);
-		$friendly_name = mb_convert_case($friendly_name, MB_CASE_TITLE, $this->charset);
+        $friendly_name = mb_convert_case($friendly_name, MB_CASE_TITLE, $this->charset);
 
         return $this->clean_out($friendly_name);
 
@@ -1616,13 +1616,13 @@ class lazy_mofo{
         if($this->validate_tip_in_placeholder)
             $validate_placeholder = $this->clean_out(@$validate[$column_name]['placeholder']); // placeholders for text 
         elseif(strlen($validate_error_msg) == 0)
-			$validate_placeholder_alternative = "<span class='lm_validate_tip'>" . $this->clean_out($validate[$column_name]['placeholder']) . "</span>";
+            $validate_placeholder_alternative = "<span class='lm_validate_tip'>" . $this->clean_out($validate[$column_name]['placeholder']) . "</span>";
     
-		$max_length = '';
-		if(intval(@$this->text_input_max_length[$column_name]) > 0)
-			$max_length = "maxlength='" . $this->text_input_max_length[$column_name] . "'";
-		elseif($this->text_input_max_length_default > 0)
-			$max_length = "maxlength='" . $this->text_input_max_length_default . "'";
+        $max_length = '';
+        if(intval(@$this->text_input_max_length[$column_name]) > 0)
+            $max_length = "maxlength='" . $this->text_input_max_length[$column_name] . "'";
+        elseif($this->text_input_max_length_default > 0)
+            $max_length = "maxlength='" . $this->text_input_max_length_default . "'";
 
         if($type == 'text')
             return "<input type='text' name='$column_name' class='$class' value='" . $this->clean_out($value) . "' size='$size' $max_length placeholder='$validate_placeholder'>$validate_error_msg $validate_placeholder_alternative";
@@ -1654,7 +1654,7 @@ class lazy_mofo{
             return $this->html_radio($column_name, $value, $sql, $sql_param) . $validate_tip . $validate_error_msg;
         elseif($type == 'checkbox')
             return $this->html_checkbox($column_name, $value, $sql, $sql_param) . $validate_tip . $validate_error_msg;
-		elseif(is_callable($type))
+        elseif(is_callable($type))
             return call_user_func($type, $column_name, $value, $type, $called_from, $validate_placeholder) . $validate_tip . $validate_error_msg;
         else
             $this->display_error("Input command or user function not found: $type", 'get_input_control()');
@@ -1685,7 +1685,7 @@ class lazy_mofo{
             return $this->html_image_output($value);
         elseif($type == 'html')
             return $this->html_html_output($value);
-		elseif(is_callable($type))
+        elseif(is_callable($type))
             return call_user_func($type, $column_name, $value, $type, $called_from);
         else
             $this->display_error("Output command or user function not found: $type. Be sure to prefix control type with 2 dashes --", 'get_output_control()');
