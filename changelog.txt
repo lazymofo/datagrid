@@ -1,5 +1,10 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2019-09-25
+------------------
+  Altered $command in custom input controls. Better backward compatibility relating to 2019-01-10 update. Thanks sarangtc 
+  Added ability to define absolute upload and thumb paths. Requested by someone a long time ago. 
+
 version 2019-08-04
 ------------------
   COLUMN_DEFAULT in MariaDB 10.2.7 changed behavior, query gathering meta data needed altering. Thanks RenZO

@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2019-08-04
+// version 2019-09-25
 
 class lazy_mofo{
 
@@ -149,10 +149,15 @@ class lazy_mofo{
     public $text_delete_image = 'delete image';
     public $text_delete_document = 'delete document';
 
-    // relative paths for --image or --document uploads
-    // paths are created at runtime as needed
-    public $upload_path = 'uploads';            // required when using  input types
+    // relative paths for image or documents uploads
+    // all paths are created at runtime as needed
+    public $upload_path = 'uploads';            // required when using input types
     public $thumb_path = 'thumbs';              // optional, leave blank if you don't need thumbnails
+
+    // newly added absolute paths, 2019-09
+    // if absolute paths are defined then files are uploaded here, relative paths always used on the client side
+    public $upload_path_absolute = '';          // optional, defaults to $upload_path if not defined
+    public $thumb_path_absolute = '';           // optional, defaults to $thumb_path if not defined
 
     // output date formats
     public $date_out = 'm/d/Y';                 // output date, change to d/m/Y for non-us
@@ -1591,6 +1596,11 @@ class lazy_mofo{
             $sql_param = @$control['sql_param']; // optional
         }
 
+        // subtle backward compatible madness
+        $legacy_control = $type;
+        if(isset($control['legacy_control']))
+            $legacy_control = $control['legacy_control'];
+
         // set input size    
         if($called_from == 'grid')
             $size = $this->grid_text_input_size;
@@ -1655,7 +1665,7 @@ class lazy_mofo{
         elseif($type == 'checkbox')
             return $this->html_checkbox($column_name, $value, $sql, $sql_param) . $validate_tip . $validate_error_msg;
         elseif(is_callable($type))
-            return call_user_func($type, $column_name, $value, $type, $called_from, $validate_placeholder) . $validate_tip . $validate_error_msg;
+            return call_user_func($type, $column_name, $value, $legacy_control, $called_from, $validate_placeholder) . $validate_tip . $validate_error_msg;
         else
             $this->display_error("Input command or user function not found: $type", 'get_input_control()');
 
@@ -1670,6 +1680,11 @@ class lazy_mofo{
         $type = 'text'; // default
         if(isset($control['type']))
             $type = $control['type'];
+
+        // subtle backward compatible madness
+        $legacy_control = $type;
+        if(isset($control['legacy_control']))
+            $legacy_control = $control['legacy_control'];
 
         if($type == 'text')
             return $this->clean_out($value, $this->grid_ellipse_at); 
@@ -1686,7 +1701,7 @@ class lazy_mofo{
         elseif($type == 'html')
             return $this->html_html_output($value);
         elseif(is_callable($type))
-            return call_user_func($type, $column_name, $value, $type, $called_from);
+            return call_user_func($type, $column_name, $value, $legacy_control, $called_from);
         else
             $this->display_error("Output command or user function not found: $type. Be sure to prefix control type with 2 dashes --", 'get_output_control()');
 
@@ -1909,13 +1924,13 @@ class lazy_mofo{
                 else
                     $input_name = "$column_name-$identity_id"; // updating 
 
-            if(!file_exists($this->upload_path) && mb_strlen($this->upload_path) > 0){
-                mkdir($this->upload_path, 0755);
+            if(!file_exists($this->get_upload_path()) && mb_strlen($this->get_upload_path()) > 0){
+                mkdir($this->get_upload_path(), 0755);
                 usleep(500);
             }
 
-            if(!file_exists($this->thumb_path) && mb_strlen($this->thumb_path) > 0){
-                mkdir($this->thumb_path, 0755);
+            if(!file_exists($this->get_thumb_path()) && mb_strlen($this->get_thumb_path()) > 0){
+                mkdir($this->get_thumb_path(), 0755);
                 usleep(500);
             }
 
@@ -1934,25 +1949,25 @@ class lazy_mofo{
             $this->upload_delete($table_name, $identity_name, $identity_id, $column_name, $input_control);
 
             // copy upload to thumbnail path
-            if(mb_strlen($this->thumb_path) > 0 && $type == 'image')
-                if(!copy("$this->upload_path/$file_name", "$this->thumb_path/$file_name")){
-                    $this->display_error("Error: Unable to copy uploaded to thumb_path. Make sure path: $this->thumb_path exists and is writeable. Try chmod 0755 (or 0777 if you must) on the destination path.", 'get_upload()');
+            if(mb_strlen($this->get_thumb_path()) > 0 && $type == 'image')
+                if(!copy($this->get_upload_path() . "/$file_name", $this->get_thumb_path() . "/$file_name")){
+                    $this->display_error("Unable to copy uploaded to thumb_path. Make sure path: " . $this->get_thumb_path() . " exists and is writeable. Try chmod 0755 (or 0777 if you must) on the destination path.", 'get_upload()');
                     return false;
                 }
 
             // resize or crop main image
             if($type == 'image')
                 if($upload_crop)
-                    $this->image_crop("$this->upload_path/$file_name", $upload_width, $upload_height);
+                    $this->image_crop($this->get_upload_path() . "/$file_name", $upload_width, $upload_height);
                 else
-                    $this->image_resize("$this->upload_path/$file_name", $upload_width, $upload_height);
+                    $this->image_resize($this->get_upload_path() . "/$file_name", $upload_width, $upload_height);
 
             // thumbs - resize or crop 
-            if($type == 'image' && mb_strlen($this->thumb_path) > 0)
+            if($type == 'image' && mb_strlen($this->get_thumb_path()) > 0)
                 if($thumb_crop)
-                    $this->image_crop("$this->thumb_path/$file_name", $thumb_width, $thumb_height);
+                    $this->image_crop($this->get_thumb_path() . "/$file_name", $thumb_width, $thumb_height);
                 else
-                    $this->image_resize("$this->thumb_path/$file_name", $thumb_width, $thumb_height);
+                    $this->image_resize($this->get_thumb_path() . "/$file_name", $thumb_width, $thumb_height);
 
             // update file name in table 
             $sql_param = array();
@@ -2013,10 +2028,10 @@ class lazy_mofo{
             return;
         }
 
-        $file_name = $this->upload_rename_if_exists($this->upload_path, $file_name);
+        $file_name = $this->upload_rename_if_exists($this->get_upload_path(), $file_name);
 
-        if(!move_uploaded_file($tmp_name, "$this->upload_path/$file_name")){
-            $notice .= "Error: Unable to move uploaded file. Make sure path: $this->upload_path exists and is writeable. Try chmod 0755 (or 0777 is you must) on the destination path.\n";
+        if(!move_uploaded_file($tmp_name, $this->get_upload_path() . "/$file_name")){
+            $notice .= "Unable to move uploaded file. Make sure path: " . $this->get_upload_path() . " exists and is writeable. Try chmod 0755 (or 0777 is you must) on the destination path.\n";
             return;
         }
 
@@ -2061,11 +2076,11 @@ class lazy_mofo{
                 continue;
 
             // delete files
-            if(mb_strlen($this->upload_path) > 0)
-                @unlink("$this->upload_path/$val");
+            if(mb_strlen($this->get_upload_path()) > 0)
+                @unlink($this->get_upload_path() . "/$val");
 
-            if(mb_strlen($this->thumb_path) > 0)
-                @unlink("$this->thumb_path/$val");
+            if(mb_strlen($this->get_thumb_path()) > 0)
+                @unlink($this->get_thumb_path() . "/$val");
                     
             // empty field now that file is deleted
             $sql = "update `$table_name` set `$column_name` = null where `$identity_name` = :identity_id;";
@@ -2106,7 +2121,31 @@ class lazy_mofo{
         return $file_name;
 
     }
+
+
+    function get_upload_path(){
+
+        // purpose: return the path, prefer the absolute path if available
+        // returns: string path
     
+        if(strlen($this->upload_path_absolute))
+            return rtrim($this->upload_path_absolute, '\/');
+
+        return rtrim($this->upload_path, '\/');
+    }
+
+
+    function get_thumb_path(){
+
+        // purpose: return the path, prefer the absolute path if available
+        // returns: string path to thumbnail folder
+
+        if(strlen($this->upload_thumb_absolute))
+            return rtrim($this->upload_thumb_absolute, '\/');
+
+        return rtrim($this->thumb_path, '\/');
+    }
+
 
     function image_resize($file_name, $max_width, $max_height, $output_to_browser = false){
 
@@ -2649,7 +2688,7 @@ class lazy_mofo{
         if($pos === false || strlen($type) == 0)
             die("Error: control for $column_name appears to be invalid");
 
-        return array('type' => $type, 'sql' => $sql, 'sql_param' => null);
+        return array('type' => $type, 'sql' => $sql, 'sql_param' => null, 'legacy_control' => $control);
     }
 
 
