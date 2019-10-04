@@ -278,9 +278,13 @@ $lm-&gt;grid_output_control["field_name"] = array("type" => string);
 </pre>
 
 <pre class="gray">
-// old style syntax still supported (changed in version 2019-01-10)
+// legacy syntax still supported (changed in version 2019-01-10)
 // optional sql string depending on control, type is prefixed with --
 $lm-&gt;form_input_control["field_name"] = "[sql]--type";
+
+// legacy examples
+$lm-&gt;form_input_control["country_id"] = "select country_id as val, country_name as opt from country;--select";
+$lm-&gt;form_input_control["is_active"] = "--checkbox";
 </pre>
 
 <pre>
@@ -347,7 +351,7 @@ function my_user_function($column_name, $value, $command, $called_from){
 
     // $column_name: field name
     // $value: field value  
-    // $command: array defined in the control; rarely needed
+    // $command: array defined in the control, or string with legacy syntax; rarely needed
     // $called_from: orgin of call; 'form', or 'grid'; rarely needed
 
     global $lm;

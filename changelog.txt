@@ -1,5 +1,9 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2019-10-03
+------------------
+  Altered $command in custom controls again. Previous update was not quite proper. Thanks again sarangtc 
+
 version 2019-09-25
 ------------------
   Altered $command in custom input controls. Better backward compatibility relating to 2019-01-10 update. Thanks sarangtc 

@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2019-09-25
+// version 2019-10-03
 
 class lazy_mofo{
 
@@ -1597,7 +1597,7 @@ class lazy_mofo{
         }
 
         // subtle backward compatible madness
-        $legacy_control = $type;
+        $legacy_control = $control;
         if(isset($control['legacy_control']))
             $legacy_control = $control['legacy_control'];
 
@@ -1682,7 +1682,7 @@ class lazy_mofo{
             $type = $control['type'];
 
         // subtle backward compatible madness
-        $legacy_control = $type;
+        $legacy_control = $control;
         if(isset($control['legacy_control']))
             $legacy_control = $control['legacy_control'];
 
