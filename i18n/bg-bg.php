@@ -28,14 +28,14 @@ $this->form_back_button   = "<input type='button' value='&lt; Назад' class=
 $this->form_delete_button = "<input type='button' value='Изтрий' class='lm_button error' onclick='_delete();'>"; 
 
 // titles in the <th> of top of the edit form 
-$this->form_text_title_add    = 'Добавяне на запис';   
-$this->form_text_title_edit   = 'Редактиране на запис';
+$this->form_text_title_add    = 'Нов запис';   
+$this->form_text_title_edit   = 'Промяна на запис';
 $this->form_text_record_saved = 'Записът е запомнен';
 $this->form_text_record_added = 'Записът е добавен';
 
 // links on grid
-$this->grid_add_link    = "<a href='[script_name]action=edit&amp;[qs]' class='lm_grid_add_link'>Добавяне на запис</a>";
-$this->grid_edit_link   = "<a href='[script_name]action=edit&amp;[identity_name]=[identity_id]&amp;[qs]'>[редактиране]</a>";
+$this->grid_add_link    = "<a href='[script_name]action=edit&amp;[qs]' class='lm_grid_add_link'>Нов запис</a>";
+$this->grid_edit_link   = "<a href='[script_name]action=edit&amp;[identity_name]=[identity_id]&amp;[qs]'>[промяна]</a>";
 $this->grid_delete_link = "<a href='#' onclick='return _delete(\"[identity_id]\");'>[изтриване]</a>";
 $this->grid_export_link = "<a href='[script_name]_export=1&amp;[qs]' title='Свали CSV'>Експорт CSV</a>";
 
@@ -58,8 +58,8 @@ $this->grid_text_delete           = "Изтрий";
 $this->grid_text_no_records_found = "Няма намерен запис(и)";
 
 // pagination text
-$this->pagination_text_use_paging = 'използвай страници';
-$this->pagination_text_show_all   = 'покажи всичко';
+$this->pagination_text_use_paging = 'на страници';
+$this->pagination_text_show_all   = 'покажи всички';
 $this->pagination_text_records    = 'Запис(а)';
 $this->pagination_text_go         = 'Отиди на';
 $this->pagination_text_page       = 'Страница';
@@ -77,5 +77,5 @@ $this->upload_path = 'uploads';            // required when using  input types
 $this->thumb_path = 'thumbs';              // optional, leave blank if you don't need thumbnails
 
 // output date formats
-$this->date_out = 'd.m.Y';
-$this->datetime_out = 'd.m.Y, H:i';
+$this->date_out = 'Y/m/d';
+$this->datetime_out = 'Y/m/d H:i'; //'d.m.Y, H:i';
