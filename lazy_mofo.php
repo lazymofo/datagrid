@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2019-10-03
+// version 2019-11-09
 
 class lazy_mofo{
 
@@ -56,7 +56,7 @@ class lazy_mofo{
     public $on_delete_user_function = '';
     public $on_update_grid_user_function = '';
 
-    public $after_insert_user_function = '';    // user function names to be called after data is inserted, updated, or deleteed.
+    public $after_insert_user_function = '';    // user function names to be called after data is inserted, updated, or deleted.
     public $after_update_user_function = '';
     public $after_delete_user_function = '';
     public $after_update_grid_user_function = '';
@@ -1259,26 +1259,26 @@ class lazy_mofo{
     }
 
     
-    function html_radio($field_name, $value, $sql){    
+    function html_radio($field_name, $value, $sql, $sql_param = array()){    
 
         // purpose: render html radio input, note sql query should return 2 columns
         // returns: html
 
-        static $prev_sql = '';
-        static $result;
         $class = $this->get_class_name($field_name);
+
+        if(!is_array($sql_param))
+            $sql_param = array();
 
         // if no sql is provided render 1 = yes/ 0 = no
         if($sql == '')
             $sql = "select 1 as val, 'Yes' as opt union select 0, 'No'";
 
-        // simple optimization
-        if($prev_sql != $sql)
-            $result = $this->query($sql, array(), 'html_radio()');
+        $result = $this->query($sql, $sql_param, 'html_radio()');
 
         $prev_sql = $sql;
+        $prev_sql_param = $sql_param;
 
-        $control = '';    
+        $html = '';    
         foreach($result as $row){
 
             $val = current($row);
@@ -1288,39 +1288,36 @@ class lazy_mofo{
             if($val == $value)
                 $checked = "checked='checked'";
             
-            $control .= "<label><input type='radio' name='$field_name' class='$class' value='" . $this->clean_out($val) . "' $checked >" . $this->clean_out($opt) . "</label> ";
+            $html .= "<label><input type='radio' name='$field_name' class='$class' value='" . $this->clean_out($val) . "' $checked >" . $this->clean_out($opt) . "</label> ";
         }
         
-        return $control;
+        return $html;
 
     }
 
 
-    function html_select($field_name, $value, $sql, $sql_param = array(), $js_or_css = '', $first_option_blank = true, $multiple = 0){
+    function html_select($field_name, $value, $sql, $sql_param = array(), $js_or_style = '', $first_option_blank = true, $multiple = 0){
 
         // purpose: render html select dropdown from sql query
         // returns: html
         // sample query: select 0 as val, 'no' as opt union select 1, 'yes'
 
-        static $prev_sql = '';
-        static $result;
-        $out = '';
+        $html = '';
         $class = $this->get_class_name($field_name);
+
+        if(!is_array($sql_param))
+            $sql_param = array();
 
         // if no sql is provided render 1 = yes, 0 = no
         if($sql == '')
             $sql = "select 1 as val, 'Yes' as opt union select 0, 'No'";
     
-        // simple optimization
-        if($prev_sql != $sql)
-            $result = $this->query($sql, $sql_param, 'html_select()');
-
-        $prev_sql = $sql;
+        $result = $this->query($sql, $sql_param, 'html_select()');
 
         if($multiple == 0){
 
             if($first_option_blank)
-                $out .= "<option value=''>&nbsp;</option>";
+                $html .= "<option value=''>&nbsp;</option>";
 
             foreach($result as $row){
 
@@ -1331,16 +1328,16 @@ class lazy_mofo{
                 if($val == $value)
                     $selected = "selected='selected'";
 
-                $out .= "<option value='" . $this->clean_out($val) . "' $selected>" . $this->clean_out($opt) . "</option>";
+                $html .= "<option value='" . $this->clean_out($val) . "' $selected>" . $this->clean_out($opt) . "</option>";
             }
-            $out = "<select name='$field_name' class='$class' $js_or_css>$out</select>";
-            return $out;
+            $html = "<select name='$field_name' class='$class' $js_or_style>$html</select>";
+            return $html;
         }
             
         // render multiple select
-        $out  = "";
+        $html = "";
         if($first_option_blank)
-            $out .= "<option value=''>&nbsp;</option>";
+            $html .= "<option value=''>&nbsp;</option>";
 
         $value  = "$this->delim$value$this->delim";
         foreach($result as $row){
@@ -1352,11 +1349,11 @@ class lazy_mofo{
             if(mb_strstr($value, "$this->delim$val$this->delim"))
                 $selected = "selected='selected'";
         
-            $out .= "<option value='" . $this->clean_out($val) . "' $selected>" . $this->clean_out($opt) . "</option>";
+            $html .= "<option value='" . $this->clean_out($val) . "' $selected>" . $this->clean_out($opt) . "</option>";
         }    
 
-        $out = "<select name='{$field_name}[]' class='$class' multiple='multiple' size='$multiple' $js_or_css>$out</select>";
-        return $out;
+        $html = "<select name='{$field_name}[]' class='$class' multiple='multiple' size='$multiple' $js_or_style>$html</select>";
+        return $html;
 
     }
 
@@ -1368,13 +1365,15 @@ class lazy_mofo{
 
         $class = $this->get_class_name($field_name);
 
+        if(!is_array($sql_param))
+            $sql_param = array();
+
         // make hidden field name. an additional hidden field is require to detect presence of checkbox. 
         $i = mb_strrpos($field_name, '-');
         if($i > 0)
             $field_name_hidden = mb_substr($field_name, 0, $i) . '-checkbox' . mb_substr($field_name, $i); // grid format field_name-checkbox-identity_id
         else
             $field_name_hidden = $field_name . '-checkbox';
-
 
         // if no sql is provided just return a single checkbox for 1 = yes
         $checked = '';
@@ -1386,16 +1385,7 @@ class lazy_mofo{
             return "<label><input type='checkbox' name='$field_name' class='$class' value='1' $checked ></label><input type='hidden' name='$field_name_hidden' value=''>";
         }
 
-        // static for optimization
-        static $prev_sql = '';
-        static $result;
-
-        // not saved yet, then run query
-        if($prev_sql != $sql)
-            $result = $this->query($sql, $sql_param, 'html_radio()');
-
-        // save into static var for optimization comparison on next loop
-        $prev_sql = $sql;
+        $result = $this->query($sql, $sql_param, 'html_radio()');
 
         // make delimited string of previous post
         if(is_array($value))
@@ -2140,8 +2130,8 @@ class lazy_mofo{
         // purpose: return the path, prefer the absolute path if available
         // returns: string path to thumbnail folder
 
-        if(strlen($this->upload_thumb_absolute))
-            return rtrim($this->upload_thumb_absolute, '\/');
+        if(strlen($this->thumb_path_absolute))
+            return rtrim($this->thumb_path_absolute, '\/');
 
         return rtrim($this->thumb_path, '\/');
     }

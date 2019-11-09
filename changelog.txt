@@ -1,5 +1,11 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2019-11-03
+------------------
+  new bg_bg.php i18n language added. Thanks lorol!
+  Fixed issue with new thumb_path_absolute.
+  Tweaks and fixes to html_select, html_checkbox, html_radio related to sql_param and removed cache. 
+
 version 2019-10-03
 ------------------
   Altered $command in custom controls again. Previous update was not quite proper. Thanks again sarangtc 
