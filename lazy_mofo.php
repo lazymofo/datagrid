@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2019-11-09
+// version 2020-01-19
 
 class lazy_mofo{
 
@@ -433,6 +433,11 @@ class lazy_mofo{
                 if(mb_substr($key, 0, -9) != $prev_key)
                     $key = mb_substr($key, 0, -9);
 
+            // same as above but for -selectmultiple
+            if(mb_substr($key, -15) == '-selectmultiple')
+                if(mb_substr($key, 0, -15) != $prev_key)
+                    $key = mb_substr($key, 0, -15);
+
             $prev_key = $key;
 
             if(!(array_search($key, $columns) === false))
@@ -454,6 +459,11 @@ class lazy_mofo{
             if(mb_substr($key, -9) == '-checkbox')
                 if(mb_substr($key, 0, -9) != $prev_key)
                     $key = mb_substr($key, 0, -9);
+
+            // same as above but for -selectmultiple
+            if(mb_substr($key, -15) == '-selectmultiple')
+                if(mb_substr($key, 0, -15) != $prev_key)
+                    $key = mb_substr($key, 0, -15);
 
             if(!(array_search($key, $columns) === false)){
                 $safe_np = $this->safe_np($key);
@@ -506,8 +516,13 @@ class lazy_mofo{
 
             // checkboxes require a special hidden field so unchecked values are detectable
             if(mb_substr($key, -9) == '-checkbox')
-                if(!array_key_exists(mb_substr($key, 0, -9), $_POST))
+                if(!array_key_exists(mb_substr($key, 0, -9), $_POST)) // add key if none exists already
                     $key = mb_substr($key, 0, -9);
+
+            // same as above, but for selectmultiple 
+            if(mb_substr($key, -15) == '-selectmultiple')
+                if(!array_key_exists(mb_substr($key, 0, -15), $_POST))
+                    $key = mb_substr($key, 0, -15);
             
             if(!(array_search($key, $columns) === false)){
                 $safe_np = $this->safe_np($key);
@@ -1352,7 +1367,8 @@ class lazy_mofo{
             $html .= "<option value='" . $this->clean_out($val) . "' $selected>" . $this->clean_out($opt) . "</option>";
         }    
 
-        $html = "<select name='{$field_name}[]' class='$class' multiple='multiple' size='$multiple' $js_or_style>$html</select>";
+        // hidden field at the end assists in detecting no selections
+        $html = "<select name='{$field_name}[]' class='$class' multiple='multiple' size='$multiple' $js_or_style>$html</select><input type='hidden' name='{$field_name}-selectmultiple' value=''>";
         return $html;
 
     }

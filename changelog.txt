@@ -1,5 +1,9 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2020-01-19
+------------------
+  selectmultiple was not updating all unselect on form updates. Thanks sarangtc!
+
 version 2019-11-03
 ------------------
   new bg_bg.php i18n language added. Thanks lorol!
