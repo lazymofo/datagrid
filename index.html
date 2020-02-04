@@ -9,7 +9,7 @@
     <style>
         *     { font-family: sans-serif; }
         body  { margin: 40px; }
-        pre   { font-family: monospace, courier; color: blue; margin-left: 10px; padding: 10px; border: 1px solid #999; border-radius: 2px; border-right: 0; background-color: #ff; width: 100%; }
+        pre   { font-family: monospace, courier; color: blue; margin-left: 10px; padding: 10px; border: 1px solid #999; border-radius: 2px; border-right: 0; background-color: #ffd; width: 100%; font-size: 70%; }
         li    { margin: 6px; }
         .gray { color: #555; }
     </style>
@@ -152,7 +152,7 @@ $lm-&gt;rename['country_id'] = 'Country';
 
 // optional, define input controls on the form
 $lm-&gt;form_input_control['photo'] = array('type' =&gt; 'image');
-$lm-&gt;form_input_control['is_active'] = array('type' =&gt; 'radio', 'sql' =&gt; "select 1, 'Yes' union select 0, 'No' union select 2, 'Maybe'");
+$lm-&gt;form_input_control['is_active'] = array('type' =&gt; 'radio', 'sql' =&gt; "select 1, 'Yes' union select 0, 'No'");
 $lm-&gt;form_input_control['country_id'] = array('type' =&gt; 'select', 'sql' =&gt; 'select country_id, country_name from country');
 
 
@@ -165,12 +165,13 @@ $lm-&gt;grid_output_control['contact_email'] = array('type' =&gt; 'email'); // m
 $lm-&gt;grid_output_control['photo'] = array('type' =&gt; 'image');         // make image clickable  
 
 
-// new in version &gt;= 2015-02-27 all searches have to be done manually
+// show search box, but _search parameter still needs to be passed to query below 
 $lm-&gt;grid_show_search_box = true;
 
 
-// optional, query for grid().
-// ** IMPORTANT - last column must be the identity/key for [edit] and [delete] links to appear **
+// query to define grid view
+// IMPORTANT - last column must be the identity/key for [edit] and [delete] links to appear
+// include an 'order by' to prevent potential parsing issues
 $lm-&gt;grid_sql = "
 select 
   m.market_id
@@ -190,6 +191,8 @@ or    coalesce(m.contact_email, '') like :_search
 or    coalesce(c.country_name, '') like :_search 
 order by m.market_id desc
 ";
+
+// bind parameter for grid query
 $lm-&gt;grid_sql_param[':_search'] = '%' . trim(@$_REQUEST['_search']) . '%';
 
 
@@ -207,10 +210,12 @@ select
 from  market 
 where market_id = :market_id
 ";
-$lm-&gt;form_sql_param[":$lm-&gt;identity_name"] = @$_REQUEST[$lm-&gt;identity_name]; 
+
+// bind parameter for form query
+$lm-&gt;form_sql_param[':market_id'] = @$_REQUEST['market_id'];
 
 
-// optional, validation - regexp may be 'email' or a user defined function, all other parameters optional 
+// optional, validation - regexp, 'email' or a user defined function, all other parameters optional 
 $lm-&gt;on_insert_validate['market_name']   = array('regexp' =&gt; '/.+/',  'error_msg' =&gt; 'Missing Market Name', 'placeholder' =&gt; 'this is required', 'optional' =&gt; false); 
 $lm-&gt;on_insert_validate['contact_email'] = array('regexp' =&gt; 'email', 'error_msg' =&gt; 'Invalid Email',       'placeholder' =&gt; 'this is optional', 'optional' =&gt; true);
 
@@ -219,7 +224,7 @@ $lm-&gt;on_insert_validate['contact_email'] = array('regexp' =&gt; 'email', 'err
 $lm-&gt;on_update_validate = $lm-&gt;on_insert_validate;  
 
 
-// use the lm controller
+// run the controller
 $lm-&gt;run();
 </pre>
 
@@ -243,7 +248,6 @@ $lm-&gt;grid_export_link = "";
 // change success message
 $lm-&gt;form_text_record_added = "New Record Added";
 $lm-&gt;grid_text_record_added = "New Record Added";
-
 </pre>
 
 
@@ -297,7 +301,7 @@ Examples:
 
     $lm-&gt;form_input_control['is_active'] = array("type" => "checkbox"); 
 
-    $lm-&gt;form_input_control['will_you_attend'] = array("type" => "radio", "sql" => "select 1 as key, 'Yes' as val union select 0, 'No' union select 3, 'Maybe'");
+    $lm-&gt;form_input_control['will_you_attend'] = array("type" => "radio", "sql" => "select 1 as key, 'Yes' as val union select 0, 'No'");
 
     $lm-&gt;form_input_control['country_id'] = array("type" => "select", sql => "select country_id as val, country_name as opt from country");
 
@@ -399,7 +403,7 @@ $lm-&gt;grid_search_box = "
 &lt;/form&gt;
 "; 
 
-$lm->query_string_list = "new_search_1,new_search_2"; // add variable names to querystring so search is perserved when paging, sorting, and editing
+$lm->query_string_list = "new_search_1,new_search_2"; // add variable names to querystring so search is saved while paging, sorting, and editing
 
 // set name parameters
 $lm-&gt;grid_sql_param[':new_search_1'] =  '%' . @$_REQUEST['new_search_1'] . '%';
@@ -572,7 +576,7 @@ function my_after_insert($id){
 Example: 
 
 // when using the checkbox input maybe we'd want unchecked to be 0 instead of null 
-$lm->cat_user_function['is_active'] = 'my_cast';
+$lm->cast_user_function['is_active'] = 'my_cast';
 
 function my_cast($val){
     

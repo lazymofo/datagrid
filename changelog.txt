@@ -1,5 +1,11 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2020-02-03
+------------------
+  added Russian Belaruse translation ru-by.php. Thanks Sergei!
+  added caching back in for select, radio, and checkbox.   
+  tweaked demo.php and documentation
+
 version 2020-01-19
 ------------------
   selectmultiple was not updating all unselect on form updates. Thanks sarangtc!

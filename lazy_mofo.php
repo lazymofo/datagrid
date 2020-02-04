@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2020-01-19
+// version 2020-02-03
 
 class lazy_mofo{
 
@@ -29,8 +29,8 @@ class lazy_mofo{
     public $form_additional_html = '';      // add any addition html inside the <form> after the form buttons.
     public $form_text_input_size = 35;      // size of text inputs on form()
 
-    public $grid_sql = '';                  // render grid with desired sql. defaults to 'select *, identity_name from table'. *important* to display [edit] and [delete] links, the identity must be the last column in the sql statement. this arangement allows grid to display data without showing the identity.
-    public $grid_sql_param = array();       // associative array to bind variables to grid_sql. see php docs on PDOStatement->execute for more info.
+    public $grid_sql = '';                  // optional, render grid with query result. *important* to display [edit] and [delete] links, the identity must be the last column in the sql statement. include an 'order by' to prevent query parsing errors on complex queries.
+    public $grid_sql_param = array();       // associative array to bind variables to grid_sql. example: $lm->grid_sql_param(':market_id' => $market_id);
     public $grid_default_order_by = '';     // free-form 'order by' clause. Not used if grid_sql is specified. Example: column1 desc, column2 asc
     public $grid_input_control = array();   // for grid(), define inputs like select boxes, checkboxes, etc. example: $lm->grid_input_control['field_name'] = array('type' => 'select', 'sql' => "select id as val, title as opt from table");
     public $grid_output_control = array();  // for grid(). define outputs like email or document to make a link. example: example: $lm->grid_output_control['field_name'] = array('type' => 'email');
@@ -1288,7 +1288,15 @@ class lazy_mofo{
         if($sql == '')
             $sql = "select 1 as val, 'Yes' as opt union select 0, 'No'";
 
-        $result = $this->query($sql, $sql_param, 'html_radio()');
+        // complexity added for caching, this could help on grid view
+        static $result = null;
+        static $prev_sql = null;
+        static $prev_sql_param = null;
+        if(!($result && $prev_sql === $sql && count(array_diff_assoc($sql_param, $prev_sql_param)) === 0)){
+            $result = $this->query($sql, $sql_param, 'html_radio()');
+            $prev_sql = $sql;
+            $prev_sql_param = $sql_param;
+        }
 
         $prev_sql = $sql;
         $prev_sql_param = $sql_param;
@@ -1326,8 +1334,16 @@ class lazy_mofo{
         // if no sql is provided render 1 = yes, 0 = no
         if($sql == '')
             $sql = "select 1 as val, 'Yes' as opt union select 0, 'No'";
-    
-        $result = $this->query($sql, $sql_param, 'html_select()');
+
+        // complexity added for caching, this could help on grid view
+        static $result = null;
+        static $prev_sql = null;
+        static $prev_sql_param = null;
+        if(!($result && $prev_sql === $sql && count(array_diff_assoc($sql_param, $prev_sql_param)) === 0)){
+            $result = $this->query($sql, $sql_param, 'html_select()');
+            $prev_sql = $sql;
+            $prev_sql_param = $sql_param;
+        }
 
         if($multiple == 0){
 
@@ -1401,7 +1417,15 @@ class lazy_mofo{
             return "<label><input type='checkbox' name='$field_name' class='$class' value='1' $checked ></label><input type='hidden' name='$field_name_hidden' value=''>";
         }
 
-        $result = $this->query($sql, $sql_param, 'html_radio()');
+        // complexity added for caching, this could help on grid view
+        static $result = null;
+        static $prev_sql = null;
+        static $prev_sql_param = null;
+        if(!($result && $prev_sql === $sql && count(array_diff_assoc($sql_param, $prev_sql_param)) === 0)){
+            $result = $this->query($sql, $sql_param, 'html_checkbox()');
+            $prev_sql = $sql;
+            $prev_sql_param = $sql_param;
+        }
 
         // make delimited string of previous post
         if(is_array($value))

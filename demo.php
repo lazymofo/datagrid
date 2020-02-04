@@ -67,7 +67,7 @@ catch(PDOException $e) {
 }
 
 // create LM object, pass in PDO connection, see i18n folder for country + language options 
-$lm = new lazy_mofo($dbh, 'en-us'); 
+$lm = new lazy_mofo($dbh, 'en-us');
 
 
 // table name for updates, inserts and deletes
@@ -84,7 +84,7 @@ $lm->rename['country_id'] = 'Country';
 
 // optional, define input controls on the form
 $lm->form_input_control['photo'] = array('type' => 'image');
-$lm->form_input_control['is_active'] = array('type' => 'radio', 'sql' => "select 1, 'Yes' union select 0, 'No' union select 2, 'Maybe'");
+$lm->form_input_control['is_active'] = array('type' => 'radio', 'sql' => "select 1, 'Yes' union select 0, 'No'");
 $lm->form_input_control['country_id'] = array('type' => 'select', 'sql' => 'select country_id, country_name from country');
 
 
@@ -97,12 +97,13 @@ $lm->grid_output_control['contact_email'] = array('type' => 'email'); // make em
 $lm->grid_output_control['photo'] = array('type' => 'image');         // make image clickable  
 
 
-// new in version >= 2015-02-27 all searches have to be done manually, added in where clause of grid_sql
+// show search box, but _search parameter still needs to be passed to query below 
 $lm->grid_show_search_box = true;
 
 
-// optional, query for grid().
-// ** IMPORTANT - last column must be the identity/key for [edit] and [delete] links to appear **
+// query to define grid view
+// IMPORTANT - last column must be the identity/key for [edit] and [delete] links to appear
+// include an 'order by' to prevent potential parsing issues
 $lm->grid_sql = "
 select 
   m.market_id
@@ -122,6 +123,8 @@ or    coalesce(m.contact_email, '') like :_search
 or    coalesce(c.country_name, '') like :_search 
 order by m.market_id desc
 ";
+
+// bind parameter for grid query
 $lm->grid_sql_param[':_search'] = '%' . trim(@$_REQUEST['_search']) . '%';
 
 
@@ -139,10 +142,12 @@ select
 from  market 
 where market_id = :market_id
 ";
-$lm->form_sql_param[":$lm->identity_name"] = @$_REQUEST[$lm->identity_name]; 
+
+// bind parameter for form query
+$lm->form_sql_param[':market_id'] = @$_REQUEST['market_id']; 
 
 
-// optional, validation - regexp may be 'email' or a user defined function, all other parameters optional 
+// optional, validation - regexp, 'email' or a user defined function, all other parameters optional 
 $lm->on_insert_validate['market_name']   = array('regexp' => '/.+/',  'error_msg' => 'Missing Market Name', 'placeholder' => 'this is required', 'optional' => false); 
 $lm->on_insert_validate['contact_email'] = array('regexp' => 'email', 'error_msg' => 'Invalid Email',       'placeholder' => 'this is optional', 'optional' => true);
 
