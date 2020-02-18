@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2020-02-03
+// version 2020-02-17
 
 class lazy_mofo{
 
@@ -1288,18 +1288,7 @@ class lazy_mofo{
         if($sql == '')
             $sql = "select 1 as val, 'Yes' as opt union select 0, 'No'";
 
-        // complexity added for caching, this could help on grid view
-        static $result = null;
-        static $prev_sql = null;
-        static $prev_sql_param = null;
-        if(!($result && $prev_sql === $sql && count(array_diff_assoc($sql_param, $prev_sql_param)) === 0)){
-            $result = $this->query($sql, $sql_param, 'html_radio()');
-            $prev_sql = $sql;
-            $prev_sql_param = $sql_param;
-        }
-
-        $prev_sql = $sql;
-        $prev_sql_param = $sql_param;
+        $result = $this->query_cache($sql, $sql_param, 'html_radio()');
 
         $html = '';    
         foreach($result as $row){
@@ -1335,15 +1324,7 @@ class lazy_mofo{
         if($sql == '')
             $sql = "select 1 as val, 'Yes' as opt union select 0, 'No'";
 
-        // complexity added for caching, this could help on grid view
-        static $result = null;
-        static $prev_sql = null;
-        static $prev_sql_param = null;
-        if(!($result && $prev_sql === $sql && count(array_diff_assoc($sql_param, $prev_sql_param)) === 0)){
-            $result = $this->query($sql, $sql_param, 'html_select()');
-            $prev_sql = $sql;
-            $prev_sql_param = $sql_param;
-        }
+        $result = $this->query_cache($sql, $sql_param, 'html_select()');
 
         if($multiple == 0){
 
@@ -1417,15 +1398,7 @@ class lazy_mofo{
             return "<label><input type='checkbox' name='$field_name' class='$class' value='1' $checked ></label><input type='hidden' name='$field_name_hidden' value=''>";
         }
 
-        // complexity added for caching, this could help on grid view
-        static $result = null;
-        static $prev_sql = null;
-        static $prev_sql_param = null;
-        if(!($result && $prev_sql === $sql && count(array_diff_assoc($sql_param, $prev_sql_param)) === 0)){
-            $result = $this->query($sql, $sql_param, 'html_checkbox()');
-            $prev_sql = $sql;
-            $prev_sql_param = $sql_param;
-        }
+        $result = $this->query_cache($sql, $sql_param, 'html_checkbox()');
 
         // make delimited string of previous post
         if(is_array($value))
@@ -2431,6 +2404,43 @@ class lazy_mofo{
             return array();    
         else    
             return $sth->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    private function query_cache($sql, $sql_param, $source_function){
+
+        // purpose: try return cached result, used by html_select, html_checkbox and html_radio, might help on grid rendering 
+
+        static $results = array();
+        static $miss = 0;
+        $max = 6;
+        $cnt = count($results);
+
+        // things aren't working out, just run the query, skip searching cache
+        if($miss > $max)
+            return $this->query($sql, $sql_param, $source_function);
+
+        // see if result already exists
+        foreach($results as $arr){
+
+            if($arr['sql'] !== $sql)
+                continue;
+
+            if(count(array_diff_assoc($arr['sql_param'], $sql_param)) !== 0)
+                continue;
+                    
+            // hit/success
+            return $arr['result'];
+        }
+
+        $miss++;
+        $result = $this->query($sql, $sql_param, $source_function);
+
+        // save to cache
+        $results[] = array('sql' => $sql, 'sql_param' => $sql_param, 'result' => $result);
+
+        return $result;
 
     }
 

@@ -77,10 +77,6 @@ $this->upload_path = 'uploads';            // required when using  input types
 $this->thumb_path = 'thumbs';              // optional, leave blank if you don't need thumbnails
 
 // output date formats
-//$this->date_out = 'м/д/г';
-//$this->datetime_out = 'м/д/г ч:м д';
-
-// wikipedia says dd.mm.yyyy
 $this->date_out = 'd.m.Y';
 $this->datetime_out = 'd.m.Y H:i';
 

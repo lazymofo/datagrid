@@ -1,5 +1,9 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2020-02-17
+------------------
+  new cache for html_select, html_radio, html_checkbox. Thanks sarangtc
+
 version 2020-02-03
 ------------------
   added Russian Belaruse translation ru-by.php. Thanks Sergei!
