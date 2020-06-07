@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2020-02-17
+// version 2020-06-07
 
 class lazy_mofo{
 
@@ -498,7 +498,7 @@ class lazy_mofo{
         $identity_id = $this->cast_id($_POST[$this->identity_name]);
 
         if(mb_strlen($this->table) == 0 || $identity_id == 0 || count($columns) == 0){
-            $this->display_error("missing tablename, or missing identity_value, or get_columns() failed", 'update()');
+            $this->display_error("missing tablename, or missing identity_value, or get_columns() failed", 'sql_update()');
             return false;
         }
 
@@ -672,10 +672,11 @@ class lazy_mofo{
         // $error = error message to display before form, often from server-side validation
         // returns: html
 
-        if(mb_strlen($this->identity_name) == 0 || (mb_strlen($this->grid_sql) && mb_strlen($this->table) == 0)){
-            $this->display_error("missing grid_sql and table (one is required), or missing identity_name", 'form()');
-            return;
-        }
+        if(mb_strlen($this->identity_name) == 0)
+            return $this->display_error("property: identity_name must be set", 'form()');
+
+        if(mb_strlen($this->form_sql) == 0 && mb_strlen($this->table) == 0)
+            return $this->display_error("property: form_sql or table must be set", 'form()');
 
         $identity_id = $this->cast_id(@$_GET[$this->identity_name]);
         if($identity_id == 0)
@@ -1732,9 +1733,13 @@ class lazy_mofo{
             $sql = $this->form_sql;
             $sql_param = $this->form_sql_param;
         }
+        else{
 
-        if($sql == '')
+            if(mb_strlen($this->table) == 0)
+                return $this->display_error("missing property: table", 'get_columns');
+
             $sql = "select * from `$table`";
+        }
 
         // remove last semicolon        
         $sql = rtrim($sql, "\r\n\t; ");
