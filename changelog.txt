@@ -3,6 +3,7 @@ lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansok
 version 2020-02-17
 ------------------
   new cache for html_select, html_radio, html_checkbox. Thanks sarangtc
+  added language nl-nl.php file on 2020-06-07. Thanks Henk
 
 version 2020-02-03
 ------------------
