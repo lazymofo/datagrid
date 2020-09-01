@@ -1,5 +1,9 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2020-09-01
+------------------
+  removed deprecated checks for magic quotes. Thanks dmitry
+
 version 2020-06-07
 ------------------
   fixed property checks in form and get_columns. Thanks gaful

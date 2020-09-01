@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2020-06-07
+// version 2020-09-01
 
 class lazy_mofo{
 
@@ -173,9 +173,6 @@ class lazy_mofo{
 
         if(!$dbh)
             die('Pass in a PDO object connected to the mysql database.');
-
-        if(!(get_magic_quotes_gpc() == 0) && (get_magic_quotes_runtime() == 0))
-            echo('Warning: this class requires magic_quotes be disabled.');
 
         $this->dbh = $dbh; 
 
