@@ -1,8 +1,13 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+
+version 2020-11-22
+------------------
+  missing image_quality attribute on a jpg call. Thanks Laurent
+
 version 2020-09-01
 ------------------
-  removed deprecated checks for magic quotes. Thanks dmitry
+  removed deprecated checks for magic quotes. Thanks Dmitry
 
 version 2020-06-07
 ------------------

@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2020-09-01
+// version 2020-11-22
 
 class lazy_mofo{
 
@@ -2360,7 +2360,7 @@ class lazy_mofo{
         elseif($ext == 'png')
             imagepng($image, $file_name);
         else
-            imagejpeg($image, $file_name, 100); 
+            imagejpeg($image, $file_name, $this->image_quality); 
 
         unset($image);
         return;
