@@ -1,5 +1,8 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2020-12-21
+------------------
+  quotes from information_schema.columns string defaults removed. 
 
 version 2020-11-22
 ------------------

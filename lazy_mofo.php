@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2020-11-22
+// version 2020-12-21
 
 class lazy_mofo{
 
@@ -45,7 +45,7 @@ class lazy_mofo{
     public $text_input_max_length_default = 0;  // global max_length attribute for input. 0 is disabled
     public $text_input_max_length = array();    // array of column names to max length integers, optional
 
-    public $auto_populate_controls = true;      // have get_columns() populate input and output controls according to meta data for types --date, --datetime, --number and --textarea. also, populate default values.
+    public $auto_populate_controls = true;      // have get_columns() populate input and output controls according to meta data for types --date, --datetime, --number and --textarea. also, populate default values if user has read access to information_schema.columns
 
     public $on_insert_validate = array();       // example : array('regexp' => '/.+/', 'error_msg' => 'Missing Market Name', 'placeholder' => 'this is required', 'optional' => false); 
     public $on_update_validate = array();       // regexp may be 'email' or a user defined function, all other parameters optional
@@ -1802,7 +1802,7 @@ class lazy_mofo{
 
         }
 
-        // populate default values
+        // populate default values - user must have read access to information_schema.columns
         $sql = "select column_name, column_default from information_schema.columns where column_default != 'NULL' and column_default is not null and table_name = :table and table_schema = database()";
         $sql_param = array(':table' => $table);
         $result = $this->query($sql, $sql_param, 'get_columns() - populate form_default_value');
@@ -1810,7 +1810,7 @@ class lazy_mofo{
             
             if($context == 'form')
                 if(!array_key_exists($row['column_name'], $this->form_default_value))
-                    $this->form_default_value[$row['column_name']] = $row['column_default'];
+                    $this->form_default_value[$row['column_name']] = trim($row['column_default'], "'"); // weird, string values are quoted
 
         }
 
