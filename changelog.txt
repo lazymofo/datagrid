@@ -1,5 +1,10 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2021-06-03
+------------------
+  css tweak, new class added on form.
+  exclude_field feature was making invalid sql on inserts
+
 version 2020-12-21
 ------------------
   quotes from information_schema.columns string defaults removed. 

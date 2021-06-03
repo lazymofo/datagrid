@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2020-12-21
+// version 2021-06-03
 
 class lazy_mofo{
 
@@ -425,6 +425,10 @@ class lazy_mofo{
         $sql_fields = '';
         foreach($_POST as $key => $val){
 
+            // don't allow updates on certain fields
+            if(array_key_exists($key, $this->exclude_field))
+                continue;
+
             // checkboxes require a special hidden field to identify unchecked values
             if(mb_substr($key, -9) == '-checkbox')
                 if(mb_substr($key, 0, -9) != $prev_key)
@@ -738,7 +742,7 @@ class lazy_mofo{
         
         $uri_path = $this->get_uri_path();
 
-        $html  = "<div id='lm'>\n";
+        $html  = "<div id='lm' class='lm_form_wrapper'>\n";
         $html .= "<form action='$uri_path$qs' method='post' enctype='multipart/form-data'>\n";
         $html .= "<input type='hidden' name='_csrf' value='$_SESSION[_csrf]'>\n";
         $html .= "<input type='hidden' name='_posted' value='1'>\n";
@@ -1747,7 +1751,7 @@ class lazy_mofo{
             $match = end($matches[0]);
             $sql = mb_substr($sql, 0, $match[1]);
         }
-        $sql .= ' limit 0 ';                                    // add limit
+        $sql .= ' limit 0 '; // add limit, we don't need any data, just meta data
 
         $sth = $this->dbh->prepare($sql);
         if(!$sth->execute($sql_param)){
