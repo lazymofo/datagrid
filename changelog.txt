@@ -1,5 +1,11 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+
+version 2021-07-05
+------------------
+  case sensitive fix for MySQL 8 for fetching defaults from information_schema.columns. thanks again sarangtc! 
+  library was choking on 'Example 1 - Basic Usage'. yikes. thanks softhdcomp
+
 version 2021-06-03
 ------------------
   css tweak, new class added on form.

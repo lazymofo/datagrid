@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2021-06-03
+// version 2021-07-05
 
 class lazy_mofo{
 
@@ -1734,7 +1734,9 @@ class lazy_mofo{
             $sql = $this->form_sql;
             $sql_param = $this->form_sql_param;
         }
-        else{
+
+        // no query defined, just make one
+        if(strlen($sql) == 0){
 
             if(mb_strlen($this->table) == 0)
                 return $this->display_error("missing property: table", 'get_columns');
@@ -1758,7 +1760,7 @@ class lazy_mofo{
             $arr = $sth->errorInfo();
             $error = $arr[2];
             $this->display_error("$error\nsql: $sql\narr_sql_param: " . print_r($sql_param, true), 'get_columns');
-            return $columns;
+            return array();
         }
 
         $i = 0;
@@ -1806,8 +1808,8 @@ class lazy_mofo{
 
         }
 
-        // populate default values - user must have read access to information_schema.columns
-        $sql = "select column_name, column_default from information_schema.columns where column_default != 'NULL' and column_default is not null and table_name = :table and table_schema = database()";
+        // populate default values - user must have read access to information_schema.columns, aliases added for mysql 8
+        $sql = "select column_name as 'column_name', column_default as 'column_default' from information_schema.columns where column_default != 'NULL' and column_default is not null and table_name = :table and table_schema = database()";
         $sql_param = array(':table' => $table);
         $result = $this->query($sql, $sql_param, 'get_columns() - populate form_default_value');
         foreach($result as $row){
