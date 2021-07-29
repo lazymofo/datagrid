@@ -647,8 +647,7 @@ Example:
 &lt;script&gt;
 $(function() {
     
-    // note how field class names are prefixed with 'lm_'
-    $('input.lm_create_date').datepicker(); 
+    $('input[name=create_date]').datepicker(); 
     
     // non US date example dd/mm/yy and week starting on monday(1) instead of sunday(0)
     // make sure lazy mofo class members for date_out and datetime_out correspond with your local date format
