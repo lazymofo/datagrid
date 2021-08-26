@@ -628,7 +628,7 @@ $lm-&gt;datetime_out = 'm/d/Y h:i A';
 
 // or set non US date format
 $lm-&gt;date_out = 'd/m/Y';
-$lm-&gt;datetime_out = 'd/m/Y h:i A';
+$lm-&gt;datetime_out = 'd/m/Y H:i';
 
 // or use a ISO-ish date format for html5 date inputs
 $lm-&gt;date_out = 'Y-m-d';
@@ -639,19 +639,32 @@ $lm-&gt;datetime_out = 'Y-m-d H:i';
 
 <h1><a name='adding_jquery_ui_datepicker'>Adding JQuery UI Datepicker</a></h1>
 <pre>
-Example: 
 
 &lt;link rel='stylesheet' href='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css'&gt;
 &lt;script src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'&gt;&lt;/script&gt;
 &lt;script src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js'&gt;&lt;/script&gt;
+&lt;script src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/i18n/jquery-ui-i18n.min.js'&gt;&lt;/script&gt;
 &lt;script&gt;
 $(function() {
+
     
     $('input[name=create_date]').datepicker(); 
     
+
     // non US date example dd/mm/yy and week starting on monday(1) instead of sunday(0)
-    // make sure lazy mofo class members for date_out and datetime_out correspond with your local date format
-    //$('input.lm_create_date').datepicker({ dateFormat: 'dd/mm/yy', firstDay: 1 });
+    // also set date_out and datetime_out properties with the desired date format $lm-&gt;date_out = 'd/m/Y'; $lm-&gt;datetime_out = 'd/m/Y H:i';
+    /*
+    var options = $.extend({},
+        $.datepicker.regional['it'], {
+            dateFormat: 'mm/dd/yyyy',
+            changeMonth: true,
+            changeYear: true,
+            highlightWeek: true,
+            firstDay: 1,
+        }
+    );
+    $('input.lm_create_date').datepicker(options);
+    */    
 
 
 });
