@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2021-07-05
+// version 2022-01-14
 
 class lazy_mofo{
 
@@ -744,7 +744,7 @@ class lazy_mofo{
 
         $html  = "<div id='lm' class='lm_form_wrapper'>\n";
         $html .= "<form action='$uri_path$qs' method='post' enctype='multipart/form-data'>\n";
-        $html .= "<input type='hidden' name='_csrf' value='$_SESSION[_csrf]'>\n";
+        $html .= "<input type='hidden' name='_csrf' value='{$_SESSION['_csrf']}'>\n";
         $html .= "<input type='hidden' name='_posted' value='1'>\n";
 
         if(mb_strlen($error) > 0)
@@ -1005,7 +1005,7 @@ class lazy_mofo{
 
         $html .= "<form action='$uri_path$qs' method='post' onsubmit='return _update_grid()' enctype='multipart/form-data'>\n";
         $html .= "<input type='hidden' name='_posted' value='1'>\n";
-        $html .= "<input type='hidden' name='_csrf' value='$_SESSION[_csrf]'>\n";
+        $html .= "<input type='hidden' name='_csrf' value='{$_SESSION['_csrf']}'>\n";
 
         // quit if there's no data
         if($count <= 0){
@@ -1110,7 +1110,7 @@ class lazy_mofo{
         <form action='$uri_path$qs' method='post' name='delete_js'>
         <input type='hidden' name='action' value='delete' >
         <input type='hidden' name='$this->identity_name' value='$identity_id' >
-        <input type='hidden' name='_csrf' value='$_SESSION[_csrf]' >
+        <input type='hidden' name='_csrf' value='{$_SESSION['_csrf']}' >
         <input type='hidden' name='_called_from' value='$_called_from' >
         </form>
 
@@ -1186,7 +1186,7 @@ class lazy_mofo{
         $html = '';
         $class = $this->get_class_name($field_name);
 
-        if(mb_strlen($file_name) > 0){
+        if(isset($file_name) && mb_strlen($file_name) > 0){
         
             if(mb_strlen($this->thumb_path))
                 $html .= "<a href='$this->upload_path/$file_name' target='_blank'><img src='$this->thumb_path/$file_name' alt='' $this->image_style ></a>";
@@ -1226,7 +1226,7 @@ class lazy_mofo{
         // purpose: if image exists, display image depending on settings and if thumbnail exists
         // returns: html
 
-        if(mb_strlen($file_name) == 0)
+        if(!isset($file_name) || mb_strlen($file_name) == 0)
             return;
 
         if($this->grid_show_images == false)
@@ -1465,10 +1465,10 @@ class lazy_mofo{
 
         // purpose: similar to intval() but supports mysql bigint and does not overflow
 
-        if(preg_match('/-?[0-9]{1,30}/', $str))
+        if(isset($str) && preg_match('/^-?[0-9]{1,30}$/', $str))
             return $str;
-        else
-            return 0;
+
+        return 0;
 
     }
 
@@ -1491,11 +1491,13 @@ class lazy_mofo{
 
         // purpose: escape html output w/ optional ellipsing
 
+        if(!isset($str))
+            return '';
+
         if(is_array($str))
             $str = implode($this->delim, $str);
-        elseif($ellipse_at > 0)
-            if(mb_strlen($str) > $ellipse_at)
-                $str = mb_substr($str, 0, $ellipse_at, $this->charset) . "...";
+        elseif($ellipse_at > 0 && mb_strlen($str) > $ellipse_at)
+            $str = mb_substr($str, 0, $ellipse_at, $this->charset) . "...";
 
         // remove illegal characters
         $str = mb_convert_encoding($str, $this->charset, mb_detect_encoding($str));
@@ -1534,7 +1536,7 @@ class lazy_mofo{
 
         // purpose: convert database format to local format
 
-        if(mb_strlen($str) < 8)
+        if(!isset($str) || mb_strlen($str) < 8)
             return; 
         
         if($use_time)
@@ -1550,10 +1552,11 @@ class lazy_mofo{
         // purpose: change field name to friendly. example: first_name becomes "First Name" or EntryFee1 becomes "Entry Fee 1"
         // returns: html escaped string
 
-        if(mb_strlen($friendly_name) > 0)
+        if(isset($friendly_name))
             return $this->clean_out($friendly_name);
 
         $friendly_name = $field_name;
+        
         $friendly_name = preg_replace('/([a-z]{1})([A-Z]{1})/', '\1 \2', $friendly_name);
         $friendly_name = preg_replace('/([a-z]{1})([0-9]+)/i', '\1 \2 ', $friendly_name);
         $friendly_name = str_replace('_', ' ', $friendly_name);
@@ -1575,9 +1578,16 @@ class lazy_mofo{
         if(isset($action))
             return $action;
 
-        $post_get = array_merge($_POST, $_GET);
+        $post_get = array();
 
-        if(mb_strlen(@$post_get['action']) > 0)
+        // merge post and get
+        if(isset($_POST))
+            $post_get = $_POST; 
+
+        if(isset($_GET))
+            $post_get = array_merge($post_get, $_GET);
+
+        if(isset($post_get['action']))
             return $post_get['action'];
 
         foreach($post_get as $key => $val)
@@ -1624,7 +1634,7 @@ class lazy_mofo{
         // display tip or error next to input, not both
         if(@$validate[$column_name]['result'] === false)
             $validate_error_msg = "<span class='lm_validate_error'>" . $this->clean_out($validate[$column_name]['error_msg']) . "</span>";
-        elseif(strlen(@$validate[$column_name]['placeholder']) > 0)
+        elseif(isset($validate[$column_name]['placeholder']) && strlen($validate[$column_name]['placeholder']) > 0)
             $validate_tip = "<span class='lm_validate_tip'>" . $this->clean_out($validate[$column_name]['placeholder']) . "</span>";
 
         // always try to get a placeholder for the text inputs
@@ -1893,7 +1903,7 @@ class lazy_mofo{
         $get = '';
         $arr = explode(',', trim($query_string_list, ','));
         foreach($arr as $var)
-            if(mb_strlen(@$_REQUEST[$var]) > 0)
+            if(isset($_REQUEST[$var]) && mb_strlen($_REQUEST[$var]) > 0)
                 $get .= "&$var=" . urlencode($_REQUEST[$var]);
 
         return ltrim($get, '&');
@@ -1953,8 +1963,8 @@ class lazy_mofo{
             $file_name = $this->upload_file($input_name, $notice, $field_index);
 
             // reloop - no new file uploaded
-            if(mb_strlen($file_name) == 0)
-                continue;    
+            if(!isset($file_name) || mb_strlen($file_name) == 0)
+                continue;
                 
             // delete previous existing file
             $this->upload_delete($table_name, $identity_name, $identity_id, $column_name, $input_control);
@@ -2079,7 +2089,7 @@ class lazy_mofo{
         $row = $result[0];
         foreach($row as $column_name => $val){
 
-            if(mb_strlen($val) == 0)
+            if(!isset($val) || mb_strlen($val) == 0)
                 continue;
 
             // uploads only
@@ -2344,8 +2354,11 @@ class lazy_mofo{
         else
             $image = imagecreatefromjpeg($file_name);
 
-        $arr = exif_read_data($file_name);
-        $o = intval($arr['Orientation']);
+        $arr = @exif_read_data($file_name);
+
+        $o = 0;
+        if(isset($arr['Orientation']))
+            $o = intval($arr['Orientation']);
 
         // nothing to do
         if($o == 0)
@@ -2683,7 +2696,7 @@ class lazy_mofo{
             
             $regexp_or_user_func = @$validate[$column_name]['regexp'];
             
-            if(strlen($regexp_or_user_func) == 0)
+            if(!isset($regexp_or_user_func))
                 continue;
 
             $val = @$_POST[$column_name];

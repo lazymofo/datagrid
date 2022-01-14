@@ -1,6 +1,10 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
 
+version 2022-01-14
+------------------
+  deprication warnings appeared in php 8.1 related to items like strlen(null), tweaked code to be compliant.
+  
 version 2021-07-05
 ------------------
   case sensitive fix for MySQL 8 for fetching defaults from information_schema.columns. thanks again sarangtc! 

@@ -124,8 +124,14 @@ or    coalesce(c.country_name, '') like :_search
 order by m.market_id desc
 ";
 
+
+$_search = "%"; 
+if(isset($_REQUEST['_search']))
+    $_search = "%" . trim($_REQUEST['_search']) . "%";
+
+
 // bind parameter for grid query
-$lm->grid_sql_param[':_search'] = '%' . trim(@$_REQUEST['_search']) . '%';
+$lm->grid_sql_param[':_search'] = $_search;
 
 
 // optional, define what is displayed on edit form. identity id must be passed in also.  
@@ -143,8 +149,12 @@ from  market
 where market_id = :market_id
 ";
 
+$market_id = 0;
+if(isset($_REQUEST['market_id']))
+    $market_id = $_REQUEST['market_id'];
+
 // bind parameter for form query
-$lm->form_sql_param[':market_id'] = @$_REQUEST['market_id']; 
+$lm->form_sql_param[':market_id'] = $market_id; 
 
 
 // optional, validation - regexp, 'email' or a user defined function, all other parameters optional 
