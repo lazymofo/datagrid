@@ -3,11 +3,11 @@ lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansok
 
 version 2022-01-14
 ------------------
-  same as previous update, found one more deprication warning on insert
+  same as previous update, found one more deprecated warning on insert
 
 version 2022-01-14
 ------------------
-  deprication warnings appeared in php 8.1 related to items like strlen(null), tweaked code to be compliant.
+  deprecated warnings appeared in php 8.1 related to items like strlen(null), tweaked code to be compliant.
   
 version 2021-07-05
 ------------------
