@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2022-01-14
+// version 2022-01-17
 
 class lazy_mofo{
 
@@ -1453,7 +1453,7 @@ class lazy_mofo{
         elseif($type == 'number' && mb_strlen($this->restricted_numeric_input) > 0)
             $val = preg_replace($this->restricted_numeric_input, '', $val);
         
-        if(mb_strlen($val) == 0)
+        if(!isset($val) || mb_strlen($val) == 0)
             $val = null;
 
         return $val;

@@ -31,7 +31,7 @@ insert into market(market_name, contact_email, country_id, is_active, create_dat
 
 error_reporting(E_ALL);
 
-// speed things up with gzip plus ob_start() is required for csv export
+// speed things up with gzip, also ob_start() is required for csv export
 if(!ob_start('ob_gzhandler'))
 	ob_start();
 
