@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2022-01-17
+// version 2022-02-19
 
 class lazy_mofo{
 
@@ -2632,6 +2632,7 @@ class lazy_mofo{
         header("Pragma: public");
         header("Content-Type: application/csv");
         header("Content-Disposition: attachment; filename=$file_name");
+        echo chr(0xEF).chr(0xBB).chr(0xBF); // bom here is reported to help
 
         // remove last column if last column is the identity that holds the [edit] and [delete] links
         if(end($columns) == $this->identity_name)

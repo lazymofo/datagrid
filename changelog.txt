@@ -1,9 +1,9 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
 
-version 2022-01-14
+version 2022-02-19
 ------------------
-  same as previous update, found one more deprecated warning on insert
+  bom added after header in csv export. thanks sarangtc!
 
 version 2022-01-14
 ------------------
