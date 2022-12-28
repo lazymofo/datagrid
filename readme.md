@@ -1,8 +1,6 @@
 
 **[Full HTML Documentation](https://htmlpreview.github.io/?https://github.com/lazymofo/datagrid/blob/master/index.html)**
 
-**[Live Demo](http://lmdatagrid.hopto.org/)**
-
 ![logo](https://i.imgur.com/CGDTkQL.png)
 
 Lazy Mofo (LM) PHP Datagrid - MIT License
