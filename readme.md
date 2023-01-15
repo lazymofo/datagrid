@@ -1,5 +1,7 @@
 
 **[Full HTML Documentation](https://htmlpreview.github.io/?https://github.com/lazymofo/datagrid/blob/master/index.html)**
+ | 
+**[Live Demo](http://lazymofo.pcmad.ro)**
 
 ![logo](https://i.imgur.com/CGDTkQL.png)
 
