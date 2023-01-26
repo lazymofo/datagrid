@@ -61,6 +61,7 @@
     <li><a href='#cross_site_request_forgery_protection_token'>Cross Site Request Forgery Protection Token</a></li>
     <li><a href='#i18n'>i18n/Internationalization</a></li>
     <li><a href='#date_formats'>Date Formats</a></li>
+    <li><a href='#decimal_separator'>Decimal Separator</a></li>
     <li><a href='#adding_jquery_ui_datepicker'>Adding JQuery UI Datepicker</a></li>
     <li><a href='#export_to_csv'>Export to CSV</a></li>
     <li><a href='#more_features_and_settings'>More Features and Settings</a></li>
@@ -70,9 +71,10 @@
 
 <h1 style='clear:left;'><a name='whats_new'>What's New</a></h1>
 <ul>
+    <li>Fix to support <a href='#decimal_separator'>comma as decimal separator</a>.</li>
+    <li>Live demo restored. Thanks Horatiu!</li>
     <li>No new features will be added, this project is in maintenance mode.</li>
     <li>See i18n/template.php if want to submit your county + language file.</li>
-    <li>Live demo restored. Thanks Horatiu!</li>
 </ul>
 
 
@@ -632,6 +634,33 @@ $lm-&gt;date_out = 'Y-m-d';
 $lm-&gt;datetime_out = 'Y-m-d H:i';
 
 </pre>
+
+
+<h1><a name='decimal_separator'>Decimal Separator</a></h1>
+<p>Comma can be used as a decimal separator, this affects input only.
+<br>Output must be localized using mysql's format() function.</p>
+
+<pre>
+Example: 
+
+// using comma for separator, this affects input only, not displayed format
+$lm-&gt;decimal_separator = ',';
+
+
+// using mysql's format() for decimal output localization
+$lm->form_sql = "
+select
+  market_id 
+, format(price, 2, 'es_ES') as price 
+, market_name
+from  market
+where market_id = :market_id
+";
+
+<a href='https://dev.mysql.com/doc/refman/8.0/en/locale-support.html' target='_blank'>https://dev.mysql.com/doc/refman/8.0/en/locale-support.html</a>
+
+</pre>
+
 
 
 <h1><a name='adding_jquery_ui_datepicker'>Adding JQuery UI Datepicker</a></h1>

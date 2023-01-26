@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2022-02-19
+// version 2023-01-25
 
 class lazy_mofo{
 
@@ -84,7 +84,8 @@ class lazy_mofo{
     public $image_quality = 80;                       // image quality when resizing and cropping, 1-100
     public $image_style = "style='height: 100px;'";   // apply style to all images displayed. limiting size is nice to keep things orderly.
 
-    public $restricted_numeric_input = '/[^0-9\.\-]/';// optional, regular expression of what numbers are allowed to be sent to the database. helpful to remove dollar signs and spaces. many non-US countries use comma instead of decimal points and spaces instead of commas.
+    public $decimal_separator = '.';                   // expected separator for incoming number, use format() in grid_sql or form_sql for output values, example: "select format(12.34, 2, 'es_ES') as num;"    
+    public $restricted_numeric_input = '/[^0-9\.\-]/'; // do not change - input filter into database, minus could be removed if all numbers are unsigned
 
     public $upload_allow_list = '.mp3 .jpg .jpeg .png .gif .doc .docx .xls .xlsx .txt .pdf'; // space delimted file name extentions. include period
 
@@ -1450,8 +1451,8 @@ class lazy_mofo{
             $val = $this->date_in($val);
         elseif($type == 'datetime')
             $val = $this->date_in($val, true);
-        elseif($type == 'number' && mb_strlen($this->restricted_numeric_input) > 0)
-            $val = preg_replace($this->restricted_numeric_input, '', $val);
+        elseif($type == 'number')
+            $val = $this->number_in($val);
         
         if(!isset($val) || mb_strlen($val) == 0)
             $val = null;
@@ -1503,6 +1504,23 @@ class lazy_mofo{
         $str = mb_convert_encoding($str, $this->charset, mb_detect_encoding($str));
 
         return htmlspecialchars($str, ENT_QUOTES, $this->charset);
+    }
+
+
+    function number_in($str){
+
+        // purpose: swap out decimal separator and remove any extra chars going into database
+        
+        if($this->decimal_separator != '.'){
+            $str = str_replace('.', '', $str);
+            $str = str_replace($this->decimal_separator, '.', $str); 
+        }
+
+        if(mb_strlen($this->restricted_numeric_input) == 0)
+            return $str;
+
+        return preg_replace($this->restricted_numeric_input, '', $str);
+
     }
 
 
@@ -1801,6 +1819,7 @@ class lazy_mofo{
                 $this->form_input_control[$column_name]['type'] = 'number';
 
         }
+
 
         // populate grid_output_control with type date or datetime
         $i = 0;

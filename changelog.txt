@@ -1,5 +1,8 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2023-01-25
+------------------
+  added decimal_separator property for countries that use comma.
 
 version 2022-02-19
 ------------------
