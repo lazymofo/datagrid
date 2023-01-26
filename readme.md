@@ -145,4 +145,4 @@ Example - Advanced Usage
     
 **[Full HTML Documentation](https://rawgit.com/lazymofo/datagrid/master/index.html)**
 
-**[Live Demo](http://lmdatagrid.hopto.org/)**
+**[Live Demo](http://lazymofo.pcmad.ro)**
