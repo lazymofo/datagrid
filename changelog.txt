@@ -1,5 +1,9 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2023-08-12
+------------------
+   query_string_list can now carry array data. thanks sarangtc!
+
 version 2023-01-25
 ------------------
   added decimal_separator property for countries that use comma.

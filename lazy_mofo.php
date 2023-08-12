@@ -1921,9 +1921,22 @@ class lazy_mofo{
 
         $get = '';
         $arr = explode(',', trim($query_string_list, ','));
-        foreach($arr as $var)
-            if(isset($_REQUEST[$var]) && mb_strlen($_REQUEST[$var]) > 0)
-                $get .= "&$var=" . urlencode($_REQUEST[$var]);
+        foreach($arr as $key){
+
+            $val = '';
+            if(isset($_REQUEST[$key]))
+                $val = $_REQUEST[$key];
+
+            if(is_string($val) && mb_strlen($val) == 0)
+                continue;
+
+            if(is_string($val))
+                $get .= '&' . urlencode($key) . '=' . urlencode($val);
+
+            if(is_array($val))
+                foreach($val as $v)
+                    $get .= '&' . urlencode($key . '[]') . '=' . urlencode($v);
+        }
 
         return ltrim($get, '&');
 
