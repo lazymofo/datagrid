@@ -2,7 +2,6 @@
 /*
 
 -- sample sql script to populate database for demo
--- for older mysql < 5.5 replace utf8mb4 with utf8
 
 create table if not exists country
 ( country_id int unsigned not null auto_increment primary key
@@ -66,6 +65,7 @@ catch(PDOException $e) {
 	die('pdo connection error: ' . $e->getMessage());
 }
 
+
 // create LM object, pass in PDO connection, see i18n folder for country + language options 
 $lm = new lazy_mofo($dbh, 'en-us');
 
@@ -125,13 +125,8 @@ order by m.market_id desc
 ";
 
 
-$_search = "%"; 
-if(isset($_REQUEST['_search']))
-    $_search = "%" . trim($_REQUEST['_search']) . "%";
-
-
 // bind parameter for grid query
-$lm->grid_sql_param[':_search'] = $_search;
+$lm->grid_sql_param[':_search'] = '%' . trim($_REQUEST['_search'] ?? '') . '%';
 
 
 // optional, define what is displayed on edit form. identity id must be passed in also.  
@@ -149,12 +144,9 @@ from  market
 where market_id = :market_id
 ";
 
-$market_id = 0;
-if(isset($_REQUEST['market_id']))
-    $market_id = $_REQUEST['market_id'];
 
 // bind parameter for form query
-$lm->form_sql_param[':market_id'] = $market_id; 
+$lm->form_sql_param[':market_id'] = intval($_REQUEST['market_id'] ?? 0); 
 
 
 // optional, validation - regexp, 'email' or a user defined function, all other parameters optional 
@@ -171,5 +163,4 @@ $lm->run();
 
 
 echo "</body></html>";
-
 

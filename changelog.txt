@@ -1,8 +1,16 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2023-11-22
+------------------
+  dropped php 5 support, php 8 updates
+  attempted to fix all string deprecations now in php 8
+  dropped php5 support, now using null coalesce operator (??) 
+  added error_log() call when query errors occur
+  new try/catch for php8 pdo errors  
+
 version 2023-08-12
 ------------------
-   query_string_list can now carry array data. thanks sarangtc!
+  query_string_list can now carry array data. thanks sarangtc!
 
 version 2023-01-25
 ------------------

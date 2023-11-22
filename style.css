@@ -37,5 +37,5 @@ a    { color: #0074d9;}
 #lm table.lm_grid tr.lm_active, #lm table.lm_grid tr:hover { background: #c2e3ff; } /* highlight hover and current row edited */ 
 
 /* success and error messages */
-#lm div.lm_success, #lm div.lm_error { color: #2ecc40; border: 1px solid #2ecc40; border-radius: 3px; padding: 10px; margin: 10px auto; width: 50%; text-align: center; }
-#lm div.lm_error                     { color: #ff4136; border-color: #ff4136;  }
+#lm div.lm_success, #lm div.lm_error { color: #2ecc40; border: 1px solid #2ecc40; border-radius: 3px; padding: 10px; margin: 10px auto; width: 50%; text-align: left; }
+#lm div.lm_error                     { color: #ff4136; border-color: #ff4136; }

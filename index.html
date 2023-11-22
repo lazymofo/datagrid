@@ -26,7 +26,8 @@
     <a href='mailto:iansoko@gmail.com'>email</a>
 </div>
 <p>LM is a single PHP class for performing CRUD (create, read, update and delete) operations on a MySQL database table.</p>
-
+<p><b>No new features will be added, this project is in maintenance mode.</b></p>
+    
 <ul>
     <li>Define grids and forms by SQL statements or table name</li>
     <li>Populate select, radio, and checkbox inputs with data from SQL statements</li>
@@ -71,20 +72,18 @@
 
 <h1 style='clear:left;'><a name='whats_new'>What's New</a></h1>
 <ul>
+    <li>PHP 5 support dropped, better PHP 8 compatibility added</li>
     <li>Fix to support <a href='#decimal_separator'>comma as decimal separator</a>.</li>
     <li>Live demo restored. Thanks Horatiu!</li>
-    <li>No new features will be added, this project is in maintenance mode.</li>
     <li>See i18n/template.php if want to submit your county + language file.</li>
 </ul>
 
 
 <h1><a name='requirements'>Requirements</a></h1>
 <ul>
-<li>PHP 5+ and MySQL 5</li>
-<li>Magic Quotes should be turned off</li>
-<li>PDO MySQL module installed for PHP</li>
-<li>Database table must have a primary key identity</li>
-<li>Multibyte Support / mbstring must be enabled</li>
+<li>PHP 7+ and MySQL/MariaDB</li>
+<li>PHP Modules: mysql, mbstring, gd</li>
+<li>Database table must have an auto increment primary key identity</li>
 </ul>
 
 
@@ -116,8 +115,6 @@ $lm-&gt;run();
 <h1><a name='example_2'>Example 2 - Advanced Usage</a></h1>
 
 <pre>
-include('lazy_mofo.php');
-
 // enter your database host, name, username, and password
 $db_host = 'localhost';
 $db_name = 'test';
@@ -127,14 +124,14 @@ $db_pass = '';
 
 // connect with pdo 
 try {
-    $dbh = new PDO("mysql:host=$db_host;dbname=$db_name;", $db_user, $db_pass);
+	$dbh = new PDO("mysql:host=$db_host;dbname=$db_name;", $db_user, $db_pass);
 }
 catch(PDOException $e) {
-    die('pdo connection error: ' . $e-&gt;getMessage());
+	die('pdo connection error: ' . $e-&gt;getMessage());
 }
 
 // create LM object, pass in PDO connection, see i18n folder for country + language options 
-$lm = new lazy_mofo($dbh, 'en-us'); 
+$lm = new lazy_mofo($dbh, 'en-us');
 
 
 // table name for updates, inserts and deletes
@@ -185,14 +182,15 @@ from  market m
 left  
 join  country c 
 on    m.country_id = c.country_id 
-where coalesce(m.market_name, '') like :_search 
+where coalesce(m.market_name, '')   like :_search 
 or    coalesce(m.contact_email, '') like :_search 
-or    coalesce(c.country_name, '') like :_search 
+or    coalesce(c.country_name, '')  like :_search 
 order by m.market_id desc
 ";
 
+
 // bind parameter for grid query
-$lm-&gt;grid_sql_param[':_search'] = '%' . trim(@$_REQUEST['_search']) . '%';
+$lm-&gt;grid_sql_param[':_search'] = '%' . trim($_REQUEST['_search'] ?? '') . '%';
 
 
 // optional, define what is displayed on edit form. identity id must be passed in also.  
@@ -210,8 +208,9 @@ from  market
 where market_id = :market_id
 ";
 
+
 // bind parameter for form query
-$lm-&gt;form_sql_param[':market_id'] = @$_REQUEST['market_id'];
+$lm-&gt;form_sql_param[':market_id'] = intval($_REQUEST['market_id'] ?? 0); 
 
 
 // optional, validation - regexp, 'email' or a user defined function, all other parameters optional 
@@ -378,7 +377,7 @@ Example:
 $lm->grid_show_search_box = true;
 
 $lm->grid_sql = "select m.market_id, m.market_name, m.photo, m.contact_email, c.country_name, m.is_active, m.create_date, market_id from market m left join country c on m.country_id = c.country_id where coalesce(m.market_name, '') like :_search or coalesce(m.contact_email, '') like :_search or coalesce(c.country_name, '') like :_search order by m.market_id desc";
-$lm->grid_sql_param = array(':_search' => '%' . trim(@$_REQUEST['_search']) . '%');
+$lm->grid_sql_param[':_search'] = '%' . trim($_REQUEST['_search'] ?? '') . '%';
 </pre>
 
 
@@ -389,8 +388,8 @@ Example:
 
 $lm-&gt;grid_show_search_box = true; // show html defined in grid_search_box
 
-$new_search_1 = $lm->clean_out(@$_REQUEST['new_search_1']);
-$new_search_2 = $lm->clean_out(@$_REQUEST['new_search_2']);
+$new_search_1 = $lm->clean_out($_REQUEST['new_search_1'] ?? '');
+$new_search_2 = $lm->clean_out($_REQUEST['new_search_2'] ?? '');
 
 // redefine our own search form with two inputs instead of the default one
 $lm-&gt;grid_search_box = "
@@ -405,8 +404,8 @@ $lm-&gt;grid_search_box = "
 $lm->query_string_list = "new_search_1,new_search_2"; // add variable names to querystring so search is saved while paging, sorting, and editing
 
 // set name parameters
-$lm-&gt;grid_sql_param[':new_search_1'] =  '%' . @$_REQUEST['new_search_1'] . '%';
-$lm-&gt;grid_sql_param[':new_search_2'] = '%' . @$_REQUEST['new_search_2'] . '%';
+$lm-&gt;grid_sql_param[':new_search_1'] =  '%' . trim($_REQUEST['new_search_1'] ?? '') . '%';
+$lm-&gt;grid_sql_param[':new_search_2'] =  '%' . trim($_REQUEST['new_search_2'] ?? '') . '%';
 
 // define sql
 $lm-&gt;grid_sql = "
@@ -446,7 +445,7 @@ else{
     $lm->form_sql = 'select market_id, market_name, country_id, photo, is_active, create_date, notes from market where market_id = :market_id';
 }
 
-$lm->form_sql_param = array(":market_id" => @$_REQUEST['market_id']); 
+$lm->form_sql_param[':market_id'] = $_REQUEST['market_id'] ?? 0; 
 
 </pre>
 
@@ -517,18 +516,48 @@ function my_validate(){
 <pre>
 Example: 
 
-$lm->on_update_user_function = 'my_hash';
+$lm-&gt;on_update_user_function = 'my_hash_update';
 
-function my_hash(){
+function my_hash_update(){
 
-    if(isset($_POST['password_reset']))
-        $_POST['password'] = password_hash($_POST['password_reset']);
-    
+    // form_sql had an additional blank string column, example: "select '' as password_reset ..."
+    $password = $_POST['password_reset'] ?? '';
+
+    // no password sent, nothing to do
+    if(mb_strlen($password) == 0)
+        return "";
+
     // returned string will be displayed as an error message
-    if(mb_strlen($_POST['password_reset']) &gt; 100)
+    if(mb_strlen($password) &gt; 100)
         return "Password too long";
 
+    if(mb_strlen($password) &lt; 5)
+        return "Password too short";
+
+    // set optional password      
+    $_POST['password'] = password_hash($password, PASSWORD_DEFAULT);
+    
 }
+
+
+$lm-&gt;on_insert_user_function = 'my_hash_insert';
+
+function my_hash_insert(){
+
+    $password = $_POST['password'] ?? '';
+
+    // returned string will be displayed as an error message
+    if(mb_strlen($password) &gt; 100)
+        return "Password too long";
+
+    if(mb_strlen($password) &lt; 5)
+        return "Password too short";
+
+    // overwrite password field     
+    $_POST['password'] = password_hash($password, PASSWORD_DEFAULT);
+    
+}
+
 </pre>
 
 

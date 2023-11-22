@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2023-08-12 
+// version 2023-11-22 
 
 class lazy_mofo{
 
@@ -181,6 +181,9 @@ class lazy_mofo{
         if($timezone == '' || $timezone == 'UTC')
             date_default_timezone_set($this->timezone);
 
+        if(!extension_loaded('mbstring'))
+            die("Error: php mbstring module required - please install");
+
         // avoid notices for this noonce token
         if(!isset($_SESSION['_csrf']))
             $_SESSION['_csrf'] = '';
@@ -284,6 +287,7 @@ class lazy_mofo{
 
         // validation system
         $is_valid = $this->validate($this->on_update_validate);
+
         if(!$is_valid)
             $error = $this->validate_text_general; //optional general error at the top
 
@@ -356,7 +360,7 @@ class lazy_mofo{
 
         // go back on validation error
         if($error != ''){
-            if($_POST['_called_from'] == 'form')
+            if(($_POST['_called_from'] ?? '') == 'form')
                 $this->edit($error);
             else
                 $this->index($error);
@@ -618,7 +622,7 @@ class lazy_mofo{
 
                 $safe_np = $this->safe_np($column_name);
                 $sql_set .= "`$column_name` = :$safe_np, ";
-                $sql_param[":$safe_np"] = $this->cast_value(@$_POST["$column_name-$identity_id"], $column_name, 'grid');
+                $sql_param[":$safe_np"] = $this->cast_value($_POST["$column_name-$identity_id"] ?? '', $column_name, 'grid');
 
             }
 
@@ -643,7 +647,7 @@ class lazy_mofo{
                 $this->get_upload($columns, $table, $identity_name, $identity_id, 'grid');
 
         // get records to delete
-        $arr_delete = @$_POST['_delete'];
+        $arr_delete = $_POST['_delete'] ?? array();
         if(!is_array($arr_delete))
             $arr_delete = array();
 
@@ -680,9 +684,7 @@ class lazy_mofo{
         if(mb_strlen($this->form_sql) == 0 && mb_strlen($this->table) == 0)
             return $this->display_error("property: form_sql or table must be set", 'form()');
 
-        $identity_id = $this->cast_id(@$_GET[$this->identity_name]);
-        if($identity_id == 0)
-            $identity_id = $this->cast_id(@$_POST[$this->identity_name]);
+        $identity_id = $this->cast_id($_GET[$this->identity_name] ?? $_POST[$this->identity_name] ?? 0);
 
         $sql = $this->form_sql;
         $sql_param = $this->form_sql_param;
@@ -702,10 +704,10 @@ class lazy_mofo{
 
         $columns = $this->get_columns('form');
         $count = count($result);
-        $_posted = intval(@$_POST['_posted']);
+        $_posted = intval($_POST['_posted'] ?? 0);
 
         // success messages 
-        $success = intval(@$_GET['_success']);
+        $success = intval($_GET['_success'] ?? 0);
         if($success == 1)
             $success = $this->form_text_record_added;
         elseif($success == 2)
@@ -766,15 +768,15 @@ class lazy_mofo{
                 continue;
 
             // get data from database or repost
-            if($_posted == 1 && @$this->form_input_control[$column_name]['type'] != 'readonly')
-                $value = @$_POST[$column_name];
+            if($_posted == 1 && ($this->form_input_control[$column_name]['type'] ?? '') != 'readonly')
+                $value = $_POST[$column_name] ?? '';
             elseif($count == 0)
-                $value = @$this->form_default_value[$column_name];
+                $value = $this->form_default_value[$column_name] ?? '';
             else
                 $value = $row[$column_name];
 
             // field label
-            $title = $this->format_title($column_name, @$this->rename[$column_name]);
+            $title = $this->format_title($column_name, $this->rename[$column_name] ?? '');
 
             // render the html control according to the type of data
             $control = "";    
@@ -827,7 +829,7 @@ class lazy_mofo{
         // in grid_sql, select the identity_id as the last column to display the edit and delete links
         // example: $lm->grid_sql = 'select title, create_date, foo_id from foo';
 
-        if(mb_strlen($this->identity_name) == 0 || (mb_strlen($this->grid_sql) && mb_strlen($this->table) == 0)){
+        if(mb_strlen($this->identity_name) == 0 || (mb_strlen($this->grid_sql) == 0 && mb_strlen($this->table) == 0)){
             $this->display_error("missing grid_sql and table (one is required), or missing identity_name", 'form()');
             return;
         }
@@ -853,13 +855,13 @@ class lazy_mofo{
         $sql = preg_replace('/^select/i', 'select sql_calc_found_rows', $sql);
 
         // get input
-        $_posted = intval(@$_REQUEST['_posted']);
-        $_search = $this->clean_out(@$_REQUEST['_search']);
-        $_pagination_off = intval(@$_REQUEST['_pagination_off']);
-        $_order_by = abs(intval(@$_REQUEST['_order_by'])); // order by is numeric index to column
-        $_desc = abs(intval(@$_REQUEST['_desc']));         // descending order flag
-        $_offset = abs(intval(@$_REQUEST['_offset']));     // pagination offset
-        $_export = intval(@$_REQUEST['_export']); 
+        $_posted = intval($_REQUEST['_posted'] ?? 0);
+        $_search = $this->clean_out($_REQUEST['_search'] ?? '');
+        $_pagination_off = intval($_REQUEST['_pagination_off'] ?? 0);
+        $_order_by = abs(intval($_REQUEST['_order_by'] ?? 0)); // order by is numeric index to column
+        $_desc = abs(intval($_REQUEST['_desc'] ?? 0));         // descending order flag
+        $_offset = abs(intval($_REQUEST['_offset'] ?? 0));     // pagination offset
+        $_export = intval($_REQUEST['_export'] ?? 0); 
         
         $qs = $this->get_qs();
 
@@ -869,7 +871,7 @@ class lazy_mofo{
             $_desc_invert = 0;
 
         // success messages 
-        $success = intval(@$_GET['_success']);
+        $success = intval($_GET['_success'] ?? 0);
         if($success == 1)
             $success = $this->grid_text_record_added;
         elseif($success == 2)
@@ -881,9 +883,9 @@ class lazy_mofo{
 
         // column array and column count 
         $columns = $this->get_columns('grid');
-        $column_count = count($columns);
-        if($column_count == 0)
+        if(!$columns)
             return;
+        $column_count = count($columns);
 
         // alter order
         $desc_str = '';
@@ -962,7 +964,7 @@ class lazy_mofo{
             if(mb_strlen($this->query_string_list) > 0){
                 $arr = explode(',', trim($this->query_string_list, ', '));
                 foreach($arr as $val)
-                    $query_string_list_inputs .= "<input type='hidden' name='$val' value='" . $this->clean_out(@$_REQUEST[$val]) . "'>";
+                    $query_string_list_inputs .= "<input type='hidden' name='$val' value='" . $this->clean_out($_REQUEST[$val] ?? '') . "'>";
             }
             
             $search_box = $this->grid_search_box;
@@ -982,7 +984,7 @@ class lazy_mofo{
         $i = 0;
         foreach($columns as $column_name){
 
-            $title = $this->format_title($column_name, @$this->rename[$column_name]);
+            $title = $this->format_title($column_name, $this->rename[$column_name] ?? '');
 
             if($column_name == $this->identity_name && $i == ($column_count - 1))
                 $head .= "    <th></th>\n"; // if identity is last column then this is the column with the edit and delete links
@@ -1027,7 +1029,7 @@ class lazy_mofo{
 
             // highlight last updated or inserted row
             $shaded = '';
-            if(@$_GET[$this->identity_name] == @$row[$this->identity_name] && mb_strlen(@$_GET[$this->identity_name]) > 0)
+            if(($_GET[$this->identity_name] ?? '') == ($row[$this->identity_name] ?? '') && mb_strlen($_GET[$this->identity_name] ?? '') > 0)
                 $shaded = "class='lm_active'";
 
             // print a row
@@ -1051,7 +1053,7 @@ class lazy_mofo{
                 // input fields
                 elseif(array_key_exists($column_name, $this->grid_input_control)){
                     if(mb_strlen($error) > 0 && $_posted == 1) // repopulate from previous post when validation error is displayed
-                        $value = $_POST[$column_name . '-' . $row[$this->identity_name]];
+                        $value = $_POST[$column_name . '-' . $row[$this->identity_name]] ?? '';
                     $html .= '    <td>' . $this->get_input_control($column_name . '-' . $row[$this->identity_name], $value,  $this->grid_input_control[$column_name], 'grid') . "</td>\n";
                 }
 
@@ -1212,7 +1214,7 @@ class lazy_mofo{
         $html = '';
         $class = $this->get_class_name($field_name);
 
-        if(mb_strlen($file_name) > 0)
+        if(mb_strlen($file_name ?? '') > 0)
             $html .= "<a href='$this->upload_path/$file_name' target='_blank'>$file_name</a> <label><input type='checkbox' name='{$field_name}-delete' value='1'>$this->text_delete_document</label><br >";
 
         $html .= "<input type='file' name='$field_name' class='$class' size='$this->form_text_input_size'>";
@@ -1441,9 +1443,9 @@ class lazy_mofo{
         $val = trim($val);
 
         if($posted_from == 'grid')
-            $type = @$this->grid_input_control[$column_name]['type'];
+            $type = $this->grid_input_control[$column_name]['type'] ?? '';
         else
-            $type = @$this->form_input_control[$column_name]['type'];
+            $type = $this->form_input_control[$column_name]['type'] ?? '';
 
         if(isset($this->cast_user_function[$column_name]))
             $val = call_user_func($this->cast_user_function[$column_name], $val);
@@ -1570,11 +1572,10 @@ class lazy_mofo{
         // purpose: change field name to friendly. example: first_name becomes "First Name" or EntryFee1 becomes "Entry Fee 1"
         // returns: html escaped string
 
-        if(isset($friendly_name))
+        if(strlen($friendly_name ?? '') > 0)
             return $this->clean_out($friendly_name);
 
         $friendly_name = $field_name;
-        
         $friendly_name = preg_replace('/([a-z]{1})([A-Z]{1})/', '\1 \2', $friendly_name);
         $friendly_name = preg_replace('/([a-z]{1})([0-9]+)/i', '\1 \2 ', $friendly_name);
         $friendly_name = str_replace('_', ' ', $friendly_name);
@@ -1625,8 +1626,8 @@ class lazy_mofo{
         $sql_param = '';
         if(isset($control['type'])){
             $type = $control['type'];
-            $sql = @$control['sql']; // optional
-            $sql_param = @$control['sql_param']; // optional
+            $sql = $control['sql'] ?? ''; // optional
+            $sql_param = $control['sql_param'] ?? ''; // optional
         }
 
         // subtle backward compatible madness
@@ -1650,19 +1651,19 @@ class lazy_mofo{
         $validate_placeholder_alternative = '';
 
         // display tip or error next to input, not both
-        if(@$validate[$column_name]['result'] === false)
+        if(($validate[$column_name]['result'] ?? null) === false)
             $validate_error_msg = "<span class='lm_validate_error'>" . $this->clean_out($validate[$column_name]['error_msg']) . "</span>";
         elseif(isset($validate[$column_name]['placeholder']) && strlen($validate[$column_name]['placeholder']) > 0)
             $validate_tip = "<span class='lm_validate_tip'>" . $this->clean_out($validate[$column_name]['placeholder']) . "</span>";
 
         // always try to get a placeholder for the text inputs
         if($this->validate_tip_in_placeholder)
-            $validate_placeholder = $this->clean_out(@$validate[$column_name]['placeholder']); // placeholders for text 
+            $validate_placeholder = $this->clean_out($validate[$column_name]['placeholder'] ?? ''); // placeholders for text 
         elseif(strlen($validate_error_msg) == 0)
             $validate_placeholder_alternative = "<span class='lm_validate_tip'>" . $this->clean_out($validate[$column_name]['placeholder']) . "</span>";
     
         $max_length = '';
-        if(intval(@$this->text_input_max_length[$column_name]) > 0)
+        if(intval($this->text_input_max_length[$column_name] ?? '') > 0)
             $max_length = "maxlength='" . $this->text_input_max_length[$column_name] . "'";
         elseif($this->text_input_max_length_default > 0)
             $max_length = "maxlength='" . $this->text_input_max_length_default . "'";
@@ -1783,13 +1784,10 @@ class lazy_mofo{
         }
         $sql .= ' limit 0 '; // add limit, we don't need any data, just meta data
 
-        $sth = $this->dbh->prepare($sql);
-        if(!$sth->execute($sql_param)){
-            $arr = $sth->errorInfo();
-            $error = $arr[2];
-            $this->display_error("$error\nsql: $sql\narr_sql_param: " . print_r($sql_param, true), 'get_columns');
-            return array();
-        }
+        // run query, get statement handle
+        $sth = $this->query($sql, $sql_param, 'get_columns()', true, true);
+        if($sth === false)
+            return;
 
         $i = 0;
         $columns = array();
@@ -1804,7 +1802,7 @@ class lazy_mofo{
         $i = 0;
         while($column = $sth->getColumnMeta($i++)){
             
-            $type = mb_strtolower(@$column['native_type']);
+            $type = mb_strtolower($column['native_type'] ?? 0);
             $column_name = $column['name'];
             if(array_key_exists($column_name, $this->form_input_control) || $column_name == $this->identity_name)
                 continue;
@@ -1825,7 +1823,7 @@ class lazy_mofo{
         $i = 0;
         while($context == 'grid' && $column = $sth->getColumnMeta($i++)){
             
-            $type = mb_strtolower(@$column['native_type']);
+            $type = mb_strtolower($column['native_type'] ?? '0');
             $column_name = $column['name'];
             if(array_key_exists($column_name, $this->grid_output_control) || $column_name == $this->identity_name)
                 continue;
@@ -1963,7 +1961,7 @@ class lazy_mofo{
 
         foreach($columns as $column_name){
 
-            $type = @$input_control[$column_name]['type'];
+            $type = $input_control[$column_name]['type'] ?? '';
 
             // uploads only
             if(!$this->is_upload($input_control, $column_name))
@@ -1988,7 +1986,7 @@ class lazy_mofo{
             }
 
             // process file deletion requested by checkbox with field_name + "-delete"
-            if(@$_POST[$input_name . '-delete'] == 1)
+            if(($_POST[$input_name . '-delete'] ?? 0) == 1)
                 $this->upload_delete($table_name, $identity_name, $identity_id, $column_name, $input_control);
 
             // see if a new file was uploaded
@@ -2057,14 +2055,14 @@ class lazy_mofo{
 
         // get file info
         if(mb_strlen($field_index) > 0){
-            $size = intval($_FILES[$input_name]['size'][$field_index]);
-            $tmp_name = $_FILES[$input_name]['tmp_name'][$field_index];
-            $file_name = $this->clean_file_name($_FILES[$input_name]['name'][$field_index]);
+            $size = intval($_FILES[$input_name]['size'][$field_index] ?? 0);
+            $tmp_name = $_FILES[$input_name]['tmp_name'][$field_index] ?? '';
+            $file_name = $this->clean_file_name($_FILES[$input_name]['name'][$field_index] ?? '');
         }
         else{
-            $size = intval($_FILES[$input_name]['size']);
-            $tmp_name = $_FILES[$input_name]['tmp_name'];
-            $file_name = $this->clean_file_name($_FILES[$input_name]['name']);
+            $size = intval($_FILES[$input_name]['size'] ?? 0);
+            $tmp_name = $_FILES[$input_name]['tmp_name'] ?? '';
+            $file_name = $this->clean_file_name($_FILES[$input_name]['name'] ?? '');
         }
 
         // nothing to do
@@ -2206,7 +2204,7 @@ class lazy_mofo{
         // returns: nothing 
 
         if(!function_exists('imagecreatetruecolor'))
-            die("Error: GD must be installed for image resize/cropping");
+            die("Error: GD module must be installed in php for image resize/cropping");
 
         $this->image_exif_rotate($file_name);
 
@@ -2418,45 +2416,75 @@ class lazy_mofo{
     }
     
     
-    function display_error($error, $source_function){
+    function display_error($error, $source_function, $wrap_lm = false){
         
-        // purpose: display errors to user.
+        // purpose: display errors to user
+
+        if(ini_get('display_errors') != "1")
+            $error = "message disabled - use ini_set('display_errors' 1); to display detailed information";
+
+        // some errors need to be wrapped to get the css id
+        $open = '';
+        $close = '';
+        if($wrap_lm){
+            $open = "<div id='lm'>";
+            $close = '</div>';
+        }
 
         $msg = nl2br($this->clean_out("Error: $error\nSent From: $source_function"));
-        echo "<div class='lm_error'>$msg</div>" ;
+        echo "$open<div class='lm_error'>$msg</div>$close" ;
 
     }
 
 
-    function query($sql, $sql_param = array(), $source_function = '', $display_error = true){
+    function query($sql, $sql_param = array(), $source_function = '', $display_error = true, $return_sth = false){
 
         // purpose: wrapper for pdo db call
         // returns: returns array of results, an empty array for no results, or false on error
 
-        if(!$this->set_names){
-            $sth = $this->dbh->prepare("set names $this->charset_mysql");
-            $sth->execute();
-            $this->set_names = true;
-        }
+        try {
 
-        $sth = $this->dbh->prepare($sql);
+            if(!$this->set_names){
+                $sth = $this->dbh->prepare("set names $this->charset_mysql");
+                $sth->execute();
+                $this->set_names = true;
+            }
 
-        if(!$sth->execute($sql_param)){
-            $arr = $sth->errorInfo();
-            $error = $arr[2];
+            $sth = $this->dbh->prepare($sql);
+
+            // legacy php 7 error catch
+            if(!$sth->execute($sql_param)){
+                $arr = $sth->errorInfo();
+                $error = $arr[0] . " " . $arr[2];
+                if($display_error)
+                    $this->display_error("$error\n\nsql: $sql\narr_sql_param: " . print_r($sql_param, true), $source_function, true);
+
+                error_log("$error $sql {$_SERVER['REQUEST_URI']} sent from $source_function");
+                return false;
+            }
+
+        } 
+        catch(PDOException $e){  
+
+            $error = $e->getMessage();
             if($display_error)
-                $this->display_error("$error\nsql: $sql\narr_sql_param: " . print_r($sql_param, true), $source_function);
+                $this->display_error("$error\n\nsql: $sql\narr_sql_param: " . print_r($sql_param, true), $source_function, true);
 
+            error_log($e);
             return false;
         }
+
+
+        if($return_sth)
+            return $sth;
 
         if(preg_match('/^insert/i', ltrim($sql)))
             return $this->cast_id($this->dbh->lastInsertId());
 
         if($sth->columnCount() == 0)
             return array();    
-        else    
-            return $sth->fetchAll(PDO::FETCH_ASSOC);
+
+        return $sth->fetchAll(PDO::FETCH_ASSOC);
 
     }
 
@@ -2561,7 +2589,7 @@ class lazy_mofo{
         $port = '';    
         $host = preg_replace('/:[0-9]+$/', '', $_SERVER['HTTP_HOST']); // host without port number
         $protocol = 'http://';
-        if(@$_SERVER['HTTPS'] != '' && @$_SERVER['HTTPS'] != 'off')
+        if($_SERVER['HTTPS'] ?? '' != '' && $_SERVER['HTTPS'] ?? '' != 'off')
             $protocol = 'https://';
         if(!($_SERVER['SERVER_PORT'] == '80' || $_SERVER['SERVER_PORT'] == '443'))
             $port = ':' . $_SERVER['SERVER_PORT'];
@@ -2699,7 +2727,7 @@ class lazy_mofo{
         // purpose: escape for export()
         // returns: separated and escaped string
 
-        $str = str_replace($this->export_delim, $this->export_delim_escape . $this->export_delim, $str);
+        $str = str_replace($this->export_delim, $this->export_delim_escape . $this->export_delim, $str ?? '');
 
         if($column_index == 0)
             return $this->export_delim . $str . $this->export_delim; 
@@ -2727,12 +2755,12 @@ class lazy_mofo{
 
         foreach($columns as $column_name){
             
-            $regexp_or_user_func = @$validate[$column_name]['regexp'];
+            $regexp_or_user_func = $validate[$column_name]['regexp'] ?? null;
             
             if(!isset($regexp_or_user_func))
                 continue;
 
-            $val = @$_POST[$column_name];
+            $val = $_POST[$column_name] ?? '';
             if(is_array($val))
                 $val = implode($this->delim, $val);
             $val = trim($val);
@@ -2748,7 +2776,7 @@ class lazy_mofo{
             else
                 $is_valid = preg_match($regexp_or_user_func, $val);
 
-            $validate[$column_name]['result'] = (bool)$is_valid;
+            $validate[$column_name]['result'] = (bool) $is_valid;
             
             // add error msg 
             if(strlen($validate[$column_name]['error_msg']) == 0)
