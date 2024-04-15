@@ -12,6 +12,8 @@ LM is a single PHP class for performing CRUD (create, read, update and delete) o
 
 **No new features will be added, this project is in maintenance mode.**
 
+**While you're here, checkout a related simlar project [PHP Bootstrap Table Edit](https://github.com/PHPBootstrapTableEdit/PHPBootstrapTableEdit)** 
+
 - Define grids and forms by SQL statements or table name
 - Populate select, radio, and checkbox inputs with data from SQL statements
 - Upload documents, resize or crop images
