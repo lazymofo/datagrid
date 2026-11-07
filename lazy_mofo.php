@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2026-11-06 
+// version 2026-11-07
 
 class lazy_mofo{
 
@@ -252,7 +252,7 @@ class lazy_mofo{
 
         // call user function to validate or whatever
         if($is_valid && $this->on_insert_user_function != '')
-            $error = call_user_func($this->on_insert_user_function);
+            $error = $this->call_user_hook($this->on_insert_user_function, 'on_insert_user_function');
 
         // go back on validation error
         if($error != '' || !$is_valid){
@@ -265,7 +265,7 @@ class lazy_mofo{
 
         // user function after insert
         if($this->after_insert_user_function != '')
-            call_user_func($this->after_insert_user_function, $id);
+            $this->call_user_hook($this->after_insert_user_function, 'after_insert_user_function', $id);
         
         // send user back to edit screen if desired
         $action = '';
@@ -293,7 +293,7 @@ class lazy_mofo{
 
         // call user function to validate or whatever
         if($is_valid && $this->on_update_user_function != '')
-            $error = call_user_func($this->on_update_user_function);
+            $error = $this->call_user_hook($this->on_update_user_function, 'on_update_user_function');
 
         // go back on validation error
         if($error != '' || !$is_valid){
@@ -306,7 +306,7 @@ class lazy_mofo{
 
         // user function after update
         if($this->after_update_user_function != '')
-            call_user_func($this->after_update_user_function);
+            $this->call_user_hook($this->after_update_user_function, 'after_update_user_function');
         
         // send user back to edit screen if desired
         $action = '';
@@ -327,7 +327,7 @@ class lazy_mofo{
         // call user function to validate or whatever
         $error = '';
         if($this->on_update_grid_user_function != '')
-            $error = call_user_func($this->on_update_grid_user_function);
+            $error = $this->call_user_hook($this->on_update_grid_user_function, 'on_update_grid_user_function');
 
         // go back on validation error
         if($error != ''){
@@ -340,7 +340,7 @@ class lazy_mofo{
 
         // user function after updates
         if($this->after_update_grid_user_function != '')
-            call_user_func($this->after_update_grid_user_function);
+            $this->call_user_hook($this->after_update_grid_user_function, 'after_update_grid_user_function');
 
         // redirect user
         $url = $this->get_uri_path() . "_success=2&" . $this->get_qs();
@@ -356,7 +356,7 @@ class lazy_mofo{
         // call user function to validate or whatever
         $error = '';
         if($this->on_delete_user_function != '')
-            $error = call_user_func($this->on_delete_user_function);
+            $error = $this->call_user_hook($this->on_delete_user_function, 'on_delete_user_function');
 
         // go back on validation error
         if($error != ''){
@@ -373,7 +373,7 @@ class lazy_mofo{
 
         // user function after delete
         if($this->after_delete_user_function != '')
-            call_user_func($this->after_delete_user_function);
+            $this->call_user_hook($this->after_delete_user_function, 'after_delete_user_function');
 
         // redirect user
         $url = $this->get_uri_path() . "_success=3&" . $this->get_qs();
@@ -1448,7 +1448,9 @@ class lazy_mofo{
             $type = $this->form_input_control[$column_name]['type'] ?? '';
 
         if(isset($this->cast_user_function[$column_name]))
-            $val = call_user_func($this->cast_user_function[$column_name], $val);
+            $val = is_callable($this->cast_user_function[$column_name])
+                 ? call_user_func($this->cast_user_function[$column_name], $val)
+                 : $this->call_user_hook($this->cast_user_function[$column_name], "cast_user_function[$column_name]") ?? $val;
         elseif($type == 'date')
             $val = $this->date_in($val);
         elseif($type == 'datetime')
@@ -2441,6 +2443,22 @@ class lazy_mofo{
     }
 
 
+    function call_user_hook($callback, $property, ...$args){
+
+        // purpose: call a user-supplied function (on_insert_user_function, after_insert_user_function, ...)
+        // PHP 8 throws TypeError for a callback that does not exist; PHP 7.4 only warned and returned null.
+        // Keep the 7.4 outcome (null, page continues) but log it so the misconfiguration gets fixed.
+
+        if(is_callable($callback))
+            return call_user_func($callback, ...$args);
+
+        $name = is_string($callback) ? $callback : json_encode($callback);
+        error_log("lazy_mofo: $property = '$name' is not a defined function - skipped (" . ($_SERVER['REQUEST_URI'] ?? '') . ")");
+        return null;
+
+    }
+
+
     function filter_sql_param($sql, $sql_param){
 
         // purpose: drop named parameters that are not used in $sql (avoids SQLSTATE[HY093])
@@ -2801,7 +2819,7 @@ class lazy_mofo{
             if($regexp_or_user_func == 'email')
                 $is_valid = filter_var($val, FILTER_VALIDATE_EMAIL);
             elseif(mb_substr($regexp_or_user_func ?? '', 0, 1) != '/')
-                $is_valid = call_user_func($regexp_or_user_func);
+                $is_valid = $this->call_user_hook($regexp_or_user_func, "validate[$column_name]");
             else
                 $is_valid = preg_match($regexp_or_user_func, $val ?? '');
 
