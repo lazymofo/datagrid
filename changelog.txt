@@ -1,5 +1,9 @@
 lazy mofo - php data grid for mysql - send bugs and feedback to githib or iansoko at gmail
 
+version 2026-11-07
+------------------
+  big thanks to sarangtc for all php8.4 compatibility updates and tweaks 
+
 version 2023-11-22
 ------------------
   dropped php 5 support, php 8 updates
