@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2026-11-07
+// version 2026-11-27
 
 class lazy_mofo{
 
