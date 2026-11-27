@@ -3,7 +3,7 @@
 // CRUD datagrid for MySQL and PHP
 // MIT License - https://github.com/lazymofo/datagrid
 // send feedback or questions iansoko at gmail
-// version 2026-11-07
+// version 2026-11-27
 
 class lazy_mofo{
 
@@ -1457,6 +1457,9 @@ class lazy_mofo{
             $val = $this->date_in($val, true);
         elseif($type == 'number')
             $val = $this->number_in($val);
+        // PATCH (local): single checkbox (no sql) -> store 0 when unchecked, not NULL
+        elseif($type == 'checkbox' && empty(($posted_from == 'grid' ? $this->grid_input_control : $this->form_input_control)[$column_name]['sql']))
+            $val = ($val === '' ? '0' : $val);
         
         if(!isset($val) || mb_strlen($val ?? '') == 0)
             $val = null;
